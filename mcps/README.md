@@ -9,12 +9,13 @@ Model Context Protocol servers I use and recommend. Each entry includes a ready-
 Run AI tools inside Docker containers via MCP. Useful for sandboxed execution of agent-driven workflows without polluting your local environment.
 
 **Source:** https://github.com/docker/labs-ai-tools-for-devs
-> Note: Docker Desktop also ships an integrated MCP Toolkit — check Docker Desktop settings under "Beta Features".
 
 **Prerequisites:**
 - Docker Desktop running
 
-**Config (`~/.claude/settings.json`):**
+**Install (recommended):** Use the integrated MCP Toolkit built into Docker Desktop — enable it in Docker Desktop settings under "Beta Features".
+
+### Legacy config (Docker Engine without Desktop)
 
 ```json
 {
@@ -60,4 +61,21 @@ Interact with MongoDB databases and MongoDB Atlas clusters directly from your ag
 }
 ```
 
-> Remove `--readOnly` to enable write operations. For Atlas, replace `MDB_MCP_CONNECTION_STRING` with `MDB_MCP_API_CLIENT_ID` and `MDB_MCP_API_CLIENT_SECRET`.
+> Remove `--readOnly` to enable write operations.
+
+**Config (`~/.claude/settings.json`) — MongoDB Atlas:**
+
+```json
+{
+  "mcpServers": {
+    "MongoDB": {
+      "command": "npx",
+      "args": ["-y", "mongodb-mcp-server@latest"],
+      "env": {
+        "MDB_MCP_API_CLIENT_ID": "your-service-account-id",
+        "MDB_MCP_API_CLIENT_SECRET": "your-service-account-secret"
+      }
+    }
+  }
+}
+```
