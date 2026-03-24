@@ -14,8 +14,8 @@ Apply the Gitflow branching model as described at https://nvie.com/posts/a-succe
 | `main` | Production-ready code. Every commit is a release. | — | — |
 | `develop` | Integration branch. Latest delivered changes. | `main` (init) | — |
 | `feature/*` | New features. | `develop` | `develop` |
-| `release/*` | Release preparation (version bump, last fixes). | `develop` | `main` + `develop` |
-| `hotfix/*` | Critical production fixes. | `main` | `main` + `develop` |
+| `release-*` | Release preparation (version bump, last fixes). | `develop` | `main` + `develop` |
+| `hotfix-*` | Critical production fixes. | `main` | `main` + `develop` |
 
 ## Naming Conventions
 
