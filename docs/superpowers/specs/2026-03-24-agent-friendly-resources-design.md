@@ -17,29 +17,29 @@ A public repository that serves as both a personal reference and a community res
 ## Repository Structure
 
 ```
-README.md                        ← General index: project purpose, links to categories
+README.md                        ← General index: project purpose, links to sections
 
 mcps/
-  README.md                      ← All MCP documentation (Docker, MongoDB, etc.)
+  README.md                      ← All MCP documentation (Docker, MongoDB)
 
 skills/
   README.md                      ← Skills index + external recommendations (e.g. OWASP)
   gitflow/
-    gitflow.md                   ← The installable Claude Code skill file
+    SKILL.md                     ← The installable Claude Code skill file
     README.md                    ← Install guide and usage documentation
 ```
 
-Future personal skill creations follow the same pattern: `skills/<name>/`.
+Future personal skill creations follow the same pattern: `skills/<name>/SKILL.md`.
 
 ## File Content Specifications
 
 ### `README.md` (root)
 - Project title and one-line description
-- Links to `mcps/` and `skills/` sections
-- Brief explanation of how to use the resources
+- Links to `mcps/README.md` and `skills/README.md` (section-level only; individual resource details live in those files)
+- Brief explanation of how to use the resources (browse → find a resource → follow its install instructions)
 
 ### `mcps/README.md`
-For each MCP (Docker, MongoDB):
+Initial list covers two MCPs: **Docker** and **MongoDB**. For each:
 - Short description of what it does
 - Prerequisites
 - JSON config block ready to paste into `settings.json` (mcpServers)
@@ -50,21 +50,23 @@ For each MCP (Docker, MongoDB):
 - Recommendations section: external skills with name, description, install command, source link
 - OWASP skill listed here: `agamm/claude-code-owasp`, curl install command, what it covers (OWASP Top 10 2025, ASVS 5.0, Agentic AI risks)
 
-### `skills/gitflow/gitflow.md` (installable skill)
-A Claude Code skill file with:
-- Frontmatter: `name`, `description`, trigger conditions
-- Gitflow rules the agent must follow:
+### `skills/gitflow/SKILL.md` (installable skill)
+A Claude Code skill file following the standard format:
+- **Frontmatter** (two keys only):
+  - `name`: `gitflow` — used by the skill loader
+  - `description`: one sentence describing when to activate this skill (this doubles as the trigger condition recognized by the agent)
+- **Body**: Gitflow rules the agent must follow:
   - Branch model: `main` (production), `develop` (integration), `feature/*`, `release/*`, `hotfix/*`
-  - Naming conventions
-  - Merge rules: always `--no-ff` to preserve history
-  - Tagging on `main` after release/hotfix merges
-  - Full step-by-step workflow for each branch type (feature, release, hotfix)
-- Source: based on https://nvie.com/posts/a-successful-git-branching-model/ and https://www.atlassian.com/fr/git/tutorials/comparing-workflows/gitflow-workflow
+  - Naming conventions for each branch type
+  - Merge rules: always `--no-ff` to preserve history and enable clean reverts
+  - Tagging on `main` after every release/hotfix merge (semantic versioning)
+  - Full step-by-step workflow for each branch type: feature, release, hotfix
+- Source: https://nvie.com/posts/a-successful-git-branching-model/ and https://www.atlassian.com/git/tutorials/comparing-workflows/gitflow-workflow
 
 ### `skills/gitflow/README.md`
 - What the skill does
-- Install command (copy file to `.claude/skills/gitflow/`)
-- Example of when it triggers
+- Install command: `cp skills/gitflow/SKILL.md ~/.claude/skills/gitflow/SKILL.md` (create the directory first)
+- Example of when it triggers (e.g. "use gitflow to create a feature branch")
 - Link to source documentation
 
 ## Design Decisions
