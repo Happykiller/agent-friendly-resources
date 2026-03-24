@@ -17,6 +17,8 @@ Run AI tools inside Docker containers via MCP. Useful for sandboxed execution of
 
 ### Legacy config (Docker Engine without Desktop)
 
+**Config (`~/.claude/settings.json`):**
+
 ```json
 {
   "mcpServers": {
