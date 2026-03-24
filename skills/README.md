@@ -18,7 +18,7 @@ Claude Code skills: personal creations and external recommendations.
 
 Equips Claude Code with security guidance covering OWASP Top 10 (2025), ASVS 5.0, and Agentic AI risks (ASI01–ASI10). Activates automatically when reviewing code, auth logic, input handling, or API design.
 
-**Source:** https://github.com/agamm/claude-code-owasp
+**Source:** [agamm/claude-code-owasp](https://github.com/agamm/claude-code-owasp)
 
 **Install:**
 
