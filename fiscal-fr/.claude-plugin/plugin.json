@@ -1,0 +1,8 @@
+{
+  "name": "fiscal-fr",
+  "description": "Assistant fiscal MVP pour la préparation de la déclaration française",
+  "version": "0.1.0",
+  "author": {
+    "name": "Fabrice"
+  }
+}
