@@ -1,0 +1,485 @@
+{
+  "qualificationConfig": {
+    "householdStatuses": ["single", "married", "civil_union", "divorced", "widowed"],
+    "incomeTypes": [
+      "salary",
+      "pension",
+      "bank_interest",
+      "rental_income",
+      "bic_bnc",
+      "foreign_income",
+      "crypto",
+      "other"
+    ],
+    "chargeTypes": ["donations", "childcare", "home_services", "alimony", "none", "other"],
+    "outOfScopeIncomeTypes": ["foreign_income", "crypto", "bic_bnc"],
+    "monitorChargeTypes": ["childcare", "home_services"],
+    "outOfScopeEventKeywords": [
+      "divorce",
+      "separation",
+      "séparation",
+      "controle fiscal",
+      "contrôle fiscal",
+      "non resident",
+      "non-résident"
+    ]
+  },
+  "qualificationKnowledge": {
+    "campaign": "fr-2026-revenus-2025",
+    "sourceAnalysis": {
+      "preferredAsset": "gpt.md",
+      "secondaryAssets": ["gemini.md", "notebooklm.md"],
+      "notes": [
+        "Active rules are promoted only from traceable official URLs.",
+        "impots.gouv.fr has priority; service-public.gouv.fr is secondary support.",
+        "Inconsistent or non-traceable fragments stay in corpus candidate signals and are not activated."
+      ]
+    },
+    "rules": [
+      {
+        "id": "salary_pension_prefill_check",
+        "topic": "salaires_pensions",
+        "trigger": {
+          "incomeTypes": ["salary", "pension"]
+        },
+        "complexityImpact": "simple",
+        "decisionImpact": "supported",
+        "pointsToConfirm": [
+          "Verifier si les montants salaires/pensions pre-remplis correspondent aux attestations 2025."
+        ],
+        "nextQuestions": [
+          "Vos montants pre-remplis (ex. 1AJ/1BJ ou 1AS/1BS) sont-ils corrects ?"
+        ],
+        "suggestedCaseCodes": ["1AJ", "1BJ", "1AS", "1BS"],
+        "requiredDocuments": [
+          "Bulletins de salaire 2025 ou attestation fiscale employeur",
+          "Attestation annuelle de pension"
+        ],
+        "onlineUiHints": [
+          "En declaration en ligne, corriger les montants non conformes via l'edition des champs pre-remplis."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Mes salaires ou mes pensions ne sont pas pre-remplis. Que faire ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/mes-salaires-ou-mes-pensions-ne-sont-pas-preremplis-que-faire",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "bank_interest_ifu",
+        "topic": "interets_bancaires",
+        "trigger": {
+          "incomeTypes": ["bank_interest"]
+        },
+        "complexityImpact": "simple",
+        "decisionImpact": "supported",
+        "pointsToConfirm": [
+          "Verifier la coherence des montants d'interets pre-remplis avec l'IFU."
+        ],
+        "nextQuestions": [
+          "Disposez-vous de l'IFU 2025 et les montants de la rubrique RCM (ex. 2TR) sont-ils conformes ?"
+        ],
+        "suggestedCaseCodes": ["2TR"],
+        "requiredDocuments": ["Imprime Fiscal Unique (IFU) 2025"],
+        "onlineUiHints": [
+          "Verifier la rubrique Revenus de capitaux mobiliers avant validation finale."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "J'ai des placements a la banque. Que dois-je faire du justificatif adresse par la banque ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/jai-des-placements-la-banque-celle-ci-ma-adresse-un-justificatif-que-dois-je",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "donations_split_period",
+        "topic": "dons",
+        "trigger": {
+          "charges": ["donations"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Ventilation temporelle potentielle des dons 2025 a confirmer (selon organisme/periode).",
+          "Verifier si des dons concernent des organismes etablis dans l'UE (RICI)."
+        ],
+        "nextQuestions": [
+          "Pouvez-vous separer les montants de dons par periode de versement en 2025 ?",
+          "Avez-vous des recus fiscaux pour chaque versement ?"
+        ],
+        "suggestedCaseCodes": ["7UD", "7UF", "7UQ", "7UJ", "7UO", "7VA", "7VC"],
+        "requiredDocuments": ["Recus fiscaux de dons"],
+        "onlineUiHints": [
+          "Activer la rubrique reductions/credits d'impot a l'etape Charges avant saisie detaillee."
+        ],
+        "confidenceLevel": "medium",
+        "sources": [
+          {
+            "title": "J'ai fait des dons a une association. Que puis-je deduire ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/jai-fait-des-dons-une-association-que-puis-je-deduire",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration n°2042 RICI - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rici_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "childcare_credit",
+        "topic": "frais_garde_enfants",
+        "trigger": {
+          "charges": ["childcare"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Age des enfants concernes par la garde hors domicile a confirmer.",
+          "Montants nets apres deduction des aides percues a confirmer."
+        ],
+        "nextQuestions": [
+          "Quel est l'age de chaque enfant concerne au 1er janvier 2026 ?",
+          "Avez-vous deduit les aides percues (ex. CMG) des depenses declarees ?"
+        ],
+        "suggestedCaseCodes": ["7GA", "7GB", "7GC", "7GE", "7GF", "7GG"],
+        "requiredDocuments": [
+          "Attestation fiscale annuelle (Pajemploi/organisme)",
+          "Factures de garde distinguant frais de garde et frais de nourriture"
+        ],
+        "onlineUiHints": [
+          "Completer les cases de garde d'enfants dans 2042 RICI apres activation de la rubrique en ligne."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Je fais garder mon jeune enfant a l'exterieur du domicile. Que puis-je deduire ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/je-fais-garder-mon-jeune-enfant-lexterieur-du-domicile-que-puis-je-deduire",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration n°2042 RICI - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rici_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "home_services_credit",
+        "topic": "emploi_a_domicile",
+        "trigger": {
+          "charges": ["home_services"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Montant des aides percues (APA/PCH/autres) a deduire des depenses a confirmer.",
+          "Si premiere declaration du dispositif, verification des cases de signalement requises."
+        ],
+        "nextQuestions": [
+          "Pouvez-vous confirmer vos depenses nettes d'aides et le type de prestataire (emploi direct ou organisme) ?",
+          "Disposez-vous des attestations annuelles (URSSAF/CESU ou factures prestataire) ?"
+        ],
+        "suggestedCaseCodes": ["7DB", "7DR", "7DQ", "7DL", "BDA", "BDB", "BDC", "BDD", "BDE", "BEA"],
+        "requiredDocuments": [
+          "Attestation annuelle URSSAF/CESU",
+          "Factures detaillees des organismes prestataires"
+        ],
+        "onlineUiHints": [
+          "En ligne: etape Charges puis rubrique reductions/credits d'impot avant saisie des depenses et aides."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Comment beneficier du credit d'impot pour l'emploi d'un salarie a domicile ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/comment-beneficier-du-credit-dimpot-pour-lemploi-dun-salarie-domicile",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Credit d'impot pour l'emploi d'un salarie a domicile",
+            "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F12",
+            "publisher": "Service Public (DILA)",
+            "authorityLevel": "secondary_official"
+          },
+          {
+            "title": "Declaration n°2042 RICI - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rici_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "marriage_or_civil_union_event",
+        "topic": "situation_familiale",
+        "trigger": {
+          "eventKeywords": ["mariage", "pacs", "pacse", "pacses"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Date exacte de l'evenement familial en 2025 a confirmer.",
+          "Choix declaration commune vs option declarations separees l'annee de l'evenement a confirmer."
+        ],
+        "nextQuestions": [
+          "Souhaitez-vous une declaration commune ou l'option de declarations separees pour l'annee de l'evenement ?",
+          "Pouvez-vous confirmer la date de mariage/Pacs ?"
+        ],
+        "suggestedCaseCodes": ["M", "O", "B"],
+        "requiredDocuments": ["Acte ou justificatif de mariage/Pacs"],
+        "onlineUiHints": [
+          "En declaration en ligne, repondre a la question sur l'evenement familial puis suivre le parcours correspondant au choix d'imposition."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Je me marie ou me pacse, comment declarer mes revenus ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/comment-declarer-nos-revenus-lannee-du-mariage-ou-pacs",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "child_reaches_majority",
+        "topic": "enfants_a_charge",
+        "trigger": {
+          "eventKeywords": ["majorite", "enfant majeur", "18 ans"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Revenus de l'enfant devenu majeur et mode de declaration (rattachement vs declaration separee) a confirmer."
+        ],
+        "nextQuestions": [
+          "Votre enfant devenu majeur en 2025 a-t-il percu des revenus a declarer ?",
+          "Souhaitez-vous verifier le rattachement au foyer ou une declaration separee ?"
+        ],
+        "suggestedCaseCodes": ["1CJ", "1DJ", "1AJ"],
+        "requiredDocuments": [
+          "Justificatifs de revenus de l'enfant (si applicable)",
+          "Elements d'etat civil"
+        ],
+        "onlineUiHints": [],
+        "confidenceLevel": "medium",
+        "sources": [
+          {
+            "title": "Mon enfant atteint sa majorite au cours de l'annee, comment le declarer ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/mon-enfant-atteint-sa-majorite-au-cours-de-lannee-comment-le-declarer",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      }
+    ]
+  },
+  "qualificationCorpus": {
+    "campaign": "fr-2026-revenus-2025",
+    "assets": [
+      {
+        "name": "gpt.md",
+        "role": "primary",
+        "status": "promoted",
+        "notes": [
+          "Contains the most complete and traceable mapping to official URLs.",
+          "Used as the source backbone for promoted rules."
+        ]
+      },
+      {
+        "name": "gemini.md",
+        "role": "secondary",
+        "status": "supporting",
+        "notes": [
+          "Useful for exploratory signals.",
+          "Contains malformed JSON fragments; not directly promoted into active rules."
+        ]
+      },
+      {
+        "name": "notebooklm.md",
+        "role": "secondary",
+        "status": "supporting",
+        "notes": [
+          "Interesting candidate topics.",
+          "Most source_refs are empty, so items stay candidate until traced."
+        ]
+      }
+    ],
+    "officialDocuments": [
+      {
+        "id": "doc-2042-projet",
+        "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+        "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["situation_familiale", "salaires", "pensions", "interets_bancaires", "dons"],
+        "promoted": true
+      },
+      {
+        "id": "doc-2042-rici-projet",
+        "title": "Declaration n°2042 RICI - REVENUS 2025 (PROJET)",
+        "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rici_rev2025_projet.pdf",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["frais_garde_enfants", "emploi_a_domicile", "dons"],
+        "promoted": true
+      },
+      {
+        "id": "faq-garde",
+        "title": "Je fais garder mon jeune enfant a l'exterieur du domicile. Que puis-je deduire ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/je-fais-garder-mon-jeune-enfant-lexterieur-du-domicile-que-puis-je-deduire",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["frais_garde_enfants"],
+        "promoted": true
+      },
+      {
+        "id": "faq-emploi-domicile",
+        "title": "Comment beneficier du credit d'impot pour l'emploi d'un salarie a domicile ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/comment-beneficier-du-credit-dimpot-pour-lemploi-dun-salarie-domicile",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["emploi_a_domicile"],
+        "promoted": true
+      },
+      {
+        "id": "faq-dons",
+        "title": "J'ai fait des dons a une association. Que puis-je deduire ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/jai-fait-des-dons-une-association-que-puis-je-deduire",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["dons"],
+        "promoted": true
+      },
+      {
+        "id": "faq-ifu",
+        "title": "J'ai des placements a la banque. Que dois-je faire du justificatif adresse par la banque ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/jai-des-placements-la-banque-celle-ci-ma-adresse-un-justificatif-que-dois-je",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["interets_bancaires"],
+        "promoted": true
+      },
+      {
+        "id": "faq-salaires-pensions",
+        "title": "Mes salaires ou mes pensions ne sont pas pre-remplis. Que faire ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/mes-salaires-ou-mes-pensions-ne-sont-pas-preremplis-que-faire",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["salaires", "pensions"],
+        "promoted": true
+      },
+      {
+        "id": "faq-majorite",
+        "title": "Mon enfant atteint sa majorite au cours de l'annee, comment le declarer ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/mon-enfant-atteint-sa-majorite-au-cours-de-lannee-comment-le-declarer",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["enfants_a_charge"],
+        "promoted": true
+      },
+      {
+        "id": "faq-mariage-pacs",
+        "title": "Je me marie ou me pacse, comment declarer mes revenus ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/comment-declarer-nos-revenus-lannee-du-mariage-ou-pacs",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["situation_familiale", "foyer_fiscal"],
+        "promoted": true
+      },
+      {
+        "id": "sp-emploi-domicile",
+        "title": "Credit d'impot pour l'emploi d'un salarie a domicile",
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F12",
+        "publisher": "Service Public (DILA)",
+        "authorityLevel": "secondary_official",
+        "topics": ["emploi_a_domicile"],
+        "promoted": true
+      }
+    ],
+    "candidateSignals": [
+      {
+        "id": "signal-gemini-simulateur-complet",
+        "originAsset": "gemini.md",
+        "topic": "foyer_fiscal",
+        "statement": "Use 2026 complete simulator extraction as high-confidence backbone for case mapping.",
+        "status": "candidate",
+        "reason": "Needs direct trace import in corpus with stable extraction process before promotion."
+      },
+      {
+        "id": "signal-notebooklm-heures-supp-1gh",
+        "originAsset": "notebooklm.md",
+        "topic": "salaires",
+        "statement": "Case 1GH for overtime exemption should drive additional qualification prompts.",
+        "status": "candidate",
+        "reason": "source_refs are empty in notebooklm extract."
+      },
+      {
+        "id": "signal-notebooklm-frais-reels-1ak",
+        "originAsset": "notebooklm.md",
+        "topic": "salaires",
+        "statement": "Case 1AK (frais reels) could be a monitor-level branch.",
+        "status": "candidate",
+        "reason": "No explicit official source pointers attached in asset output."
+      },
+      {
+        "id": "signal-notebooklm-pension-enfant-6gu",
+        "originAsset": "notebooklm.md",
+        "topic": "pensions",
+        "statement": "Case 6GU for pension to adult child suggests exclusion logic with attachment option.",
+        "status": "candidate",
+        "reason": "Interesting business branch but traceability is currently insufficient."
+      },
+      {
+        "id": "signal-notebooklm-2op-pfu",
+        "originAsset": "notebooklm.md",
+        "topic": "interets_bancaires",
+        "statement": "Case 2OP optimization hint may be useful as optional advisory.",
+        "status": "candidate",
+        "reason": "Tax optimization advice requires stronger legal/source anchoring."
+      },
+      {
+        "id": "signal-gemini-cdhr",
+        "originAsset": "gemini.md",
+        "topic": "foyer_fiscal",
+        "statement": "CDHR high-income branch appears in exploratory inventory.",
+        "status": "rejected",
+        "reason": "Outside current MVP scope for qualify_tax_profile."
+      }
+    ]
+  }
+}

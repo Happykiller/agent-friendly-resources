@@ -1,0 +1,101 @@
+### fiscal-fr MCP server over HTTP
+### Prerequisite: run `npm run dev:http` in `mcp-server/`
+
+@baseUrl = http://localhost:3333
+@mcpPath = /mcp
+
+### Health check (method not allowed expected)
+GET {{baseUrl}}{{mcpPath}}
+Accept: application/json
+
+### Optional initialize request
+POST {{baseUrl}}{{mcpPath}}
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2025-06-18",
+    "capabilities": {},
+    "clientInfo": {
+      "name": "vscode-rest-client",
+      "version": "1.0.0"
+    }
+  }
+}
+
+### List tools
+POST {{baseUrl}}{{mcpPath}}
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/list",
+  "params": {}
+}
+
+### Call tool - simple profile
+POST {{baseUrl}}{{mcpPath}}
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "tools/call",
+  "params": {
+    "name": "qualify_tax_profile",
+    "arguments": {
+      "householdStatus": "single",
+      "dependentsCount": 1,
+      "incomeTypes": ["salary"],
+      "charges": ["childcare"],
+      "events": ["naissance"]
+    }
+  }
+}
+
+### Call tool - potentially out of scope profile
+POST {{baseUrl}}{{mcpPath}}
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "method": "tools/call",
+  "params": {
+    "name": "qualify_tax_profile",
+    "arguments": {
+      "householdStatus": "married",
+      "dependentsCount": 0,
+      "incomeTypes": ["salary", "foreign_income"],
+      "charges": ["none"],
+      "events": ["non-resident part of year"]
+    }
+  }
+}
+
+### Invalid payload example (expect INVALID_INPUT)
+POST {{baseUrl}}{{mcpPath}}
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 5,
+  "method": "tools/call",
+  "params": {
+    "name": "qualify_tax_profile",
+    "arguments": {
+      "householdStatus": "single",
+      "dependentsCount": -1,
+      "incomeTypes": []
+    }
+  }
+}

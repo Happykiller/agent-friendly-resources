@@ -10,3 +10,8 @@ A curated collection of MCPs, Claude Code skills, and personal creations for AI-
 ## How to use
 
 Browse a category, find a resource, and follow the install instructions in its section.
+
+
+# 
+
+claude --plugin-dir ./fiscal-fr
