@@ -27,6 +27,7 @@ Chaque agent spécialisé vit dans `agents/<nom-agent>.md`.
 
 Exemple actuel :
 - `agents/tax-qualifier.md`
+- `agents/documents-checklist.md`
 
 ## Contrat d'un agent
 
@@ -58,6 +59,7 @@ Chaque fichier agent doit inclure :
 Le skill `skills/assistant-fiscal/SKILL.md` pilote les interactions utilisateur.
 
 Pour la qualification fiscale, l'orchestrateur doit s'appuyer sur `tax-qualifier` avant de conclure.
+Pour la phase justificatifs, l'orchestrateur doit s'appuyer sur `documents-checklist` apres appel de `list_supporting_documents`.
 
 L'orchestrateur doit suivre le fil conversationnel cible :
 
