@@ -71,6 +71,34 @@ function ruleMatchesInput(rule: QualificationRule, input: QualifyTaxProfileInput
     return false;
   }
 
+  if (
+    trigger.dependentContexts &&
+    !input.dependentContexts.some((context) => trigger.dependentContexts?.includes(context))
+  ) {
+    return false;
+  }
+
+  if (
+    trigger.donationContexts &&
+    !input.donationContexts.some((context) => trigger.donationContexts?.includes(context))
+  ) {
+    return false;
+  }
+
+  if (
+    trigger.homeServiceContexts &&
+    !input.homeServiceContexts.some((context) => trigger.homeServiceContexts?.includes(context))
+  ) {
+    return false;
+  }
+
+  if (
+    trigger.alimonyContexts &&
+    !input.alimonyContexts.some((context) => trigger.alimonyContexts?.includes(context))
+  ) {
+    return false;
+  }
+
   return true;
 }
 
@@ -116,6 +144,34 @@ export class QualifyTaxProfileUseCase {
             type: "string",
           },
         },
+        dependentContexts: {
+          type: "array",
+          items: {
+            type: "string",
+            enum: [...config.dependentContextTypes],
+          },
+        },
+        donationContexts: {
+          type: "array",
+          items: {
+            type: "string",
+            enum: [...config.donationContextTypes],
+          },
+        },
+        homeServiceContexts: {
+          type: "array",
+          items: {
+            type: "string",
+            enum: [...config.homeServiceContextTypes],
+          },
+        },
+        alimonyContexts: {
+          type: "array",
+          items: {
+            type: "string",
+            enum: [...config.alimonyContextTypes],
+          },
+        },
       },
       required: ["householdStatus", "dependentsCount", "incomeTypes"],
     };
@@ -145,6 +201,34 @@ export class QualifyTaxProfileUseCase {
           )
           .default([]),
         events: z.array(z.string()).default([]),
+        dependentContexts: z
+          .array(
+            z.string().refine((value) => config.dependentContextTypes.includes(value), {
+              message: "Invalid dependentContexts value",
+            })
+          )
+          .default([]),
+        donationContexts: z
+          .array(
+            z.string().refine((value) => config.donationContextTypes.includes(value), {
+              message: "Invalid donationContexts value",
+            })
+          )
+          .default([]),
+        homeServiceContexts: z
+          .array(
+            z.string().refine((value) => config.homeServiceContextTypes.includes(value), {
+              message: "Invalid homeServiceContexts value",
+            })
+          )
+          .default([]),
+        alimonyContexts: z
+          .array(
+            z.string().refine((value) => config.alimonyContextTypes.includes(value), {
+              message: "Invalid alimonyContexts value",
+            })
+          )
+          .default([]),
       })
       .superRefine((value, ctx) => {
         if (value.charges.includes("none") && value.charges.length > 1) {
@@ -192,6 +276,22 @@ export class QualifyTaxProfileUseCase {
 
     if (input.charges.length > 0 && !input.charges.includes("none")) {
       facts.push(`Charges mentionnees: ${input.charges.join(", ")}`);
+    }
+
+    if (input.dependentContexts.length > 0) {
+      facts.push(`Contextes personnes a charge: ${input.dependentContexts.join(", ")}`);
+    }
+
+    if (input.donationContexts.length > 0) {
+      facts.push(`Contextes dons: ${input.donationContexts.join(", ")}`);
+    }
+
+    if (input.homeServiceContexts.length > 0) {
+      facts.push(`Contextes emploi a domicile: ${input.homeServiceContexts.join(", ")}`);
+    }
+
+    if (input.alimonyContexts.length > 0) {
+      facts.push(`Contextes pension versee: ${input.alimonyContexts.join(", ")}`);
     }
 
     if (input.incomeTypes.some((incomeType) => outOfScopeIncomeTypesSet.has(incomeType))) {

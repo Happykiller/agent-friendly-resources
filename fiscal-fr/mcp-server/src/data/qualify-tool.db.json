@@ -12,6 +12,23 @@
       "other"
     ],
     "chargeTypes": ["donations", "childcare", "home_services", "alimony", "none", "other"],
+    "dependentContextTypes": [
+      "children_exclusive_custody",
+      "children_shared_custody",
+      "adult_child_attachment"
+    ],
+    "donationContextTypes": [
+      "general_interest",
+      "people_in_need",
+      "heritage_religious",
+      "mayotte_chido"
+    ],
+    "homeServiceContextTypes": [
+      "first_year_direct_employment",
+      "received_aids",
+      "ascendant_apa"
+    ],
+    "alimonyContextTypes": ["adult_child_support", "ex_spouse_support", "other"],
     "outOfScopeIncomeTypes": ["foreign_income", "crypto", "bic_bnc"],
     "monitorChargeTypes": ["childcare", "home_services"],
     "outOfScopeEventKeywords": [
@@ -239,6 +256,302 @@
         ]
       },
       {
+        "id": "dependents_shared_custody",
+        "topic": "enfants_a_charge",
+        "trigger": {
+          "dependentContexts": ["children_shared_custody"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier le mode de garde (residence alternee) pour chaque enfant concerne.",
+          "Verifier la coherence entre charge partagee et les rubriques de garde d'enfants."
+        ],
+        "nextQuestions": [
+          "Confirmez-vous une residence alternee pour au moins un enfant ?",
+          "Quels enfants sont en garde alternee vs charge principale ?"
+        ],
+        "suggestedCaseCodes": ["H", "I", "7GE", "7GF", "7GG"],
+        "requiredDocuments": [
+          "Jugement ou convention de garde (si applicable)",
+          "Justificatifs de garde d'enfants si frais declares"
+        ],
+        "onlineUiHints": [
+          "Verifier les rubriques enfants en charge partagee avant de saisir les frais de garde associes."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration n°2042 RICI - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rici_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "adult_child_attachment_context",
+        "topic": "enfants_a_charge",
+        "trigger": {
+          "dependentContexts": ["adult_child_attachment"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Choix entre rattachement de l'enfant majeur et declaration separee a confirmer.",
+          "Verifier la coherence entre rattachement et eventuelle pension versee."
+        ],
+        "nextQuestions": [
+          "Souhaitez-vous rattacher l'enfant majeur au foyer fiscal ?",
+          "L'enfant majeur a-t-il des revenus a declarer separement ?"
+        ],
+        "suggestedCaseCodes": ["J", "N", "1CJ", "1DJ"],
+        "requiredDocuments": [
+          "Attestation de rattachement de l'enfant majeur (si retenu)",
+          "Justificatifs de revenus de l'enfant (si applicable)"
+        ],
+        "onlineUiHints": [
+          "Traiter le choix rattachement vs declaration separee avant de finaliser les rubriques revenus."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Mon enfant atteint sa majorite au cours de l'annee, comment le declarer ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/mon-enfant-atteint-sa-majorite-au-cours-de-lannee-comment-le-declarer",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "donations_general_interest_context",
+        "topic": "dons",
+        "trigger": {
+          "charges": ["donations"],
+          "donationContexts": ["general_interest"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier que l'organisme releve bien de l'interet general pour la case cible.",
+          "Verifier le montant total des dons concernes sur l'annee 2025."
+        ],
+        "nextQuestions": [
+          "Pouvez-vous confirmer l'organisme beneficiaire des dons ?",
+          "Avez-vous les recus fiscaux correspondants ?"
+        ],
+        "suggestedCaseCodes": ["7UF"],
+        "requiredDocuments": ["Recus fiscaux de dons"],
+        "onlineUiHints": [
+          "Verifier la rubrique des dons d'interet general avant validation finale."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "J'ai fait des dons a une association. Que puis-je deduire ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/jai-fait-des-dons-une-association-que-puis-je-deduire",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "donations_people_in_need_context",
+        "topic": "dons",
+        "trigger": {
+          "charges": ["donations"],
+          "donationContexts": ["people_in_need"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Ventilation des dons entre periodes 2025 a confirmer (avant/apres 14 octobre).",
+          "Verifier la case applicable selon la periode de versement."
+        ],
+        "nextQuestions": [
+          "Pouvez-vous separer les dons avant et apres le 14 octobre 2025 ?",
+          "Disposez-vous de recus dates pour chaque don ?"
+        ],
+        "suggestedCaseCodes": ["7UD", "7UQ"],
+        "requiredDocuments": ["Recus fiscaux de dons"],
+        "onlineUiHints": [
+          "Verifier la ventilation temporelle des dons avant saisie des cases finales."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "J'ai fait des dons a une association. Que puis-je deduire ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/jai-fait-des-dons-une-association-que-puis-je-deduire",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "donations_heritage_religious_context",
+        "topic": "dons",
+        "trigger": {
+          "charges": ["donations"],
+          "donationContexts": ["heritage_religious"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier que le don entre bien dans le dispositif patrimoine religieux.",
+          "Verifier le montant total declare au titre de ce dispositif."
+        ],
+        "nextQuestions": [
+          "L'organisme beneficiaire releve-t-il bien du dispositif patrimoine religieux ?",
+          "Pouvez-vous confirmer les montants sur recus fiscaux ?"
+        ],
+        "suggestedCaseCodes": ["7UJ"],
+        "requiredDocuments": ["Recus fiscaux de dons"],
+        "onlineUiHints": [
+          "Verifier la case dediee patrimoine religieux avant validation."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "J'ai fait des dons a une association. Que puis-je deduire ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/jai-fait-des-dons-une-association-que-puis-je-deduire",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "home_services_first_year_context",
+        "topic": "emploi_a_domicile",
+        "trigger": {
+          "charges": ["home_services"],
+          "homeServiceContexts": ["first_year_direct_employment"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier qu'il s'agit bien de la premiere annee d'emploi direct en 2025.",
+          "Verifier la case de signalement associee a la premiere annee."
+        ],
+        "nextQuestions": [
+          "Confirmez-vous un premier emploi direct a domicile en 2025 ?",
+          "Avez-vous les justificatifs URSSAF/CESU de demarrage ?"
+        ],
+        "suggestedCaseCodes": ["7DQ", "7DB"],
+        "requiredDocuments": ["Attestation annuelle URSSAF/CESU"],
+        "onlineUiHints": [
+          "Verifier la case premiere annee avant validation de la rubrique emploi a domicile."
+        ],
+        "confidenceLevel": "medium",
+        "sources": [
+          {
+            "title": "Comment beneficier du credit d'impot pour l'emploi d'un salarie a domicile ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/comment-beneficier-du-credit-dimpot-pour-lemploi-dun-salarie-domicile",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "home_services_received_aids_context",
+        "topic": "emploi_a_domicile",
+        "trigger": {
+          "charges": ["home_services"],
+          "homeServiceContexts": ["received_aids"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier le montant des aides perçues impactant la base de depenses.",
+          "Verifier la declaration des aides dans la case dediee."
+        ],
+        "nextQuestions": [
+          "Avez-vous percu des aides (APA/PCH/CESU prefinance) en 2025 ?",
+          "Pouvez-vous confirmer le montant total des aides perçues ?"
+        ],
+        "suggestedCaseCodes": ["7DR", "7DB"],
+        "requiredDocuments": [
+          "Justificatifs des aides perçues",
+          "Attestation annuelle URSSAF/CESU ou factures prestataires"
+        ],
+        "onlineUiHints": [
+          "Verifier la coherence entre depenses 7DB et aides 7DR avant validation."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Comment beneficier du credit d'impot pour l'emploi d'un salarie a domicile ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/comment-beneficier-du-credit-dimpot-pour-lemploi-dun-salarie-domicile",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "alimony_adult_child_context",
+        "topic": "pensions_versees",
+        "trigger": {
+          "charges": ["alimony"],
+          "alimonyContexts": ["adult_child_support"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier le beneficiaire de la pension versee (enfant majeur ou autre situation).",
+          "Verifier l'absence de double avantage entre rattachement et pension versee."
+        ],
+        "nextQuestions": [
+          "La pension versee concerne-t-elle un enfant majeur non rattache ?",
+          "Disposez-vous des preuves de versement (virements, justificatifs) ?"
+        ],
+        "suggestedCaseCodes": [],
+        "requiredDocuments": [
+          "Preuves de versements effectifs",
+          "Justificatifs de la situation du beneficiaire"
+        ],
+        "onlineUiHints": [
+          "Verifier la coherence entre pension versee, rattachement eventuel et revenus declares."
+        ],
+        "confidenceLevel": "medium",
+        "sources": [
+          {
+            "title": "Impot sur le revenu - Revenus et rattachement d'un enfant majeur",
+            "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F3085",
+            "publisher": "Service Public (DILA)",
+            "authorityLevel": "secondary_official"
+          }
+        ]
+      },
+      {
         "id": "marriage_or_civil_union_event",
         "topic": "situation_familiale",
         "trigger": {
@@ -428,6 +741,15 @@
         "publisher": "Service Public (DILA)",
         "authorityLevel": "secondary_official",
         "topics": ["emploi_a_domicile"],
+        "promoted": true
+      },
+      {
+        "id": "sp-rattachement-enfant-majeur",
+        "title": "Impot sur le revenu - Revenus et rattachement d'un enfant majeur",
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F3085",
+        "publisher": "Service Public (DILA)",
+        "authorityLevel": "secondary_official",
+        "topics": ["enfants_a_charge", "pensions_versees"],
         "promoted": true
       }
     ],

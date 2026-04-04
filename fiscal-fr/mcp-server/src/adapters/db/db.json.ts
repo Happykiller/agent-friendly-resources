@@ -11,6 +11,10 @@ const QualificationConfigSchema = z.object({
   householdStatuses: z.array(z.string()).min(1),
   incomeTypes: z.array(z.string()).min(1),
   chargeTypes: z.array(z.string()).min(1),
+  dependentContextTypes: z.array(z.string()),
+  donationContextTypes: z.array(z.string()),
+  homeServiceContextTypes: z.array(z.string()),
+  alimonyContextTypes: z.array(z.string()),
   outOfScopeIncomeTypes: z.array(z.string()),
   monitorChargeTypes: z.array(z.string()),
   outOfScopeEventKeywords: z.array(z.string()),
@@ -27,6 +31,10 @@ const RuleTriggerSchema = z.object({
   incomeTypes: z.array(z.string()).optional(),
   charges: z.array(z.string()).optional(),
   eventKeywords: z.array(z.string()).optional(),
+  dependentContexts: z.array(z.string()).optional(),
+  donationContexts: z.array(z.string()).optional(),
+  homeServiceContexts: z.array(z.string()).optional(),
+  alimonyContexts: z.array(z.string()).optional(),
 });
 
 const CorpusAssetSchema = z.object({

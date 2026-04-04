@@ -45,6 +45,10 @@ Required fields:
 Optional fields:
 - `charges`: array of `donations | childcare | home_services | alimony | none | other`
 - `events`: array of strings
+- `dependentContexts`: array of `children_exclusive_custody | children_shared_custody | adult_child_attachment`
+- `donationContexts`: array of `general_interest | people_in_need | heritage_religious | mayotte_chido`
+- `homeServiceContexts`: array of `first_year_direct_employment | received_aids | ascendant_apa`
+- `alimonyContexts`: array of `adult_child_support | ex_spouse_support | other`
 
 #### Output payload
 

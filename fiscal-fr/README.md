@@ -125,6 +125,11 @@ Le MVP sait traiter les situations standards avec:
   - mariage/Pacs,
   - enfant devenant majeur,
   - autres evenements simples non bloquants.
+- Contextes qualifies (si fournis) pour affiner les recommandations:
+  - personnes a charge: charge principale / residence alternee / rattachement enfant majeur,
+  - dons: interet general / aide aux personnes en difficulte / patrimoine religieux / dons Mayotte,
+  - emploi a domicile: premiere annee en emploi direct / aides perçues / ascendant APA,
+  - pension versee: soutien enfant majeur / ex-conjoint / autre contexte.
 
 ### Cas traites avec vigilance renforcee (mais encore supportables)
 
@@ -132,6 +137,7 @@ Le MVP sait traiter les situations standards avec:
 - Dons (ventilation et justificatifs).
 - Frais de garde d'enfants.
 - Emploi a domicile.
+- Rattachement d'enfant majeur et coherence avec pension versee.
 
 Dans ces cas, l'assistant classe generalement le dossier en a surveiller (`monitor`) avec un statut prudent.
 

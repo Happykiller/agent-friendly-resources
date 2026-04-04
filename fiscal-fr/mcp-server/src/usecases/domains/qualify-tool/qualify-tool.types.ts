@@ -13,6 +13,10 @@ export type RuleTrigger = {
   incomeTypes?: string[];
   charges?: string[];
   eventKeywords?: string[];
+  dependentContexts?: string[];
+  donationContexts?: string[];
+  homeServiceContexts?: string[];
+  alimonyContexts?: string[];
 };
 
 export type QualificationRule = {
@@ -34,6 +38,10 @@ export type QualificationConfig = {
   householdStatuses: string[];
   incomeTypes: string[];
   chargeTypes: string[];
+  dependentContextTypes: string[];
+  donationContextTypes: string[];
+  homeServiceContextTypes: string[];
+  alimonyContextTypes: string[];
   outOfScopeIncomeTypes: string[];
   monitorChargeTypes: string[];
   outOfScopeEventKeywords: string[];
@@ -88,6 +96,10 @@ export type QualifyTaxProfileInput = {
   incomeTypes: string[];
   charges: string[];
   events: string[];
+  dependentContexts: string[];
+  donationContexts: string[];
+  homeServiceContexts: string[];
+  alimonyContexts: string[];
 };
 
 export type QualifyTaxProfileResult = {
