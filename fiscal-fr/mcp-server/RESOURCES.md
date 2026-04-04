@@ -36,7 +36,10 @@ Required fields:
   - `salary`
   - `pension`
   - `bank_interest`
+  - `dividends`
   - `rental_income`
+  - `furnished_rental`
+  - `micro_entrepreneur`
   - `bic_bnc`
   - `foreign_income`
   - `crypto`

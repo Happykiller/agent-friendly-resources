@@ -119,7 +119,7 @@ Aujourd'hui, le coeur fonctionnel disponible est la **qualification fiscale init
 Le MVP sait traiter les situations standards avec:
 
 - Situation familiale: celibataire (`single`), marie (`married`), pacse (`civil_union`), divorce (`divorced`), veuf (`widowed`).
-- Revenus pris en charge en qualification: salaires (`salary`), pensions (`pension`), interets bancaires (`bank_interest`), revenus locatifs (`rental_income`), autres revenus (`other`).
+- Revenus pris en charge en qualification: salaires (`salary`), pensions (`pension`), interets bancaires (`bank_interest`), dividendes/RCM (`dividends`), revenus locatifs nus (`rental_income`), location meublee (`furnished_rental`), micro-entrepreneur (`micro_entrepreneur`), autres revenus (`other`).
 - Charges prises en charge: dons (`donations`), frais de garde (`childcare`), emploi a domicile (`home_services`), pension versee (`alimony`), aucune charge (`none`), autres charges (`other`).
 - Evenements de vie reconnus sur le MVP:
   - mariage/Pacs,
@@ -138,6 +138,9 @@ Le MVP sait traiter les situations standards avec:
 - Frais de garde d'enfants.
 - Emploi a domicile.
 - Rattachement d'enfant majeur et coherence avec pension versee.
+- Revenus fonciers (orientation micro-foncier / reel).
+- Location meublee (qualification LMNP/LMP a confirmer).
+- Micro-entrepreneur (orientation 2042 C PRO selon type d'activite).
 
 Dans ces cas, l'assistant classe generalement le dossier en a surveiller (`monitor`) avec un statut prudent.
 
@@ -148,6 +151,7 @@ Le MVP detecte et signale comme potentiellement hors perimetre:
 - Revenus etrangers (`foreign_income`).
 - Crypto-actifs (`crypto`).
 - Activites BIC/BNC (`bic_bnc`).
+- Investissements locatifs fiscaux complexes (Pinel/Denormandie/Loc'Avantages) : qualification initiale possible mais revue humaine recommandee.
 - Evenements complexes detectes dans le texte (ex: non-resident, controle fiscal, separation/divorce complexe).
 
 Dans ces cas, le resultat est typiquement hors perimetre (`out_of_scope`) et l'assistant recommande une revue humaine.

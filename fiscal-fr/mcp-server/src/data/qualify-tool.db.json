@@ -5,7 +5,10 @@
       "salary",
       "pension",
       "bank_interest",
+      "dividends",
       "rental_income",
+      "furnished_rental",
+      "micro_entrepreneur",
       "bic_bnc",
       "foreign_income",
       "crypto",
@@ -121,6 +124,263 @@
           {
             "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
             "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "dividends_rcm_ifu",
+        "topic": "revenus_capitaux_mobiliers",
+        "trigger": {
+          "incomeTypes": ["dividends"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier les montants de dividendes et autres revenus mobiliers a partir des IFU 2025.",
+          "Verifier la presence de revenus non pre-remplis dans la rubrique RCM."
+        ],
+        "nextQuestions": [
+          "Avez-vous un ou plusieurs IFU a consolider pour 2025 ?",
+          "Souhaitez-vous verifier l'option 2OP (bareme global) ou conserver le regime forfaitaire ?"
+        ],
+        "suggestedCaseCodes": ["2DC", "2TS", "2TR", "2OP"],
+        "requiredDocuments": ["Imprime Fiscal Unique (IFU) 2025"],
+        "onlineUiHints": [
+          "Verifier la rubrique Revenus de capitaux mobiliers et les montants pre-remplis avant validation."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "J'ai des placements a la banque. Que dois-je faire du justificatif adresse par la banque ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/jai-des-placements-la-banque-celle-ci-ma-adresse-un-justificatif-que-dois-je",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "rental_income_nue_location",
+        "topic": "revenus_fonciers",
+        "trigger": {
+          "incomeTypes": ["rental_income"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier s'il s'agit bien de location nue (non meublee).",
+          "Verifier le total des loyers annuels hors charges pour orienter micro-foncier vs reel.",
+          "Verifier si une declaration 2044 est necessaire selon le regime retenu."
+        ],
+        "nextQuestions": [
+          "Vos loyers annuels 2025 hors charges depassent-ils 15 000 EUR ?",
+          "Avez-vous opte pour le regime reel ou un regime particulier ?",
+          "Le bien est-il strictement en location nue (non meublee) ?"
+        ],
+        "suggestedCaseCodes": ["4BE", "4BA", "4BB", "4BC", "4BD"],
+        "requiredDocuments": [
+          "Synthese des loyers 2025 hors charges",
+          "Elements de charges deductibles si regime reel"
+        ],
+        "onlineUiHints": [
+          "En ligne, afficher la rubrique revenus fonciers puis verifier la case 4BE (micro) ou les cases du resultat foncier (reel)."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Je mets en location un logement vide. Comment declarer les loyers percus ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/je-mets-en-location-un-logement-vide-comment-declarer-les-loyers-percus",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "J'ai un logement en location nue et un en location meublee... puis-je indiquer leurs revenus sur la meme declaration ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/jai-un-logement-en-location-nue-et-un-en-location-meublee-puis-je-indiquer-0",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "furnished_rental_lmnp_lmp",
+        "topic": "location_meublee",
+        "trigger": {
+          "incomeTypes": ["furnished_rental"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier le statut LMNP vs LMP selon les seuils et la situation du foyer.",
+          "Verifier le regime micro-BIC vs reel et l'eventuelle liasse fiscale si reel.",
+          "Verifier la categorie exacte (tourisme classe/non classe/chambre d'hotes/autre)."
+        ],
+        "nextQuestions": [
+          "Quel est le montant total des recettes 2025 de location meublee ?",
+          "Ces recettes depassent-elles 23 000 EUR et/ou les autres revenus d'activite du foyer ?",
+          "Etes-vous en micro-BIC ou en regime reel ?"
+        ],
+        "suggestedCaseCodes": ["5NG", "5NH", "5NI", "5NA", "5KP"],
+        "requiredDocuments": [
+          "Recapitulatif des recettes de location meublee 2025",
+          "Declaration 2031-SD si regime reel"
+        ],
+        "onlineUiHints": [
+          "En ligne, activer la rubrique 2042 C PRO liee aux locations meublees avant saisie des cases correspondantes."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Impot sur le revenu - Revenus d'une location meublee",
+            "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F32744",
+            "publisher": "Service Public (DILA)",
+            "authorityLevel": "secondary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 C PRO - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_cpro_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "micro_entrepreneur_2042_c_pro",
+        "topic": "micro_entrepreneur",
+        "trigger": {
+          "incomeTypes": ["micro_entrepreneur"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier la nature de l'activite (BIC ventes, BIC services, BNC, location meublee).",
+          "Verifier si l'option versement liberatoire est active ou non.",
+          "Verifier la ventilation du chiffre d'affaires si plusieurs activites."
+        ],
+        "nextQuestions": [
+          "Avez-vous opte pour le versement liberatoire ?",
+          "Votre activite releve-t-elle de ventes, prestations BIC, BNC ou location meublee ?",
+          "Avez-vous plusieurs activites avec des CA distincts a ventiler ?"
+        ],
+        "suggestedCaseCodes": ["5KO", "5KP", "5NO", "5NP", "5NG", "5NH", "5NI", "5HQ", "5TA", "5TB", "5TE"],
+        "requiredDocuments": ["Recapitulatif du chiffre d'affaires 2025 par activite"],
+        "onlineUiHints": [
+          "En declaration en ligne, activer les rubriques 2042 C PRO adaptees puis saisir le CA brut dans les cases correspondantes."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Comment declarer les revenus provenant de mon activite d'auto-entrepreneur ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/comment-declarer-les-revenus-provenant-de-mon-activite-dauto-entrepreneur",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration pre-remplie n°2042 C PRO - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_cpro_rev2025_projet.pdf",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "salary_frais_reels",
+        "topic": "frais_reels",
+        "trigger": {
+          "incomeTypes": ["salary"],
+          "eventKeywords": ["frais reels", "frais reels", "ndf", "note de frais"]
+        },
+        "complexityImpact": "monitor",
+        "decisionImpact": "supported_with_caution",
+        "pointsToConfirm": [
+          "Verifier que l'option frais reels est pertinente vs abattement forfaitaire de 10%.",
+          "Verifier que les depenses sont liees a l'activite et justifiables.",
+          "Verifier la coherence entre salaires declares et frais reels saisis."
+        ],
+        "nextQuestions": [
+          "Avez-vous estime si vos frais reels depassent l'abattement forfaitaire ?",
+          "Disposez-vous des justificatifs (deplacements, repas, vehicule, autres frais) ?",
+          "Avez-vous eu des remboursements employeur a retraiter ?"
+        ],
+        "suggestedCaseCodes": ["1AK", "1BK", "1CK", "1DK", "1AJ"],
+        "requiredDocuments": [
+          "Justificatifs de frais professionnels 2025",
+          "Elements de calcul des frais reels"
+        ],
+        "onlineUiHints": [
+          "En ligne, saisir les frais reels dans la rubrique dediee et conserver les justificatifs sans les joindre."
+        ],
+        "confidenceLevel": "high",
+        "sources": [
+          {
+            "title": "Comment declarer mes frais reels dans ma declaration de revenus ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/comment-declarer-mes-frais-reels-dans-ma-declaration-de-revenus",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Mon employeur me rembourse des frais professionnels, puis-je opter pour les frais reels ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/mon-employeur-me-rembourse-des-frais-professionnels-puis-je-opter-pour-les",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          }
+        ]
+      },
+      {
+        "id": "pinel_and_locative_tax_incentives",
+        "topic": "investissements_locatifs",
+        "trigger": {
+          "eventKeywords": ["pinel", "denormandie", "loc'avantages", "locavantages", "duflot", "scellier", "censi-bouvard", "investissement locatif"]
+        },
+        "complexityImpact": "out_of_scope",
+        "decisionImpact": "human_review",
+        "pointsToConfirm": [
+          "Verifier le dispositif exact et l'annee d'investissement/achevement.",
+          "Verifier la localisation et la duree d'engagement de location.",
+          "Verifier les cases RICI applicables selon l'annee et le dispositif."
+        ],
+        "nextQuestions": [
+          "Quel dispositif precise est concerne (Pinel, Denormandie, Loc'Avantages, autre) ?",
+          "Quelle est l'annee d'acquisition/achevement du bien ?",
+          "S'agit-il d'une premiere declaration ou d'un report ?"
+        ],
+        "suggestedCaseCodes": ["7VW", "7VX", "7VY", "7VZ", "7QR", "7QS", "7QT", "7QU"],
+        "requiredDocuments": [
+          "Declaration 2042 RICI",
+          "Declaration 2044-EB (si premiere annee et dispositif concerne)"
+        ],
+        "onlineUiHints": [
+          "Activer la rubrique investissements locatifs puis orienter vers revue humaine avant conclusion definitive."
+        ],
+        "confidenceLevel": "medium",
+        "sources": [
+          {
+            "title": "Ou puis-je trouver la ligne pour indiquer mon investissement",
+            "url": "https://www.impots.gouv.fr/particulier/questions/ou-puis-je-trouver-la-ligne-pour-indiquer-mon-investissement",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Comment faire pour declarer mon investissement locatif et beneficier de la reduction d'impot ?",
+            "url": "https://www.impots.gouv.fr/particulier/questions/comment-faire-pour-declarer-mon-investissement-locatif-et-beneficier-de-la",
+            "publisher": "DGFiP (impots.gouv.fr)",
+            "authorityLevel": "primary_official"
+          },
+          {
+            "title": "Declaration n°2042 RICI - REVENUS 2025 (PROJET)",
+            "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_rici_rev2025_projet.pdf",
             "publisher": "DGFiP (impots.gouv.fr)",
             "authorityLevel": "primary_official"
           }
@@ -750,6 +1010,87 @@
         "publisher": "Service Public (DILA)",
         "authorityLevel": "secondary_official",
         "topics": ["enfants_a_charge", "pensions_versees"],
+        "promoted": true
+      },
+      {
+        "id": "doc-2042-cpro-projet",
+        "title": "Declaration pre-remplie n°2042 C PRO - REVENUS 2025 (PROJET)",
+        "url": "https://www.impots.gouv.fr/sites/default/files/media/1_metier/1_particulier/EV/1_declarer/111_cdhr/projets_imprimes/2042_cpro_rev2025_projet.pdf",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["location_meublee", "micro_entrepreneur", "bic_bnc"],
+        "promoted": true
+      },
+      {
+        "id": "faq-location-nue",
+        "title": "Je mets en location un logement vide. Comment declarer les loyers percus ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/je-mets-en-location-un-logement-vide-comment-declarer-les-loyers-percus",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["revenus_fonciers"],
+        "promoted": true
+      },
+      {
+        "id": "faq-location-nue-meublee",
+        "title": "J'ai un logement en location nue et un en location meublee... puis-je indiquer leurs revenus sur la meme declaration ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/jai-un-logement-en-location-nue-et-un-en-location-meublee-puis-je-indiquer-0",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["revenus_fonciers", "location_meublee"],
+        "promoted": true
+      },
+      {
+        "id": "faq-micro-entrepreneur",
+        "title": "Comment declarer les revenus provenant de mon activite d'auto-entrepreneur ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/comment-declarer-les-revenus-provenant-de-mon-activite-dauto-entrepreneur",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["micro_entrepreneur", "location_meublee", "bic_bnc"],
+        "promoted": true
+      },
+      {
+        "id": "sp-location-meublee",
+        "title": "Impot sur le revenu - Revenus d'une location meublee",
+        "url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F32744",
+        "publisher": "Service Public (DILA)",
+        "authorityLevel": "secondary_official",
+        "topics": ["location_meublee"],
+        "promoted": true
+      },
+      {
+        "id": "faq-frais-reels",
+        "title": "Comment declarer mes frais reels dans ma declaration de revenus ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/comment-declarer-mes-frais-reels-dans-ma-declaration-de-revenus",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["frais_reels"],
+        "promoted": true
+      },
+      {
+        "id": "faq-remboursement-frais-pro",
+        "title": "Mon employeur me rembourse des frais professionnels, puis-je opter pour les frais reels ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/mon-employeur-me-rembourse-des-frais-professionnels-puis-je-opter-pour-les",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["frais_reels"],
+        "promoted": true
+      },
+      {
+        "id": "faq-investissement-ligne",
+        "title": "Ou puis-je trouver la ligne pour indiquer mon investissement",
+        "url": "https://www.impots.gouv.fr/particulier/questions/ou-puis-je-trouver-la-ligne-pour-indiquer-mon-investissement",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["investissements_locatifs"],
+        "promoted": true
+      },
+      {
+        "id": "faq-investissement-reduction",
+        "title": "Comment faire pour declarer mon investissement locatif et beneficier de la reduction d'impot ?",
+        "url": "https://www.impots.gouv.fr/particulier/questions/comment-faire-pour-declarer-mon-investissement-locatif-et-beneficier-de-la",
+        "publisher": "DGFiP (impots.gouv.fr)",
+        "authorityLevel": "primary_official",
+        "topics": ["investissements_locatifs"],
         "promoted": true
       }
     ],
