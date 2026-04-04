@@ -114,7 +114,7 @@ Regle de modelisation MCP obligatoire:
 **Tools a livrer**
 
 1. `qualify_tax_profile` - **DONE**
-2. `list_supporting_documents` - **TODO**
+2. `list_supporting_documents` - **DONE**
 3. `detect_review_points` - **TODO**
 
 **A faire**
@@ -128,6 +128,13 @@ Regle de modelisation MCP obligatoire:
 
 - premier parcours utilisateur utile: cadrage -> qualification -> documents -> vigilance.
 
+**Etat constate**
+
+- `qualify_tax_profile` est implemente et etendu (revenus salariaux, pensions, interets, dividendes, foncier nu, location meublee, micro-entrepreneur),
+- la qualification couvre mieux les cas simples vs monitor vs revue humaine,
+- `list_supporting_documents` est implemente et expose en MCP,
+- le tool `detect_review_points` reste manquant.
+
 **Definition de done**
 
 - cas simples correctement qualifies,
@@ -138,8 +145,23 @@ Regle de modelisation MCP obligatoire:
 
 - implementer `list_supporting_documents`,
 - implementer `detect_review_points`,
-- exposer les 2 tools dans le serveur MCP,
+- exposer `detect_review_points` dans le serveur MCP,
 - verifier les 3 tools ensemble sur un parcours unique (qualification -> docs -> vigilance).
+
+**Prochaine etape immediate (a executer maintenant)**
+
+- implementer `detect_review_points` en priorite,
+- entree minimale: `profileSnapshot`, `knownFacts`, `declaredAmounts` (optionnel),
+- sortie minimale: `reviewPoints[]` avec `severity`, `justification`, `blocking`, `suggestedActions`,
+- regles deterministes: incoherences issues de la qualification (pas de generation libre LLM),
+- gerer les contradictions courantes (ex: `none` avec charge, regime foncier incoherent, contexte incomplet),
+- tests cibles (minimum 6):
+  - cas simple sans alerte,
+  - dons sans justificatif,
+  - garde d'enfants avec infos incompletes,
+  - location meublee avec statut LMNP/LMP non tranche,
+  - revenus fonciers sans choix de regime,
+  - cas hors perimetre avec alerte bloquante.
 
 ## Phase 2 - Pre-declaration exploitable
 
@@ -267,7 +289,8 @@ Regle de modelisation MCP obligatoire:
 
 - `SKILL.md` present,
 - orchestration complete des 6 tools impossible tant que les tools manquants ne sont pas livres,
-- tests metier automatises: non livres.
+- tests automatises de qualification: livres (>= 10),
+- tests de parcours multi-tools: non livres.
 
 **Reste a faire pour passer DONE**
 

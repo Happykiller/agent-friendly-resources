@@ -8,6 +8,7 @@ import {
 } from "@modelcontextprotocol/sdk/types.js";
 import { container, TYPES } from "./inversify.js";
 import { QualifyTaxProfileUseCase } from "./usecases/domains/qualify-tool/qualify-tax-profile.usecase.js";
+import { ListSupportingDocumentsUseCase } from "./usecases/domains/qualify-tool/list-supporting-documents.usecase.js";
 
 const SERVER_INFO = {
   name: "fiscal-fr-mcp",
@@ -27,6 +28,9 @@ function createMcpServer() {
   const qualifyTaxProfileUseCase = container.get<QualifyTaxProfileUseCase>(
     TYPES.QualifyTaxProfileUseCase
   );
+  const listSupportingDocumentsUseCase = container.get<ListSupportingDocumentsUseCase>(
+    TYPES.ListSupportingDocumentsUseCase
+  );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
@@ -37,46 +41,86 @@ function createMcpServer() {
             "Qualifie une situation fiscale francaise et retourne recommandations structurees (cases, justificatifs, sources).",
           inputSchema: qualifyTaxProfileUseCase.getToolSchema(),
         },
+        {
+          name: "list_supporting_documents",
+          description:
+            "Genere la checklist de justificatifs obligatoires/recommandes/manquants a partir d'un profil qualifie.",
+          inputSchema: listSupportingDocumentsUseCase.getToolSchema(),
+        },
       ],
     };
   });
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
-    if (request.params.name !== "qualify_tax_profile") {
-      throw new Error(`Unknown tool: ${request.params.name}`);
-    }
+    if (request.params.name === "qualify_tax_profile") {
+      const parsed = qualifyTaxProfileUseCase.validateInput(request.params.arguments);
 
-    const parsed = qualifyTaxProfileUseCase.validateInput(request.params.arguments);
+      if (!parsed.success) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  error: "INVALID_INPUT",
+                  details: parsed.error.flatten(),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+          isError: true,
+        };
+      }
 
-    if (!parsed.success) {
+      const result = qualifyTaxProfileUseCase.execute(parsed.data);
+
       return {
         content: [
           {
             type: "text",
-            text: JSON.stringify(
-              {
-                error: "INVALID_INPUT",
-                details: parsed.error.flatten(),
-              },
-              null,
-              2
-            ),
+            text: JSON.stringify(result, null, 2),
           },
         ],
-        isError: true,
       };
     }
 
-    const result = qualifyTaxProfileUseCase.execute(parsed.data);
+    if (request.params.name === "list_supporting_documents") {
+      const parsed = listSupportingDocumentsUseCase.validateInput(request.params.arguments);
 
-    return {
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify(result, null, 2),
-        },
-      ],
-    };
+      if (!parsed.success) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  error: "INVALID_INPUT",
+                  details: parsed.error.flatten(),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const result = listSupportingDocumentsUseCase.execute(parsed.data);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
+      };
+    }
+
+    throw new Error(`Unknown tool: ${request.params.name}`);
   });
 
   return server;

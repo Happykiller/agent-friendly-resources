@@ -1,0 +1,43 @@
+{
+  "campaign": "fr-2026-revenus-2025",
+  "recommendedByIncomeType": {
+    "salary": ["Bulletins de salaire ou attestation employeur 2025"],
+    "pension": ["Releves de pension 2025"],
+    "bank_interest": ["Imprime Fiscal Unique (IFU) 2025"],
+    "dividends": ["Imprime Fiscal Unique (IFU) 2025"],
+    "rental_income": ["Releve annuel des loyers encaisses 2025 (hors charges)"],
+    "furnished_rental": ["Recapitulatif des recettes de location meublee 2025"],
+    "micro_entrepreneur": ["Recapitulatif du chiffre d'affaires 2025 par activite"]
+  },
+  "recommendedByChargeType": {
+    "donations": ["Recapitulatif des dons par organisme et date"],
+    "childcare": ["Detail annuel des depenses de garde d'enfants"],
+    "home_services": ["Detail annuel des depenses emploi a domicile"],
+    "alimony": ["Recapitulatif annuel des pensions versees"]
+  },
+  "additionalRules": [
+    {
+      "id": "pinel_investment_context",
+      "when": {
+        "eventKeywordsAny": ["pinel", "denormandie", "locavantages", "investissement locatif"]
+      },
+      "recommendedDocuments": [
+        "Contrat d'acquisition et annexes du dispositif locatif",
+        "Justificatifs d'engagement de location et declaration 2042 RICI"
+      ],
+      "note": "Cas complexe potentiel: revue humaine recommandee."
+    },
+    {
+      "id": "salary_frais_reels_context",
+      "when": {
+        "incomeTypesAny": ["salary"],
+        "eventKeywordsAny": ["frais reels", "ndf", "note de frais"]
+      },
+      "recommendedDocuments": [
+        "Justificatifs detailles des frais professionnels 2025",
+        "Elements de calcul des frais reels"
+      ],
+      "note": "Comparer les frais reels a l'abattement forfaitaire de 10%."
+    }
+  ]
+}

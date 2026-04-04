@@ -19,4 +19,8 @@ export class JsonQualifyToolRepository implements QualifyToolRepository {
   getQualificationCorpus() {
     return this.db.getQualificationCorpus();
   }
+
+  getSupportingDocumentsKnowledge() {
+    return this.db.getSupportingDocumentsKnowledge();
+  }
 }

@@ -72,7 +72,8 @@ The tool returns a JSON object serialized in `content[0].text` with:
 #### Knowledge source policy
 
 - Active knowledge rules and corpus are loaded from `mcp-server/src/data/qualify-tool.db.json`
-- This file is curated from `mcp-server/assets/` with a strict traceability policy:
+- Supporting documents mappings are loaded from `mcp-server/src/data/list-supporting-documents.db.json`
+- These DB files are curated from the repository-level `assets/` folder with a strict traceability policy:
   - explicit official URLs only
   - priority to `impots.gouv.fr`
   - `service-public.gouv.fr` as secondary official source
@@ -94,6 +95,27 @@ On invalid input, the tool returns:
 - `content[0].text` containing:
   - `error: "INVALID_INPUT"`
   - Zod validation details
+
+### `list_supporting_documents`
+
+Generates a structured checklist of supporting documents from a qualified tax profile.
+
+#### Input schema
+
+Required fields:
+- `profileSnapshot`: same payload as `qualify_tax_profile`
+
+Optional fields:
+- `alreadyAvailableDocuments`: array of free-text document names already available
+- `knownFacts`: array of already confirmed facts
+
+#### Output payload
+
+- `required`: list of mandatory documents (`label`, `technicalKey`, `reasons`, `sourceUrls`)
+- `recommended`: list of useful documents (`label`, `technicalKey`, `reasons`, `sourceUrls`)
+- `missing`: subset of required documents still missing
+- `notes`: caution and progress notes
+- `profileSummary`: `complexity`, `mvpDecision`, `detectedTopics`
 
 ## Quick manual test
 

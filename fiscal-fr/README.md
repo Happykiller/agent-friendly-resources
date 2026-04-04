@@ -181,7 +181,7 @@ Sur un dossier qualifie, l'agent fournit deja:
 
 ### Limite importante de l'existant
 
-Les modes conversationnels `justificatifs` et `predeclaration` existent cote assistant, mais aujourd'hui ils reposent surtout sur la qualification et la structuration conversationnelle. Les tools MCP dedies (`list_supporting_documents`, `build_pre_declaration`, etc.) sont prevus et en cours d'implementation.
+Le mode conversationnel `justificatifs` est maintenant outille par le tool MCP `list_supporting_documents`. Le mode `predeclaration` reste en structuration conversationnelle en attendant le tool dedie `build_pre_declaration`.
 
 Important: le plugin ne depose jamais la declaration a votre place.
 

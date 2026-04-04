@@ -134,3 +134,44 @@ export type QualifyTaxProfileResult = {
     sourcesUsed: SourceRef[];
   };
 };
+
+export type ListSupportingDocumentsInput = {
+  profileSnapshot: QualifyTaxProfileInput;
+  alreadyAvailableDocuments: string[];
+  knownFacts: string[];
+};
+
+export type DocumentItem = {
+  label: string;
+  technicalKey: string;
+  reasons: string[];
+  sourceUrls: string[];
+};
+
+export type ListSupportingDocumentsResult = {
+  required: DocumentItem[];
+  recommended: DocumentItem[];
+  missing: DocumentItem[];
+  notes: string[];
+  profileSummary: {
+    complexity: ComplexityLevel;
+    mvpDecision: DecisionLevel;
+    detectedTopics: string[];
+  };
+};
+
+export type SupportingDocumentsKnowledge = {
+  campaign: string;
+  recommendedByIncomeType: Record<string, string[]>;
+  recommendedByChargeType: Record<string, string[]>;
+  additionalRules: Array<{
+    id: string;
+    when: {
+      incomeTypesAny?: string[];
+      chargesAny?: string[];
+      eventKeywordsAny?: string[];
+    };
+    recommendedDocuments: string[];
+    note?: string;
+  }>;
+};

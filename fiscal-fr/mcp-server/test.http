@@ -99,3 +99,36 @@ Accept: application/json, text/event-stream
     }
   }
 }
+
+### Call tool - supporting documents checklist
+POST {{baseUrl}}{{mcpPath}}
+Content-Type: application/json
+Accept: application/json, text/event-stream
+
+{
+  "jsonrpc": "2.0",
+  "id": 6,
+  "method": "tools/call",
+  "params": {
+    "name": "list_supporting_documents",
+    "arguments": {
+      "profileSnapshot": {
+        "householdStatus": "married",
+        "dependentsCount": 2,
+        "incomeTypes": ["salary", "rental_income"],
+        "charges": ["donations", "childcare"],
+        "events": [],
+        "dependentContexts": [],
+        "donationContexts": ["general_interest"],
+        "homeServiceContexts": [],
+        "alimonyContexts": []
+      },
+      "alreadyAvailableDocuments": [
+        "Recus fiscaux de dons"
+      ],
+      "knownFacts": [
+        "montant des dons deja confirme"
+      ]
+    }
+  }
+}

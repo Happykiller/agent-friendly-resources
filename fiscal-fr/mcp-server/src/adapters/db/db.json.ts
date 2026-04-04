@@ -5,6 +5,7 @@ import type {
   QualificationConfig,
   QualificationCorpus,
   QualificationKnowledge,
+  SupportingDocumentsKnowledge,
 } from "../../usecases/domains/qualify-tool/qualify-tool.types.js";
 
 const QualificationConfigSchema = z.object({
@@ -101,18 +102,43 @@ const QualifyToolDbSchema = z.object({
   qualificationCorpus: QualificationCorpusSchema,
 });
 
+const SupportingDocumentsKnowledgeSchema = z.object({
+  campaign: z.string(),
+  recommendedByIncomeType: z.record(z.string(), z.array(z.string())),
+  recommendedByChargeType: z.record(z.string(), z.array(z.string())),
+  additionalRules: z.array(
+    z.object({
+      id: z.string(),
+      when: z.object({
+        incomeTypesAny: z.array(z.string()).optional(),
+        chargesAny: z.array(z.string()).optional(),
+        eventKeywordsAny: z.array(z.string()).optional(),
+      }),
+      recommendedDocuments: z.array(z.string()),
+      note: z.string().optional(),
+    })
+  ),
+});
+
 export class JsonDbAdapter implements DbAdapter {
   private readonly qualificationConfig: QualificationConfig;
   private readonly qualificationKnowledge: QualificationKnowledge;
   private readonly qualificationCorpus: QualificationCorpus;
+  private readonly supportingDocumentsKnowledge: SupportingDocumentsKnowledge;
 
   constructor() {
     const dbRaw = readFileSync(new URL("../../data/qualify-tool.db.json", import.meta.url), "utf8");
     const dbParsed = QualifyToolDbSchema.parse(JSON.parse(dbRaw));
+    const documentsRaw = readFileSync(
+      new URL("../../data/list-supporting-documents.db.json", import.meta.url),
+      "utf8"
+    );
+    const documentsParsed = SupportingDocumentsKnowledgeSchema.parse(JSON.parse(documentsRaw));
 
     this.qualificationConfig = dbParsed.qualificationConfig;
     this.qualificationKnowledge = dbParsed.qualificationKnowledge;
     this.qualificationCorpus = dbParsed.qualificationCorpus;
+    this.supportingDocumentsKnowledge = documentsParsed;
   }
 
   getQualificationConfig() {
@@ -125,5 +151,9 @@ export class JsonDbAdapter implements DbAdapter {
 
   getQualificationCorpus() {
     return this.qualificationCorpus;
+  }
+
+  getSupportingDocumentsKnowledge() {
+    return this.supportingDocumentsKnowledge;
   }
 }
