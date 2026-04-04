@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "tsx src/index.ts",
     "dev:http": "MCP_TRANSPORT=http MCP_PORT=3333 tsx src/index.ts",
-    "build": "tsc -p tsconfig.json"
+    "build": "tsc -p tsconfig.json && npm run copy:data",
+    "copy:data": "mkdir -p dist/data && cp src/data/*.json dist/data/"
   },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.29.0",

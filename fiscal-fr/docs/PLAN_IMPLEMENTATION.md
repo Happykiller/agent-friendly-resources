@@ -1,0 +1,300 @@
+# Plan unique d'implementation - fiscal-fr
+
+## 1) Cadrage unique
+
+### Objectif
+
+Fournir un plugin MCP d'assistance a la preparation de la declaration de revenus francaise (cas simples), qui qualifie la situation, prepare le dossier, et guide la saisie sans remplacer un conseil fiscal humain.
+
+### Cible
+
+- particulier francais,
+- cas standard,
+- besoin d'aide pedagogique, progressive et structuree.
+
+### Entrees
+
+- situation familiale,
+- revenus,
+- charges et credits/reductions,
+- evenements de vie,
+- pieces justificatives disponibles.
+
+### Sorties
+
+- profil fiscal,
+- checklist de documents,
+- points de vigilance,
+- estimation indicative,
+- pre-declaration structuree,
+- guide de saisie etape par etape.
+
+### Limites non negociables
+
+- pas de conseil juridique opposable,
+- pas de depot automatique,
+- pas de prise en charge des cas complexes,
+- distinction systematique `faits / hypotheses / points a confirmer`.
+
+## 2) Regles d'architecture (a respecter partout)
+
+### Deterministe (code/regles)
+
+- qualification de base,
+- controles de coherence,
+- mapping formulaires/rubriques/cases,
+- generation des justificatifs,
+- estimation simple,
+- decisions de blocage et hors perimetre.
+
+Regle de modelisation MCP obligatoire:
+
+- separer les champs "affichage utilisateur" (libelles lisibles) des champs "valeurs techniques" (codes/enum),
+- ne jamais deduire un code technique a partir d'un texte libre sans regle explicite,
+- dans chaque sortie tool, conserver les deux niveaux quand pertinent:
+  - niveau metier lisible (ex: "revenus salariaux"),
+  - niveau technique stable (ex: `salary`, case/code formulaire).
+
+### LLM (orchestration/UX)
+
+- reformuler,
+- poser les bonnes questions au bon moment,
+- expliquer simplement,
+- produire des syntheses claires.
+
+### Interdits LLM
+
+- inventer une case ou un formulaire,
+- inventer une eligibilite,
+- conclure sans regle/source,
+- masquer l'incertitude.
+
+## 3) Plan d'execution unique (phases)
+
+## Phase 0 - Socle technique
+
+**Statut actuel: PARTIAL (maj 2026-04-04)**
+
+**A faire**
+
+- finaliser serveur MCP TypeScript (dev/build/test),
+- fournir `.mcp.json` exemple projet,
+- poser `types/schemas` communs avec validation stricte.
+
+**Livrables**
+
+- serveur compilable et executable,
+- contrats d'entrees/sorties pour tous les tools,
+- aucun payload libre non valide.
+
+**Definition de done**
+
+- build OK,
+- chargement MCP OK,
+- validations IO actives.
+
+**Etat constate**
+
+- build OK,
+- chargement MCP via `.mcp.json` OK,
+- validation stricte active pour `qualify_tax_profile`,
+- schemas/contrats complets des 6 tools: non livre.
+
+**Reste a faire pour passer DONE**
+
+- ajouter les schemas d'entree/sortie pour les 5 tools manquants,
+- brancher ces schemas dans l'exposition MCP (`tools/list` + `tools/call`),
+- verifier qu'aucun tool n'accepte de payload non valide,
+- ajouter un test de contrat par tool (validation OK + INVALID_INPUT).
+
+## Phase 1 - Qualification et dossier minimal
+
+**Statut actuel: PARTIAL (maj 2026-04-04)**
+
+**Tools a livrer**
+
+1. `qualify_tax_profile` - **DONE**
+2. `list_supporting_documents` - **TODO**
+3. `detect_review_points` - **TODO**
+
+**A faire**
+
+- classifier la situation (`simple|monitor|out_of_scope`),
+- donner statut (`supported|unsupported|needs_human_review`),
+- produire checklist documentaire (`required|recommended|missing`),
+- produire points d'attention priorises (`severity`, justification).
+
+**Livrables**
+
+- premier parcours utilisateur utile: cadrage -> qualification -> documents -> vigilance.
+
+**Definition de done**
+
+- cas simples correctement qualifies,
+- cas hors perimetre refuses proprement,
+- chaque sortie contient faits/hypotheses/points a confirmer.
+
+**Reste a faire pour passer DONE**
+
+- implementer `list_supporting_documents`,
+- implementer `detect_review_points`,
+- exposer les 2 tools dans le serveur MCP,
+- verifier les 3 tools ensemble sur un parcours unique (qualification -> docs -> vigilance).
+
+## Phase 2 - Pre-declaration exploitable
+
+**Statut actuel: TODO (maj 2026-04-04)**
+
+**Tool a livrer**
+
+4. `build_pre_declaration` - **TODO**
+
+**A faire**
+
+- produire un JSON de brouillon structure,
+- rattacher chaque valeur a son origine,
+- marquer clairement ce qui est confirme vs a confirmer.
+- separer explicitement:
+  - les rubriques/formulaires presentes a l'utilisateur (libelles),
+  - les identifiants techniques internes (codes, enums, references).
+
+**Livrables**
+
+- pre-declaration directement exploitable en conversation et en controle final.
+
+**Definition de done**
+
+- aucune rubrique sans source,
+- sortie stable et affichable telle quelle.
+- aucune confusion entre libelle utilisateur et valeur technique.
+
+**Reste a faire pour passer DONE**
+
+- implementer le tool `build_pre_declaration`,
+- definir un format de sortie stable (rubrique, valeur, source, statut),
+- ajouter validation stricte de l'entree et de la sortie,
+- tester un cas complet avec donnees partielles + points a confirmer.
+
+## Phase 3 - Estimation prudente
+
+**Statut actuel: TODO (maj 2026-04-04)**
+
+**Tool a livrer**
+
+5. `estimate_impact` - **TODO**
+
+**A faire**
+
+- calcul indicatif uniquement pour cas simples,
+- exposer hypotheses, niveau de confiance et avertissements,
+- bloquer la precision abusive en donnees incompletes.
+
+**Livrables**
+
+- estimation utile mais non trompeuse.
+
+**Definition de done**
+
+- resultat toujours tague `indicative`,
+- avertissement present si incomplet/incertain.
+
+**Reste a faire pour passer DONE**
+
+- implementer le tool `estimate_impact`,
+- ajouter hypotheses explicites et niveau de confiance,
+- forcer un avertissement si donnees incompletes,
+- interdire toute formulation de calcul definitif.
+
+## Phase 4 - Copilote de saisie
+
+**Statut actuel: TODO (maj 2026-04-04)**
+
+**Tool a livrer**
+
+6. `guide_filing_step` - **TODO**
+
+**A faire**
+
+- guider ecran par ecran selon contexte,
+- indiquer: a verifier maintenant, oublis frequents, pieges,
+- conserver la logique "guide sans faire a la place".
+
+**Livrables**
+
+- accompagnement operationnel pendant la saisie sur impots.gouv.fr.
+
+**Definition de done**
+
+- pour une etape donnee, la checklist est immediate, priorisee et actionnable.
+
+**Reste a faire pour passer DONE**
+
+- implementer le tool `guide_filing_step`,
+- definir l'entree minimale (`currentStep`, `knownContext`),
+- structurer la sortie (a verifier maintenant / oublis / pieges),
+- valider sur 3 ecrans types de saisie.
+
+## Phase 5 - Orchestration et tests
+
+**Statut actuel: PARTIAL (maj 2026-04-04)**
+
+**A faire**
+
+- stabiliser `SKILL.md` (ordre d'appel des tools, ton, limites, refus),
+- couvrir minimum 10 scenarios metier,
+- verifier le parcours complet conversationnel.
+
+**Scenarios minimum**
+
+1. celibataire salarie simple,
+2. couple avec enfant,
+3. dons,
+4. emploi a domicile,
+5. interets bancaires,
+6. donnees incoherentes,
+7. cas complexe rejete,
+8. justificatifs manquants,
+9. estimation incomplete,
+10. guidage ecran par ecran.
+
+**Definition de done**
+
+- tests verts,
+- parcours complet executable de l'ouverture au controle final,
+- README utilisateur + exemple `.mcp.json` presents.
+
+**Etat constate**
+
+- `SKILL.md` present,
+- orchestration complete des 6 tools impossible tant que les tools manquants ne sont pas livres,
+- tests metier automatises: non livres.
+
+**Reste a faire pour passer DONE**
+
+- aligner `SKILL.md` avec les 6 tools une fois implementes,
+- ajouter au moins 10 tests metier automatises,
+- verifier le parcours conversationnel complet de l'ouverture au controle final,
+- valider les cas hors perimetre et refus propres.
+
+## 4) Sequence d'usage cible (reference produit)
+
+1. ouverture et cadrage,
+2. qualification,
+3. justificatifs,
+4. points de vigilance,
+5. pre-declaration,
+6. estimation indicative,
+7. mode copilote de saisie,
+8. controle final avant validation.
+
+## 5) Definition finale de done MVP
+
+Le MVP est "Done" uniquement si:
+
+- Claude Code charge le serveur MCP sans manipulation speciale,
+- les 6 tools sont implementes et stables,
+- toutes les entrees/sorties sont validees,
+- les cas hors perimetre sont refuses proprement,
+- les reponses distinguent toujours faits/hypotheses/points a confirmer,
+- au moins 10 tests metier passent,
+- la doc client (`README.md`) et la doc d'implementation (ce fichier) sont a jour.

@@ -4,7 +4,7 @@
       "command": "bash",
       "args": [
         "-lc",
-        "cd /home/faro/happykiller/agent-friendly-resources/fiscal-fr/mcp-server && npm run dev"
+        "npm run dev --prefix \"$PWD/mcp-server\""
       ]
     }
   }

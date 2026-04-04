@@ -97,6 +97,7 @@ export class QualifyTaxProfileUseCase {
         },
         incomeTypes: {
           type: "array",
+          minItems: 1,
           items: {
             type: "string",
             enum: [...config.incomeTypes],
@@ -123,25 +124,37 @@ export class QualifyTaxProfileUseCase {
   validateInput(rawInput: unknown) {
     const config = this.repository.getQualificationConfig();
 
-    const schema = z.object({
-      householdStatus: z.string().refine((value) => config.householdStatuses.includes(value), {
-        message: "Invalid householdStatus",
-      }),
-      dependentsCount: z.number().int().min(0),
-      incomeTypes: z.array(
-        z.string().refine((value) => config.incomeTypes.includes(value), {
-          message: "Invalid incomeTypes value",
-        })
-      ),
-      charges: z
-        .array(
-          z.string().refine((value) => config.chargeTypes.includes(value), {
-            message: "Invalid charges value",
-          })
-        )
-        .default([]),
-      events: z.array(z.string()).default([]),
-    });
+    const schema = z
+      .object({
+        householdStatus: z.string().refine((value) => config.householdStatuses.includes(value), {
+          message: "Invalid householdStatus",
+        }),
+        dependentsCount: z.number().int().min(0),
+        incomeTypes: z
+          .array(
+            z.string().refine((value) => config.incomeTypes.includes(value), {
+              message: "Invalid incomeTypes value",
+            })
+          )
+          .min(1, "At least one income type is required"),
+        charges: z
+          .array(
+            z.string().refine((value) => config.chargeTypes.includes(value), {
+              message: "Invalid charges value",
+            })
+          )
+          .default([]),
+        events: z.array(z.string()).default([]),
+      })
+      .superRefine((value, ctx) => {
+        if (value.charges.includes("none") && value.charges.length > 1) {
+          ctx.addIssue({
+            code: z.ZodIssueCode.custom,
+            path: ["charges"],
+            message: "'none' cannot be combined with other charges",
+          });
+        }
+      });
 
     return schema.safeParse(rawInput);
   }
