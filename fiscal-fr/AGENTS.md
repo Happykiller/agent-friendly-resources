@@ -81,6 +81,35 @@ L'orchestrateur doit suivre le fil conversationnel cible :
 5. Mettre à jour le skill orchestrateur si ce nouvel agent doit être invoqué.
 6. Mettre à jour la documentation associée si le périmètre fonctionnel est impacté (`README.md`, `docs/PLAN_IMPLEMENTATION.md`).
 
+## Architecture du serveur MCP — règle obligatoire
+
+Toute donnée ou règle métier utilisée par un usecase **doit passer par la chaîne complète** :
+
+```
+src/data/<nom>.db.json       ← données/règles (source de vérité)
+    ↓
+DbAdapter (db.abstract.ts)   ← port : déclare getX()
+    ↓
+JsonDbAdapter (db.json.ts)   ← lit + valide le JSON via Zod au démarrage, cache en mémoire
+    ↓
+QualifyToolRepository        ← port domaine : déclare getX()
+    ↓
+JsonQualifyToolRepository    ← délègue au DbAdapter
+    ↓
+Inversify (inversify.ts)     ← câble les dépendances
+    ↓
+Usecase                      ← reçoit le repository par injection, appelle this.repository.getX()
+```
+
+**Interdit** : hardcoder des règles, des valeurs métier ou des listes de référence directement dans le code TypeScript d'un usecase.
+
+**Obligatoire** : pour chaque nouveau jeu de règles/données, créer ou étendre :
+1. `src/data/<nom>.db.json` — les données
+2. Le schéma Zod correspondant dans `db.json.ts` (validation au chargement)
+3. Le type TypeScript dans `qualify-tool.types.ts`
+4. La méthode `getX()` dans `DbAdapter`, `QualifyToolRepository`, et `JsonQualifyToolRepository`
+5. Le usecase utilise `this.repository.getX()` uniquement
+
 ## Vérification rapide
 
 Avant commit :

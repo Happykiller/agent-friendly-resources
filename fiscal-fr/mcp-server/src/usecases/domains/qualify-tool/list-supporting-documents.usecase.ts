@@ -84,27 +84,10 @@ export class ListSupportingDocumentsUseCase {
       })
       .transform((value) => {
         const parsedProfile = this.qualifyUseCase.validateInput(value.profileSnapshot);
-
-        if (!parsedProfile.success) {
-          return {
-            ...value,
-            profileSnapshot: {
-              householdStatus: "single",
-              dependentsCount: 0,
-              incomeTypes: [],
-              charges: [],
-              events: [],
-              dependentContexts: [],
-              donationContexts: [],
-              homeServiceContexts: [],
-              alimonyContexts: [],
-            },
-          };
-        }
-
+        // parsedProfile.success is guaranteed here: superRefine already rejected invalid profiles
         return {
           ...value,
-          profileSnapshot: parsedProfile.data,
+          profileSnapshot: parsedProfile.data!,
         };
       });
 

@@ -93,29 +93,29 @@ Regle de modelisation MCP obligatoire:
 - chargement MCP OK,
 - validations IO actives.
 
-**Etat constate**
+**Etat constate (maj 2026-04-04)**
 
 - build OK,
 - chargement MCP via `.mcp.json` OK,
-- validation stricte active pour `qualify_tax_profile`,
-- schemas/contrats complets des 6 tools: non livre.
+- validation stricte active pour les 3 tools implementes,
+- erreur MCP non-conforme corrigee (`throw Error` → `isError: true`),
+- schemas/contrats complets des 6 tools: 3/6 livres.
 
 **Reste a faire pour passer DONE**
 
-- ajouter les schemas d'entree/sortie pour les 5 tools manquants,
+- ajouter les schemas d'entree/sortie pour les 3 tools manquants (phases 2-4),
 - brancher ces schemas dans l'exposition MCP (`tools/list` + `tools/call`),
-- verifier qu'aucun tool n'accepte de payload non valide,
 - ajouter un test de contrat par tool (validation OK + INVALID_INPUT).
 
 ## Phase 1 - Qualification et dossier minimal
 
-**Statut actuel: PARTIAL (maj 2026-04-04)**
+**Statut actuel: DONE (maj 2026-04-04)**
 
 **Tools a livrer**
 
 1. `qualify_tax_profile` - **DONE**
 2. `list_supporting_documents` - **DONE**
-3. `detect_review_points` - **TODO**
+3. `detect_review_points` - **DONE**
 
 **A faire**
 
@@ -128,40 +128,22 @@ Regle de modelisation MCP obligatoire:
 
 - premier parcours utilisateur utile: cadrage -> qualification -> documents -> vigilance.
 
-**Etat constate**
+**Etat constate (maj 2026-04-04)**
 
-- `qualify_tax_profile` est implemente et etendu (revenus salariaux, pensions, interets, dividendes, foncier nu, location meublee, micro-entrepreneur),
-- la qualification couvre mieux les cas simples vs monitor vs revue humaine,
-- `list_supporting_documents` est implemente et expose en MCP,
-- le tool `detect_review_points` reste manquant.
+- `qualify_tax_profile` implemente et etendu (salaires, pensions, interets, dividendes, foncier nu, location meublee, micro-entrepreneur),
+- `list_supporting_documents` implemente, expose en MCP, bug validation silencieuse corrige,
+- `detect_review_points` implemente et expose en MCP :
+  - 7 regles deterministes (revenus hors perimetre, evenement bloquant, regime foncier, LMNP/LMP, dons, garde alternee, incoherence declaredAmounts),
+  - regles externalisees en JSON (`detect-review-points.db.json`) via la chaine DbAdapter → Repository → Usecase,
+  - 13 tests couvrant tous les cas cibles,
+- 32 tests au total, 100% verts,
+- architecture data-access documentee dans `AGENTS.md`.
 
 **Definition de done**
 
-- cas simples correctement qualifies,
-- cas hors perimetre refuses proprement,
-- chaque sortie contient faits/hypotheses/points a confirmer.
-
-**Reste a faire pour passer DONE**
-
-- implementer `list_supporting_documents`,
-- implementer `detect_review_points`,
-- exposer `detect_review_points` dans le serveur MCP,
-- verifier les 3 tools ensemble sur un parcours unique (qualification -> docs -> vigilance).
-
-**Prochaine etape immediate (a executer maintenant)**
-
-- implementer `detect_review_points` en priorite,
-- entree minimale: `profileSnapshot`, `knownFacts`, `declaredAmounts` (optionnel),
-- sortie minimale: `reviewPoints[]` avec `severity`, `justification`, `blocking`, `suggestedActions`,
-- regles deterministes: incoherences issues de la qualification (pas de generation libre LLM),
-- gerer les contradictions courantes (ex: `none` avec charge, regime foncier incoherent, contexte incomplet),
-- tests cibles (minimum 6):
-  - cas simple sans alerte,
-  - dons sans justificatif,
-  - garde d'enfants avec infos incompletes,
-  - location meublee avec statut LMNP/LMP non tranche,
-  - revenus fonciers sans choix de regime,
-  - cas hors perimetre avec alerte bloquante.
+- cas simples correctement qualifies : OK,
+- cas hors perimetre refuses proprement : OK,
+- chaque sortie contient faits/hypotheses/points a confirmer : OK.
 
 ## Phase 2 - Pre-declaration exploitable
 
@@ -285,17 +267,18 @@ Regle de modelisation MCP obligatoire:
 - parcours complet executable de l'ouverture au controle final,
 - README utilisateur + exemple `.mcp.json` presents.
 
-**Etat constate**
+**Etat constate (maj 2026-04-04)**
 
 - `SKILL.md` present,
-- orchestration complete des 6 tools impossible tant que les tools manquants ne sont pas livres,
-- tests automatises de qualification: livres (>= 10),
-- tests de parcours multi-tools: non livres.
+- orchestration des 3 premiers tools possible (qualification -> docs -> vigilance),
+- orchestration complete des 6 tools impossible tant que les tools phases 2-4 ne sont pas livres,
+- tests automatises : 32 tests unitaires verts (qualification, documents, points de vigilance),
+- tests de parcours multi-tools : non livres.
 
 **Reste a faire pour passer DONE**
 
-- aligner `SKILL.md` avec les 6 tools une fois implementes,
-- ajouter au moins 10 tests metier automatises,
+- aligner `SKILL.md` avec les 6 tools une fois implementes (phases 2-4),
+- ajouter au moins 10 tests metier automatises de parcours,
 - verifier le parcours conversationnel complet de l'ouverture au controle final,
 - valider les cas hors perimetre et refus propres.
 

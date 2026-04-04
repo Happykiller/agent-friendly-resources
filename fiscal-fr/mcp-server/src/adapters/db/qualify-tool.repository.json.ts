@@ -23,4 +23,8 @@ export class JsonQualifyToolRepository implements QualifyToolRepository {
   getSupportingDocumentsKnowledge() {
     return this.db.getSupportingDocumentsKnowledge();
   }
+
+  getReviewPointsKnowledge() {
+    return this.db.getReviewPointsKnowledge();
+  }
 }

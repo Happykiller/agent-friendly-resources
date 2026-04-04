@@ -9,6 +9,7 @@ import {
 import { container, TYPES } from "./inversify.js";
 import { QualifyTaxProfileUseCase } from "./usecases/domains/qualify-tool/qualify-tax-profile.usecase.js";
 import { ListSupportingDocumentsUseCase } from "./usecases/domains/qualify-tool/list-supporting-documents.usecase.js";
+import { DetectReviewPointsUseCase } from "./usecases/domains/qualify-tool/detect-review-points.usecase.js";
 
 const SERVER_INFO = {
   name: "fiscal-fr-mcp",
@@ -31,6 +32,9 @@ function createMcpServer() {
   const listSupportingDocumentsUseCase = container.get<ListSupportingDocumentsUseCase>(
     TYPES.ListSupportingDocumentsUseCase
   );
+  const detectReviewPointsUseCase = container.get<DetectReviewPointsUseCase>(
+    TYPES.DetectReviewPointsUseCase
+  );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
@@ -46,6 +50,12 @@ function createMcpServer() {
           description:
             "Genere la checklist de justificatifs obligatoires/recommandes/manquants a partir d'un profil qualifie.",
           inputSchema: listSupportingDocumentsUseCase.getToolSchema(),
+        },
+        {
+          name: "detect_review_points",
+          description:
+            "Detecte les points de vigilance et incoherences dans un profil fiscal qualifie (regimes non tranches, justificatifs manquants, cas hors perimetre).",
+          inputSchema: detectReviewPointsUseCase.getToolSchema(),
         },
       ],
     };
@@ -120,7 +130,49 @@ function createMcpServer() {
       };
     }
 
-    throw new Error(`Unknown tool: ${request.params.name}`);
+    if (request.params.name === "detect_review_points") {
+      const parsed = detectReviewPointsUseCase.validateInput(request.params.arguments);
+
+      if (!parsed.success) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  error: "INVALID_INPUT",
+                  details: parsed.error.flatten(),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const result = detectReviewPointsUseCase.execute(parsed.data);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
+      };
+    }
+
+    return {
+      content: [
+        {
+          type: "text",
+          text: JSON.stringify({ error: "UNKNOWN_TOOL", tool: request.params.name }, null, 2),
+        },
+      ],
+      isError: true,
+    };
   });
 
   return server;

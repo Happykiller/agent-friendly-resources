@@ -2,6 +2,7 @@ import type {
   QualificationConfig,
   QualificationCorpus,
   QualificationKnowledge,
+  ReviewPointsKnowledge,
   SupportingDocumentsKnowledge,
 } from "../../usecases/domains/qualify-tool/qualify-tool.types.js";
 
@@ -10,4 +11,5 @@ export interface DbAdapter {
   getQualificationKnowledge(): QualificationKnowledge;
   getQualificationCorpus(): QualificationCorpus;
   getSupportingDocumentsKnowledge(): SupportingDocumentsKnowledge;
+  getReviewPointsKnowledge(): ReviewPointsKnowledge;
 }

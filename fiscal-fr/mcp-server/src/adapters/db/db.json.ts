@@ -5,6 +5,7 @@ import type {
   QualificationConfig,
   QualificationCorpus,
   QualificationKnowledge,
+  ReviewPointsKnowledge,
   SupportingDocumentsKnowledge,
 } from "../../usecases/domains/qualify-tool/qualify-tool.types.js";
 
@@ -120,11 +121,42 @@ const SupportingDocumentsKnowledgeSchema = z.object({
   ),
 });
 
+const ReviewPointConditionSchema = z.object({
+  incomeTypesAny: z.array(z.string()).optional(),
+  chargesAny: z.array(z.string()).optional(),
+  dependentContextsAny: z.array(z.string()).optional(),
+  outOfScopeIncomes: z.boolean().optional(),
+  outOfScopeEvents: z.boolean().optional(),
+  declaredAmountWithoutIncomeType: z
+    .object({
+      amountKeywords: z.array(z.string()),
+      requiredIncomeType: z.string(),
+    })
+    .optional(),
+});
+
+const ReviewPointsKnowledgeSchema = z.object({
+  campaign: z.string(),
+  rules: z.array(
+    z.object({
+      id: z.string(),
+      severity: z.enum(["info", "warning", "error"]),
+      blocking: z.boolean(),
+      topic: z.string(),
+      justificationTemplate: z.string(),
+      suggestedActions: z.array(z.string()),
+      when: ReviewPointConditionSchema,
+      confirmedByKeywords: z.array(z.string()).optional(),
+    })
+  ),
+});
+
 export class JsonDbAdapter implements DbAdapter {
   private readonly qualificationConfig: QualificationConfig;
   private readonly qualificationKnowledge: QualificationKnowledge;
   private readonly qualificationCorpus: QualificationCorpus;
   private readonly supportingDocumentsKnowledge: SupportingDocumentsKnowledge;
+  private readonly reviewPointsKnowledge: ReviewPointsKnowledge;
 
   constructor() {
     const dbRaw = readFileSync(new URL("../../data/qualify-tool.db.json", import.meta.url), "utf8");
@@ -134,11 +166,17 @@ export class JsonDbAdapter implements DbAdapter {
       "utf8"
     );
     const documentsParsed = SupportingDocumentsKnowledgeSchema.parse(JSON.parse(documentsRaw));
+    const reviewPointsRaw = readFileSync(
+      new URL("../../data/detect-review-points.db.json", import.meta.url),
+      "utf8"
+    );
+    const reviewPointsParsed = ReviewPointsKnowledgeSchema.parse(JSON.parse(reviewPointsRaw));
 
     this.qualificationConfig = dbParsed.qualificationConfig;
     this.qualificationKnowledge = dbParsed.qualificationKnowledge;
     this.qualificationCorpus = dbParsed.qualificationCorpus;
     this.supportingDocumentsKnowledge = documentsParsed;
+    this.reviewPointsKnowledge = reviewPointsParsed;
   }
 
   getQualificationConfig() {
@@ -155,5 +193,9 @@ export class JsonDbAdapter implements DbAdapter {
 
   getSupportingDocumentsKnowledge() {
     return this.supportingDocumentsKnowledge;
+  }
+
+  getReviewPointsKnowledge() {
+    return this.reviewPointsKnowledge;
   }
 }

@@ -160,6 +160,62 @@ export type ListSupportingDocumentsResult = {
   };
 };
 
+export type ReviewPointSeverity = "info" | "warning" | "error";
+
+export type ReviewPointCondition = {
+  incomeTypesAny?: string[];
+  chargesAny?: string[];
+  dependentContextsAny?: string[];
+  outOfScopeIncomes?: boolean;
+  outOfScopeEvents?: boolean;
+  declaredAmountWithoutIncomeType?: {
+    amountKeywords: string[];
+    requiredIncomeType: string;
+  };
+};
+
+export type ReviewPointRule = {
+  id: string;
+  severity: ReviewPointSeverity;
+  blocking: boolean;
+  topic: string;
+  justificationTemplate: string;
+  suggestedActions: string[];
+  when: ReviewPointCondition;
+  confirmedByKeywords?: string[];
+};
+
+export type ReviewPointsKnowledge = {
+  campaign: string;
+  rules: ReviewPointRule[];
+};
+
+export type ReviewPoint = {
+  id: string;
+  severity: ReviewPointSeverity;
+  blocking: boolean;
+  topic: string;
+  justification: string;
+  suggestedActions: string[];
+};
+
+export type DetectReviewPointsInput = {
+  profileSnapshot: QualifyTaxProfileInput;
+  knownFacts: string[];
+  declaredAmounts?: Record<string, number>;
+};
+
+export type DetectReviewPointsResult = {
+  reviewPoints: ReviewPoint[];
+  hasBlockingPoints: boolean;
+  summary: {
+    complexity: ComplexityLevel;
+    mvpDecision: DecisionLevel;
+    totalPoints: number;
+    blockingCount: number;
+  };
+};
+
 export type SupportingDocumentsKnowledge = {
   campaign: string;
   recommendedByIncomeType: Record<string, string[]>;

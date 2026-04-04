@@ -1,0 +1,112 @@
+{
+  "campaign": "2026",
+  "rules": [
+    {
+      "id": "out_of_scope_income",
+      "severity": "error",
+      "blocking": true,
+      "topic": "Revenus hors perimetre",
+      "justificationTemplate": "Les revenus de type \"{found}\" ne sont pas pris en charge (BIC/BNC, revenus etrangers, crypto-actifs).",
+      "suggestedActions": [
+        "Consulter un expert-comptable ou un conseiller fiscal agree.",
+        "Se rapprocher du service des impots pour les situations specifiques."
+      ],
+      "when": {
+        "outOfScopeIncomes": true
+      }
+    },
+    {
+      "id": "out_of_scope_event",
+      "severity": "error",
+      "blocking": true,
+      "topic": "Evenement personnel complexe",
+      "justificationTemplate": "Un evenement declare (\"{found}\") necessite une revue humaine (divorce, controle fiscal, non-resident).",
+      "suggestedActions": [
+        "Consulter un professionnel du droit fiscal avant de finaliser la declaration.",
+        "Contacter le service des impots en cas de controle fiscal en cours."
+      ],
+      "when": {
+        "outOfScopeEvents": true
+      }
+    },
+    {
+      "id": "rental_regime_unclear",
+      "severity": "warning",
+      "blocking": false,
+      "topic": "Regime fiscal revenus fonciers",
+      "justificationTemplate": "Des revenus fonciers sont declares mais le regime fiscal (micro-foncier ou reel) n'est pas precise.",
+      "suggestedActions": [
+        "Verifier si les loyers bruts annuels sont inferieurs a 15 000 EUR (micro-foncier eligible).",
+        "Preciser le regime retenu avant de renseigner les cases du formulaire 2044 ou 2042."
+      ],
+      "when": {
+        "incomeTypesAny": ["rental_income"]
+      },
+      "confirmedByKeywords": ["micro-foncier", "micro foncier", "regime reel", "regime", "15000"]
+    },
+    {
+      "id": "furnished_rental_status_unclear",
+      "severity": "warning",
+      "blocking": false,
+      "topic": "Statut LMNP/LMP location meublee",
+      "justificationTemplate": "Une location meublee est declaree mais le statut LMNP ou LMP et le regime fiscal ne sont pas confirmes.",
+      "suggestedActions": [
+        "Verifier si les recettes annuelles depassent 23 000 EUR ET 50 % des revenus du foyer (seuil LMP).",
+        "Preciser le regime retenu : micro-BIC (recettes < 77 700 EUR) ou regime reel."
+      ],
+      "when": {
+        "incomeTypesAny": ["furnished_rental"]
+      },
+      "confirmedByKeywords": ["lmnp", "lmp", "statut", "meuble", "micro-bic", "micro bic"]
+    },
+    {
+      "id": "donation_receipt_unconfirmed",
+      "severity": "warning",
+      "blocking": false,
+      "topic": "Justificatifs dons",
+      "justificationTemplate": "Des dons ont ete declares mais la presence des recus fiscaux n'est pas confirmee dans les faits connus.",
+      "suggestedActions": [
+        "Rassembler les recus fiscaux emis par chaque organisme beneficiaire.",
+        "Verifier que chaque organisme est bien reconnu d'utilite publique ou d'interet general.",
+        "Conserver les recus 3 ans apres la declaration (delai de reprise de l'administration)."
+      ],
+      "when": {
+        "chargesAny": ["donations"]
+      },
+      "confirmedByKeywords": ["recu fiscal", "recu", "attestation", "justificatif", "don confirme"]
+    },
+    {
+      "id": "shared_custody_details_needed",
+      "severity": "info",
+      "blocking": false,
+      "topic": "Garde alternee",
+      "justificationTemplate": "Une garde alternee est declaree. Des precisions sont necessaires pour le calcul correct des parts fiscales.",
+      "suggestedActions": [
+        "Preciser si la demi-part supplementaire est partagee avec l'autre parent ou attribuee a un seul.",
+        "Verifier que les deux foyers ne revendiquent pas simultanement la meme part fiscale.",
+        "En cas de desaccord entre parents, un jugement peut etre requis."
+      ],
+      "when": {
+        "dependentContextsAny": ["children_shared_custody"]
+      },
+      "confirmedByKeywords": ["garde alternee", "demi-part", "accord", "partage", "juge"]
+    },
+    {
+      "id": "declared_salary_no_income_type",
+      "severity": "warning",
+      "blocking": false,
+      "topic": "Incoherence revenus declares",
+      "justificationTemplate": "Un montant de salaire est fourni dans declaredAmounts mais 'salary' n'est pas present dans les incomeTypes du profil.",
+      "suggestedActions": [
+        "Verifier que le profil inclut bien 'salary' comme type de revenu.",
+        "Relancer qualify_tax_profile avec le type de revenu corrige."
+      ],
+      "when": {
+        "declaredAmountWithoutIncomeType": {
+          "amountKeywords": ["salary", "salaire", "traitement"],
+          "requiredIncomeType": "salary"
+        }
+      }
+    }
+  ]
+}
