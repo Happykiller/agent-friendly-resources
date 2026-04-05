@@ -1,0 +1,149 @@
+```json
+[
+  {
+    "stepId": "step_etat_civil",
+    "label": "État civil et situation familiale",
+    "verifyNow": [
+      "Vérifier l'exactitude de l'adresse postale au 1er janvier de l'année d'imposition.",
+      "Signaler tout changement de situation familiale intervenu au cours de l'année (mariage, Pacs, divorce, décès).",
+      "Confirmer la présence des personnes à charge, notamment les enfants mineurs ou majeurs rattachés."
+    ],
+    "frequentOmissions": [
+      "Oublier de signaler un déménagement, une nouvelle adresse, ou la location d'une résidence secondaire.",
+      "Omettre de cocher la case 'parent isolé' (case T) si l'on élève seul un ou plusieurs enfants."
+    ],
+    "traps": [
+      "Croire que la case 'parent isolé' (case T) reste cochée automatiquement d'une année sur l'autre : elle doit être re-cochée chaque année.",
+      "Déclarer un enfant majeur ou un ascendant en rattachement à charge alors qu'il bénéficie d'une pension alimentaire déductible, ce qui est strictement interdit."
+    ],
+    "keyCaseCodes": [
+      "T",
+      "L",
+      "J",
+      "F",
+      "G",
+      "H",
+      "I"
+    ],
+    "sourceUrl": "https://www.economie.gouv.fr/particuliers/gerer-mon-impot-sur-le-revenu/declaration-de-revenus-quelles-sont-les-principales",
+    "confidenceLevel": "high"
+  },
+  {
+    "stepId": "step_revenus_salaires",
+    "label": "Traitements, salaires, pensions et rentes",
+    "verifyNow": [
+      "Comparer les montants préremplis de salaires et de prélèvement à la source avec les bulletins de paie de décembre.",
+      "Vérifier si l'option pour les frais réels, calculée avec les barèmes kilométriques, est plus avantageuse que l'abattement forfaitaire automatique de 10 %."
+    ],
+    "frequentOmissions": [
+      "Oublier de vérifier ou corriger les indemnités journalières de maladie ou de maternité qui sont imposables."
+    ],
+    "traps": [
+      "Confondre la case du salaire imposable (1AJ) avec celle des heures supplémentaires exonérées (1GH).",
+      "Il faut impérativement s'assurer que les heures exonérées sont bien soustraites de la case 1AJ et isolées en 1GH (dans la limite du plafond de 7 500 €) pour éviter d'être taxé à tort sur ces revenus."
+    ],
+    "keyCaseCodes": [
+      "1AJ",
+      "1BJ",
+      "1AS",
+      "1BS",
+      "1GH",
+      "1AK"
+    ],
+    "sourceUrl": "https://www.impots.gouv.fr/formulaire/2042/declaration-des-revenus",
+    "confidenceLevel": "high"
+  },
+  {
+    "stepId": "step_revenus_capitaux_mobiliers",
+    "label": "Revenus de valeurs et capitaux mobiliers",
+    "verifyNow": [
+      "S'assurer que les intérêts, dividendes et autres produits d'assurance-vie préremplis correspondent à l'Imprimé Fiscal Unique (IFU / formulaire 2561) fourni par la banque."
+    ],
+    "frequentOmissions": [
+      "Oublier de déclarer les comptes bancaires ou contrats d'assurance-vie ouverts ou détenus à l'étranger.",
+      "Omettre de déclarer les plus-values boursières ou la taxation des cryptomonnaies."
+    ],
+    "traps": [
+      "Subir le Prélèvement Forfaitaire Unique (PFU) à 30 % par défaut en oubliant de cocher la case 2OP.",
+      "L'option pour le barème progressif (case 2OP) est souvent beaucoup plus avantageuse pour les contribuables non imposables ou situés dans la tranche à 11 %, car elle permet d'appliquer les abattements et de réduire l'impôt final."
+    ],
+    "keyCaseCodes": [
+      "2DC",
+      "2TR",
+      "2BH",
+      "2CK",
+      "2OP"
+    ],
+    "sourceUrl": "https://www.service-public.gouv.fr/particuliers/vosdroits/F34913/1_7",
+    "confidenceLevel": "high"
+  },
+  {
+    "stepId": "step_revenus_fonciers",
+    "label": "Revenus fonciers",
+    "verifyNow": [
+      "Si les recettes de location vide sont inférieures à 15 000 €, vérifier l'application du régime micro-foncier.",
+      "Pour le régime réel (dès lors que les loyers dépassent 15 000 €), s'assurer que le formulaire annexe 2044 a bien été complété avec la déduction des charges réelles."
+    ],
+    "frequentOmissions": [
+      "Oublier de reporter le résultat calculé sur la déclaration annexe 2044 vers les cases correspondantes de la déclaration principale 2042.",
+      "Omettre de déduire certaines charges en régime réel, comme la taxe foncière ou les frais de copropriété."
+    ],
+    "traps": [
+      "Appliquer soi-même l'abattement de 30 % directement dans la case 4BE du micro-foncier.",
+      "Il faut impérativement inscrire le montant brut des loyers perçus, car c'est l'administration fiscale qui se charge de calculer et de déduire automatiquement l'abattement de 30 %."
+    ],
+    "keyCaseCodes": [
+      "4BE",
+      "4BA",
+      "Formulaire 2044"
+    ],
+    "sourceUrl": "https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2025/accueil.htm",
+    "confidenceLevel": "high"
+  },
+  {
+    "stepId": "step_charges_credits_reductions",
+    "label": "Charges déductibles, réductions et crédits d'impôt",
+    "verifyNow": [
+      "Détailler les dépenses ouvrant droit à réduction ou crédit d'impôt, telles que les frais de garde des enfants de moins de 6 ans, l'emploi à domicile, les pensions alimentaires versées, les dons aux associations ou les cotisations PER."
+    ],
+    "frequentOmissions": [
+      "Oublier de déduire les aides financières reçues (CMG de la CAF, aides de l'employeur, CESU préfinancés) de la base de calcul pour l'emploi à domicile ou les frais de garde.",
+      "Ne pas distinguer les dons de manière chronologique, alors que le plafond du dispositif 'Coluche' (réduction de 75 %) est doublé pour les dons réalisés à compter du 14 octobre 2025."
+    ],
+    "traps": [
+      "Saisir un montant global d'emploi à domicile (case 7DB) sans identifier explicitement le nom du prestataire, du salarié, ou fournir un SIRET.",
+      "La nouvelle obligation de traçabilité et de transparence de la campagne 2026 exige de détailler l'identité des bénéficiaires, sous peine de voir la déclaration bloquée."
+    ],
+    "keyCaseCodes": [
+      "7GA",
+      "7DB",
+      "7UF",
+      "7UD",
+      "6GI",
+      "7DR",
+      "6GU",
+      "6EL"
+    ],
+    "sourceUrl": "https://www.service-public.gouv.fr/particuliers/vosdroits/R32008",
+    "confidenceLevel": "high"
+  },
+  {
+    "stepId": "step_recapitulatif_validation",
+    "label": "Résumé et signature",
+    "verifyNow": [
+      "Prendre connaissance du résumé de la déclaration affiché en fin de parcours, de l'estimation de l'impôt, du solde final à payer ou à se faire rembourser, et de la mise à jour du Revenu Fiscal de Référence.",
+      "Vérifier et valider les coordonnées bancaires (RIB) requises pour d'éventuels prélèvements ou remboursements estivaux."
+    ],
+    "frequentOmissions": [
+      "Oublier de vérifier et gérer ses options liées au prélèvement à la source (PAS) à l'issue de la déclaration, notamment le choix d'appliquer un taux individualisé pour les conjoints du foyer fiscal."
+    ],
+    "traps": [
+      "Oublier de signer et valider électroniquement la déclaration à la fin de la procédure.",
+      "S'inquiéter du 'solde à payer' sans comprendre que c'est simplement le résultat de l'impôt total calculé, duquel l'administration a déduit les retenues à la source déjà effectuées l'année précédente."
+    ],
+    "keyCaseCodes": [],
+    "sourceUrl": "https://www.impots.gouv.fr/les-modalites-de-la-declaration-de-revenus-en-2026",
+    "confidenceLevel": "high"
+  }
+]
+```

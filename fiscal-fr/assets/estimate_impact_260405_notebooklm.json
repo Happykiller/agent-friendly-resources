@@ -1,0 +1,186 @@
+[
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.service-public.gouv.fr/particuliers/actualites/A18045",
+    "source_title": "Fiscalité - Impôt sur le revenu : tranches et taux d'imposition 2026",
+    "confidence_level": "high",
+    "rule_id": "bareme_progressif_2026",
+    "rule_type": "bareme",
+    "description": "Barème progressif de l'impôt sur le revenu 2026 (revenus 2025) composé de 5 tranches d'imposition.",
+    "changed_from_2025": true,
+    "change_note": "Les seuils des tranches ont été revalorisés de 0,9 % pour tenir compte de l'inflation.",
+    "data": {
+      "tranches": [
+        { "taux": 0.00, "seuil_bas": 0, "seuil_haut": 11600 },
+        { "taux": 0.11, "seuil_bas": 11601, "seuil_haut": 29579 },
+        { "taux": 0.30, "seuil_bas": 29580, "seuil_haut": 84577 },
+        { "taux": 0.41, "seuil_bas": 84578, "seuil_haut": 181917 },
+        { "taux": 0.45, "seuil_bas": 181918, "seuil_haut": null }
+      ]
+    }
+  },
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.service-public.gouv.fr/particuliers/actualites/A18045",
+    "source_title": "Fiscalité - Impôt sur le revenu : tranches et taux d'imposition 2026",
+    "confidence_level": "low",
+    "rule_id": "quotient_familial_parts",
+    "rule_type": "bareme",
+    "description": "Calcul du quotient familial selon la situation (célibataire/marié) et les personnes à charge, incluant la demi-part supplémentaire pour parent isolé (case T).",
+    "missing_source": "Montant exact en euros du plafonnement du quotient familial et de la demi-part parent isolé manquant dans les sources officielles de la campagne 2026 fournies.",
+    "data": {
+      "parts_de_base": {
+        "celibataire": 1,
+        "marie_pacse": 2
+      },
+      "parts_enfants": {
+        "enfant_1": 0.5,
+        "enfant_2": 0.5,
+        "enfant_3_et_plus": 1.0
+      },
+      "regle_parent_isole_case_t": "Octroie une demi-part supplémentaire si le parent vit seul au 1er janvier avec au moins un enfant à charge."
+    }
+  },
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.economie.gouv.fr/particuliers/impots-et-fiscalite/gerer-mon-impot-sur-le-revenu/loi-de-finances-2026-ce-qui-change-pour-les-particuliers",
+    "source_title": "Loi de finances 2026 : ce qui change pour les particuliers",
+    "confidence_level": "low",
+    "rule_id": "abattement_10_salaires_pensions",
+    "rule_type": "abattement",
+    "description": "Abattement forfaitaire automatique de 10 % appliqué sur les salaires et les pensions de retraite.",
+    "missing_source": "Montants exacts des planchers (minimum) et plafonds (maximum) de l'abattement pour les salaires et pour les pensions absents des sources officielles 2026 du corpus.",
+    "data": {
+      "taux_abattement": 0.10,
+      "maintien_pensions": "L'abattement de 10 % sur les pensions de retraite est formellement maintenu par la loi de finances 2026."
+    }
+  },
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F34913/1_7",
+    "source_title": "Impôt sur le revenu - Revenus d'épargne et de placement - Revenus 2026",
+    "confidence_level": "high",
+    "rule_id": "abattement_40_dividendes",
+    "rule_type": "abattement",
+    "description": "Abattement de 40 % sur les dividendes.",
+    "data": {
+      "taux_abattement": 0.40,
+      "base_calcul": "Montant brut des dividendes perçus",
+      "condition_application": "Uniquement si le contribuable opte pour l'imposition au barème progressif (renoncement au PFU)."
+    }
+  },
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F34913/1_3",
+    "source_title": "Impôt sur le revenu - Revenus d'épargne et de placement - Revenus 2026",
+    "confidence_level": "high",
+    "rule_id": "pfu_flat_tax_2026",
+    "rule_type": "pfu",
+    "description": "Prélèvement Forfaitaire Unique (PFU) applicable par défaut aux revenus du capital (dividendes, intérêts).",
+    "changed_from_2025": true,
+    "change_note": "Le taux des prélèvements sociaux passe de 17,2 % à 18,6 % au 1er janvier 2026, portant le taux global du PFU à 31,4 %.",
+    "data": {
+      "taux_global": 0.314,
+      "composante_ir": 0.128,
+      "composante_prelevements_sociaux": 0.186,
+      "application_par_defaut": true
+    }
+  },
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F8",
+    "source_title": "Impôt sur le revenu - Frais de garde d'enfant hors du domicile (crédit d'impôt)",
+    "confidence_level": "high",
+    "rule_id": "credit_impot_garde_enfant",
+    "rule_type": "credit",
+    "description": "Crédit d'impôt pour la garde d'enfants de moins de 6 ans à l'extérieur du domicile (case 7GA).",
+    "data": {
+      "taux_credit": 0.50,
+      "plafond_depenses_par_enfant": 3500,
+      "plafond_credit_par_enfant": 1750,
+      "plafond_depenses_garde_alternee": 1750,
+      "conditions": [
+        "Enfant âgé de moins de 6 ans au 1er janvier de l'année d'imposition.",
+        "Les frais de nourriture ne sont pas pris en compte.",
+        "Les aides perçues (CMG de la CAF, aides employeur) doivent être déduites de la base de calcul."
+      ]
+    }
+  },
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F12",
+    "source_title": "Impôt sur le revenu - Crédit d'impôt pour l'emploi d'un salarié à domicile",
+    "confidence_level": "high",
+    "rule_id": "credit_impot_emploi_domicile",
+    "rule_type": "credit",
+    "description": "Crédit d'impôt pour l'emploi d'un salarié à domicile (case 7DB).",
+    "data": {
+      "taux_credit": 0.50,
+      "plafond_depenses_droit_commun": 12000,
+      "majoration_par_personne_a_charge": 1500,
+      "plafond_depenses_majore_limite": 15000,
+      "conditions_majoration": "Enfant à charge (750 € en garde alternée), membre du foyer ou ascendant de plus de 65 ans."
+    }
+  },
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.economie.gouv.fr/particuliers/impots-et-fiscalite/gerer-mon-impot-sur-le-revenu/loi-de-finances-2026-ce-qui-change-pour-les-particuliers",
+    "source_title": "Loi de finances 2026 : ce qui change pour les particuliers",
+    "confidence_level": "high",
+    "rule_id": "reduction_impot_dons",
+    "rule_type": "reduction",
+    "description": "Réduction d'impôt pour dons aux associations (taux général et dispositif Coluche).",
+    "changed_from_2025": true,
+    "change_note": "La loi de finances 2026 a doublé le plafond des dons Coluche, le portant à 2 000 € pour les versements effectués à compter du 14 octobre 2025.",
+    "data": {
+      "dispositif_coluche": {
+        "taux": 0.75,
+        "plafond_versement": 2000,
+        "organismes_eligibles": "Aide aux personnes en difficulté ou victimes de violence"
+      },
+      "dispositif_general": {
+        "taux": 0.66,
+        "plafond_revenu_imposable": 0.20
+      }
+    }
+  },
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.economie.gouv.fr/particuliers/impots-et-fiscalite/gerer-mon-impot-sur-le-revenu/loi-de-finances-2026-ce-qui-change-pour-les-particuliers",
+    "source_title": "Loi de finances 2026 : ce qui change pour les particuliers",
+    "confidence_level": "high",
+    "rule_id": "contribution_hauts_revenus_cdhr",
+    "rule_type": "cehr",
+    "description": "Reconduction de la Contribution Différentielle sur les Hauts Revenus (CDHR) visant à garantir un taux d'imposition minimal.",
+    "data": {
+      "taux_minimal_garanti": 0.20,
+      "seuil_declenchement_rfr_celibataire": 250000,
+      "seuil_declenchement_rfr_couple": 500000
+    }
+  },
+  {
+    "campaign": "2026",
+    "source_authority": "primary_official",
+    "source_url": "https://www.impots.gouv.fr/particulier/questions/je-fais-garder-mon-jeune-enfant-lexterieur-du-domicile-que-puis-je-deduire",
+    "source_title": "RÉDUCTIONS ET CRÉDITS D'IMPÔT DE LA 2042 ET DE LA 2042 RICI",
+    "confidence_level": "low",
+    "rule_id": "revenus_micro_foncier",
+    "rule_type": "abattement",
+    "description": "Mécanisme d'abattement forfaitaire de 30 % sur les revenus locatifs sous le régime micro-foncier.",
+    "missing_source": "Brochure pratique officielle DGFiP ou BOFiP 2026 confirmant explicitement le maintien de l'abattement de 30 % sur les recettes brutes pour la campagne 2026.",
+    "data": {
+      "taux_abattement": 0.30,
+      "multiplicateur_revenu_net": 0.70,
+      "base_de_calcul": "Recettes brutes (loyers encaissés)"
+    }
+  }
+]

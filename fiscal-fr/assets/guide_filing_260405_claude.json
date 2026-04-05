@@ -1,0 +1,395 @@
+[
+  {
+    "stepId": "step_connexion",
+    "label": "Connexion à l'espace Finances publiques",
+    "position": 0,
+    "sourceUrl": "https://www.impots.gouv.fr/particulier/declarez-en-ligne",
+    "sourceTitle": "Déclarez en ligne – impots.gouv.fr",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Disposer de son numéro fiscal (13 chiffres, haut à gauche de l'avis d'imposition ou de la déclaration reçue en avril) et de son mot de passe.",
+      "Vérifier que l'on se connecte bien à l'espace 'Particulier' (et non 'Professionnel') pour accéder à la déclaration de revenus.",
+      "Utiliser FranceConnect si l'on a oublié ses identifiants DGFiP."
+    ],
+    "frequentOmissions": [
+      "Ne pas avoir son avis d'imposition 2025 (revenus 2024) sous la main : le RFR figure dessus et peut être demandé à la première connexion.",
+      "Primo-déclarant : il faut créer son espace en amont, après vérification d'identité, ce qui peut prendre plusieurs jours."
+    ],
+    "traps": [
+      "Confondre l'espace Particulier et l'espace Professionnel : la déclaration de revenus personnelle n'est accessible que depuis l'espace Particulier.",
+      "Tentative de connexion avant le 9 avril 2026 : le service de déclaration n'est ouvert qu'à partir du 9 avril 2026."
+    ],
+    "keyCaseCodes": [],
+    "notes": "Dates limites 2026 : 21 mai (dép. 01–19 et non-résidents), 28 mai (dép. 20–54), 4 juin (dép. 55–976)."
+  },
+
+  {
+    "stepId": "step_declaration_automatique",
+    "label": "Déclaration automatique (le cas échéant) — Écran d'accueil",
+    "position": 1,
+    "sourceUrl": "https://www.service-public.gouv.fr/particuliers/vosdroits/F358",
+    "sourceTitle": "Déclaration de revenus annuelle – Service-Public.gouv.fr (vérifié 01/01/2026)",
+    "sourceUrl2": "https://www.moneyvox.fr/impot/actualites/108249/impots-2026-les-3-pieges-de-la-declaration-automatique",
+    "sourceTitle2": "Les 3 pièges de la déclaration automatique – MoneyVox 2026",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Vérifier si l'on est éligible à la déclaration automatique (aucun changement de situation en 2025, revenus uniquement préremplis par l'admin).",
+      "Si éligible, lire attentivement le récapitulatif présenté (situation familiale, adresse, revenus, coordonnées bancaires, impôt estimatif) AVANT de valider tacitement.",
+      "Si des changements de situation ont été signalés via 'gérer mon prélèvement à la source' (mariage, naissance, déménagement…), vérifier si l'éligibilité est conservée : un courriel DGFiP mi-avril prévient si ce n'est plus le cas."
+    ],
+    "frequentOmissions": [
+      "Valider la déclaration automatique sans lire le récapitulatif : des erreurs sur les préremplissages passent inaperçues.",
+      "Oublier que les dons, crédits d'impôt non transmis par des tiers (garde d'enfant, emploi à domicile), les frais réels ou un changement de situation imposent de modifier la déclaration et donc de sortir du mode automatique."
+    ],
+    "traps": [
+      "Avoir signalé un événement de vie (mariage, PACS, naissance, divorce) via l'espace en ligne en 2025 : cela rend la déclaration automatique non disponible MAIS le fisc peut ne pas en informer le contribuable à temps.",
+      "Déclaration automatique validée alors qu'un crédit d'impôt garde d'enfant ou emploi à domicile aurait dû être déclaré : l'avantage est perdu pour l'année.",
+      "Absence de correction = déclaration déposée : si on ne fait rien et qu'on était éligible, la déclaration est considérée comme validée."
+    ],
+    "keyCaseCodes": [],
+    "notes": "Si on n'est PAS éligible à la déclaration automatique, on suit le parcours classique en 4 étapes décrites ci-dessous."
+  },
+
+  {
+    "stepId": "step_selection_rubriques",
+    "label": "Étape 1 — Sélection des rubriques et déclarations annexes",
+    "position": 2,
+    "sourceUrl": "https://www.impots.gouv.fr/les-modalites-de-la-declaration-de-revenus-en-2026",
+    "sourceTitle": "Modalités de la déclaration de revenus en 2026 – impots.gouv.fr",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Cocher toutes les rubriques correspondant à sa situation : Traitements/salaires, Pensions, Revenus de capitaux mobiliers (cases 2), Revenus fonciers (cases 4), Charges déductibles (cadre 6), Réductions et crédits d'impôt (cases 7), le cas échéant Revenus non-salariés (2042C PRO), Revenus à l'étranger (2047).",
+      "Vérifier les déclarations annexes pré-cochées automatiquement : notamment la déclaration n° 3916 (comptes à l'étranger) qui est parfois pré-cochée à tort.",
+      "Si revenus fonciers au régime réel, activer la déclaration 2044."
+    ],
+    "frequentOmissions": [
+      "Oublier de cocher la rubrique 'Réductions et crédits d'impôt' (2042 RICI) : la rubrique garde d'enfant (7GA), emploi à domicile (7DB) et dons (7UD/7UF) n'apparaîtra pas.",
+      "Ne pas activer la déclaration 2042C si des revenus de remplacement (chômage) ou des plus-values mobilières (2074) doivent être déclarés."
+    ],
+    "traps": [
+      "La déclaration n° 3916 (compte étranger) peut être pré-cochée automatiquement même si aucun compte à l'étranger n'est détenu. Il faut la décocher si ce n'est pas le cas, sinon la déclaration sera bloquée en fin de parcours.",
+      "Le menu 'Déclarations annexes' (à gauche de l'écran) est accessible à tout moment du parcours pour ajouter ou retirer une annexe, même en cours de saisie."
+    ],
+    "keyCaseCodes": ["2042", "2042C", "2042C PRO", "2042 RICI", "2044", "2047", "2074", "3916"]
+  },
+
+  {
+    "stepId": "step_etat_civil",
+    "label": "Étape 2 — État civil, situation familiale et adresse",
+    "position": 3,
+    "sourceUrl": "https://www.service-public.gouv.fr/particuliers/vosdroits/F358",
+    "sourceTitle": "Déclaration de revenus annuelle – Service-Public.gouv.fr",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Vérifier la situation de famille : célibataire, marié(e)/pacsé(e), divorcé(e)/séparé(e), veuf(ve). Un changement en 2025 modifie les parts de quotient familial.",
+      "Vérifier les personnes à charge : nombre d'enfants, âge, situation (charge exclusive, garde alternée, enfant majeur rattaché, enfant invalide). Chaque enfant et chaque configuration a un impact précis sur le nombre de parts.",
+      "Vérifier l'adresse : si déménagement en 2025, la corriger ici. L'adresse détermine le SIP (service des impôts) compétent.",
+      "Vérifier la case T (parent isolé) : cochée si on élève seul au moins un enfant au 1er janvier 2025 et qu'on n'a pas de conjoint au foyer.",
+      "Vérifier la date de mariage ou PACS 2025 le cas échéant : l'année d'un mariage/PACS, les époux ont le choix entre déclaration commune sur l'année entière ou deux déclarations séparées. La déclaration commune est généralement plus favorable."
+    ],
+    "frequentOmissions": [
+      "Oublier de signaler la naissance d'un enfant en 2025 (même en fin d'année) : elle est retenue au 31 décembre si plus favorable.",
+      "Oublier de cocher la case parent isolé (case T, demi-part supplémentaire à 4 262 € d'avantage max) pour les contribuables élevant seuls leurs enfants.",
+      "Oublier de rattacher un enfant majeur étudiant (moins de 25 ans) quand cela est plus favorable que de déduire une pension alimentaire.",
+      "Ne pas mettre à jour l'adresse après un déménagement si la procédure n'a pas été faite via 'gérer mon prélèvement à la source' : risque de retard de réception de l'avis d'imposition."
+    ],
+    "traps": [
+      "Enfant en garde alternée : chaque parent ne bénéficie que de la moitié de la demi-part (soit 1/4 de part pour les deux premiers). Ne pas déclarer l'enfant chez les deux parents à la fois.",
+      "Mariage ou PACS en cours d'année 2025 : l'option pour deux déclarations séparées (chacun déclare ses revenus de toute l'année) peut être plus favorable si les revenus sont proches. Ne pas oublier de simuler les deux scénarios.",
+      "Rattachement d'un enfant majeur vs déduction pension alimentaire : le rattachement donne une demi-part supplémentaire (plafonnée à 1 807 €) mais interdit de déduire la pension alimentaire versée à cet enfant.",
+      "Date d'appréciation de la situation : en règle générale au 1er janvier 2025, SAUF pour les naissances et les situations plus favorables (31 décembre)."
+    ],
+    "keyCaseCodes": ["case T (parent isolé)", "case W (veuf(ve) avec enfant à charge)", "case P (invalidité 40%+)", "case F (garde alternée)"]
+  },
+
+  {
+    "stepId": "step_revenus_salaires",
+    "label": "Étape 3 — Traitements, salaires, pensions de retraite",
+    "position": 4,
+    "sourceUrl": "https://www.impots.gouv.fr/particulier/questions/comment-declarer-mes-frais-reels-dans-ma-declaration-de-revenus",
+    "sourceTitle": "Déclaration des frais réels – impots.gouv.fr",
+    "sourceUrl2": "https://www.impots.gouv.fr/particulier/traitements-et-salaires",
+    "sourceTitle2": "Traitements et salaires – impots.gouv.fr",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Comparer les montants pré-remplis en 1AJ (déclarant 1) et 1BJ (déclarant 2) avec le 'net fiscal' ou 'net imposable' du bulletin de salaire de décembre 2025 (cumul annuel). Le fisc prérempli avec les données transmises par l'employeur, qui peuvent comporter des erreurs.",
+      "Vérifier les cases 1AS (pensions déclarant 1) et 1BS (pensions déclarant 2) avec l'attestation fiscale annuelle de la caisse de retraite (Assurance retraite, Agirc-Arrco…). Attention au montant 'brut fiscal' qui peut différer du 'montant brut' de la pension.",
+      "Vérifier les allocations chômage (ARE) : préremplies en 1AP/1BP, à ne pas omettre même si elles sont exonérées de prélèvements sociaux.",
+      "Vérifier les indemnités journalières de maladie, accident du travail (partiellement imposables) : préremplies mais à contrôler.",
+      "Si option pour les frais réels : calculer si le montant réel des frais professionnels (kilométrique, repas, télétravail…) dépasse 10 % du salaire net imposable (plancher 509 €, plafond 14 555 €). Si oui, saisir en 1AK (déclarant 1) ou 1BK (déclarant 2) SANS modifier le montant de la case 1AJ/1BJ."
+    ],
+    "frequentOmissions": [
+      "Ne pas vérifier le montant de la case 1AJ avec le récapitulatif annuel du bulletin de salaire : les erreurs de transmission employeur ne sont pas rares (avantages en nature mal imputés, rappel de salaires, prime de partage de la valeur…).",
+      "Oublier d'ajouter les remboursements d'employeur (véhicule de fonction, allocation forfaitaire télétravail au-delà du plafond exonéré…) si on opte pour les frais réels.",
+      "Ne pas vérifier la case 1AD (prime de partage de la valeur exonérée) : si présente, elle est exonérée d'IR mais doit figurer pour le calcul du RFR.",
+      "Négliger la case 8TK (revenus perçus par des agents de l'État à l'étranger) ou la rubrique des heures supplémentaires exonérées (cases 1GH, 1HH)."
+    ],
+    "traps": [
+      "Option frais réels : la case 1AK se saisit EN PLUS de 1AJ (ne pas soustraire). L'administration soustrait automatiquement le montant des frais réels de la base imposable.",
+      "Prime de partage de la valeur (PPV) : exonérée d'IR sous conditions (salaire < 3 SMIC, premier versement avant le 31/12/2026 dans les PME), mais le montant peut être pré-rempli dans 1AJ à tort par certains employeurs — il faut le retirer de 1AJ et le mettre en 1AD si éligible à l'exonération.",
+      "Indemnités de rupture conventionnelle ou licenciement : partiellement exonérées. Vérifier la rubrique spécifique et ne pas les déclarer en totalité en 1AJ.",
+      "Pensions de retraite : l'abattement de 10 % (plancher 454 €/pensionné, plafond 4 439 €/foyer) est appliqué automatiquement — ne pas l'appliquer soi-même avant de saisir en 1AS/1BS.",
+      "Cumul emploi-retraite : si le contribuable perçoit à la fois un salaire (1AJ) et une pension (1AS), les deux montants sont distincts et subissent chacun leur propre abattement 10 %."
+    ],
+    "keyCaseCodes": [
+      "1AJ", "1BJ",
+      "1AS", "1BS",
+      "1AP", "1BP",
+      "1AK", "1BK",
+      "1AD",
+      "1GH", "1HH"
+    ]
+  },
+
+  {
+    "stepId": "step_revenus_capitaux_mobiliers",
+    "label": "Étape 3 — Revenus des valeurs et capitaux mobiliers (cadre 2)",
+    "position": 5,
+    "sourceUrl": "https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2025/pdf_som/08-RCM_119a134.pdf",
+    "sourceTitle": "Notice 2042 — Revenus des valeurs et capitaux mobiliers – impots.gouv.fr",
+    "sourceUrl2": "https://entreprendre.service-public.gouv.fr/actualites/A18796",
+    "sourceTitle2": "Évolution du taux du PFU (31,4 %) – Service-Public Entreprendre, 10 fév. 2026",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Comparer les cases préremplies 2DC (dividendes bruts éligibles à l'abattement 40 %), 2TR (intérêts et produits de placement à revenu fixe), 2BH (revenus déjà soumis aux PS, avec CSG déductible si option barème) avec l'Imprimé Fiscal Unique (IFU) reçu de chaque établissement financier.",
+      "Vérifier la case 2CK (crédit d'impôt = acompte IR de 12,8 % prélevé à la source par les établissements financiers en 2025). Ce crédit est remboursable.",
+      "Décider si l'option pour le barème progressif (case 2OP) est plus avantageuse que le PFU. Règle empirique : option barème généralement favorable si TMI ≤ 11 % (permet abattement 40 % sur dividendes + déduction CSG 6,8 %). À simuler pour les TMI supérieures.",
+      "NOUVEAU 2026 — PFU à 31,4 % : pour les dividendes et intérêts perçus à compter du 1er janvier 2026, le PFU est de 31,4 % (IR 12,8 % + PS 18,6 %). Pour les revenus 2025 (dividendes/intérêts perçus en 2025), le PFU reste à 30 % (PS 17,2 %). En revanche, les plus-values de cession réalisées dès le 1er janvier 2025 sont concernées par le taux PS de 18,6 %.",
+      "Vérifier s'il y a des plus-values (ou moins-values) de cession de valeurs mobilières à déclarer via la déclaration 2074."
+    ],
+    "frequentOmissions": [
+      "Oublier de recueillir l'IFU (Imprimé Fiscal Unique) de chaque établissement (banque, courtier, assurance, plateforme de crowdfunding…) avant de déclarer.",
+      "Ne pas vérifier les cases 2CK (crédit d'impôt acompte 12,8 %) : si ce montant est manquant, on paie en double.",
+      "Oublier de déclarer les revenus de plateformes de crowdfunding ou de livrets bancaires fiscalisés qui ne préremplissent pas automatiquement.",
+      "Ne pas cocher 2OP alors que le TMI est à 11 % : on perd l'abattement 40 % sur les dividendes et la déductibilité de la CSG.",
+      "Oublier la case 2CA (frais et charges déductibles) si on a des frais de gestion de titres facturés par l'établissement — uniquement en cas d'option barème."
+    ],
+    "traps": [
+      "La case 2OP est globale et irrévocable une fois la déclaration validée : elle s'applique à TOUS les revenus de capitaux mobiliers et plus-values de l'année. On ne peut pas choisir le barème pour les dividendes et le PFU pour les intérêts.",
+      "La case 2BH ne se remplit pas toujours automatiquement pour les gérants d'EURL/SARL : les dividendes déclarés en 2DC doivent aussi figurer en 2BH si les prélèvements sociaux ont été payés auprès de l'URSSAF (dividendes excédant 10 % du capital).",
+      "Distinction 2DC / 2TS : les dividendes de sociétés françaises ou européennes éligibles à l'abattement 40 % vont en 2DC ; les jetons de présence, produits de SICAV non éligibles vont en 2TS.",
+      "IFU pré-rempli erroné : la banque peut avoir fusionné des comptes, transmis un doublon, ou omis un compte. Toujours croiser avec ses propres relevés.",
+      "Livret A, LDDS, LEP : exonérés d'IR et de PS — ne pas les déclarer en revenus imposables.",
+      "PEA après 5 ans : gains exonérés d'IR mais les prélèvements sociaux (18,6 % depuis le 1er janv. 2026) restent dus sur les gains. Ne pas omettre de déclarer un retrait sur PEA."
+    ],
+    "keyCaseCodes": [
+      "2DC",
+      "2TR",
+      "2BH",
+      "2CK",
+      "2OP",
+      "2CA",
+      "2TS",
+      "2CG",
+      "2DF"
+    ]
+  },
+
+  {
+    "stepId": "step_revenus_fonciers",
+    "label": "Étape 3 — Revenus fonciers (cadre 4)",
+    "position": 6,
+    "sourceUrl": "https://www.impots.gouv.fr/particulier/revenus-fonciers",
+    "sourceTitle": "Revenus fonciers – impots.gouv.fr (CGI art. 32 et 28)",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Déterminer le régime applicable : micro-foncier si recettes brutes annuelles ≤ 15 000 € ET aucun bien sous régime spécial (Malraux, monuments historiques…) → case 4BE (revenu net = recettes × 70 %). Régime réel si recettes > 15 000 € ou sur option → formulaire 2044.",
+      "En micro-foncier (4BE) : saisir directement le revenu net imposable = recettes brutes × 70 %. Ne pas saisir le brut.",
+      "En régime réel (2044) : vérifier l'intégralité des charges déductibles (travaux d'entretien/réparation, intérêts d'emprunt, charges de copropriété, assurances, honoraires de gestion, taxe foncière). Reporter le résultat net en case 4BA (bénéfice foncier) ou 4BC (déficit imputable sur revenu global, plafond 10 700 €/an).",
+      "Vérifier si des immeubles sont détenus en indivision ou via une SCI à l'IR : reporter la quote-part du résultat communiqué par la SCI."
+    ],
+    "frequentOmissions": [
+      "Confondre recettes brutes et revenu net : en micro-foncier, case 4BE = recettes × 70 % (et non les recettes brutes).",
+      "Oublier de déclarer les revenus de SCPI à l'IR (parts de fonds d'investissement immobiliers) : ils sont transmis par le gestionnaire mais peuvent ne pas être préremplis.",
+      "Ne pas déduire la taxe foncière en régime réel (elle est déductible pour la part du bien mis en location).",
+      "Oublier le report des déficits fonciers des années antérieures (case 4BD ou 4BF) : les déficits non imputés sont reportables pendant 10 ans."
+    ],
+    "traps": [
+      "L'option pour le régime réel (si recettes < 15 000 €) engage sur 3 ans minimum. Ne pas l'activer par erreur si le micro-foncier est plus simple.",
+      "En micro-foncier, si on possède un bien sous dispositif Robien/Besson/Borloo/Périssol : on ne peut PAS utiliser le micro-foncier pour ce bien et doit opter pour le régime réel pour l'ensemble des biens.",
+      "Les loyers impayés (créances irrécouvrables) ne sont pas déductibles en micro-foncier, mais le sont en régime réel sous conditions.",
+      "Case 4BF (déficit imputable uniquement sur les revenus fonciers futurs) vs 4BC (déficit imputable sur le revenu global dans la limite de 10 700 €) : la distinction dépend de la nature des charges (travaux non déductibles sur revenu global vs intérêts d'emprunt).",
+      "Propriétaires d'un seul bien loué en location meublée : ce n'est pas un revenu foncier mais un BIC (déclaration 2042C PRO ou 2031) — à ne pas confondre."
+    ],
+    "keyCaseCodes": [
+      "4BE",
+      "4BA",
+      "4BC",
+      "4BD",
+      "4BF",
+      "4BL"
+    ]
+  },
+
+  {
+    "stepId": "step_micro_entrepreneur",
+    "label": "Étape 3 — Revenus non-salariés / Micro-entrepreneur (2042C PRO, cadre 5)",
+    "position": 7,
+    "sourceUrl": "https://www.impots.gouv.fr/professionnel/micro-entrepreneur",
+    "sourceTitle": "Micro-entrepreneur – impots.gouv.fr (CGI art. 50-0 et 102 ter)",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Identifier la nature de l'activité pour appliquer le bon abattement : BIC vente/hébergement (71 %) → case 5KO/5LO, BIC services (50 %) → case 5HQ/5IQ, BNC professions libérales (34 %) → case 5HQ/5IQ ou 5QC/5RC selon la caisse de rattachement.",
+      "Vérifier que le chiffre d'affaires déclaré correspond aux encaissements de l'année 2025 (principe de la comptabilité de caisse).",
+      "Vérifier si l'option pour le versement libératoire de l'IR a été exercée : si oui, le CA est reporté dans des cases spécifiques (5TA, 5TB, 5TE) et n'entre pas dans le revenu global soumis au barème.",
+      "Comparer avec les données transmises par l'URSSAF (préfigurations disponibles dans l'espace autoentrepreneur)."
+    ],
+    "frequentOmissions": [
+      "Confondre chiffre d'affaires brut et revenu net : dans la 2042C PRO, on saisit le CA brut total (avant abattement). L'abattement est calculé automatiquement.",
+      "Oublier de déclarer un CA de micro-entrepreneur même si des cotisations sociales ont déjà été payées à l'URSSAF.",
+      "Ne pas déclarer la case 5HY (exonération ACRE la première année) si applicable."
+    ],
+    "traps": [
+      "BIC vente vs BIC services : une activité de livraison ou d'hébergement touristique (71 %) diffère d'une prestation de services (50 %). L'erreur de catégorie modifie l'impôt.",
+      "Option versement libératoire activée mais CA reporté dans la mauvaise case : le CA serait alors imposé deux fois (une fois via le versement libératoire et une fois via le barème).",
+      "Seuils de CA micro (2025) : BIC vente 188 700 €, BIC services / BNC 77 700 €. Un dépassement oblige au régime réel dès l'année suivante."
+    ],
+    "keyCaseCodes": [
+      "5KO", "5LO",
+      "5HQ", "5IQ",
+      "5QC", "5RC",
+      "5TA", "5TB", "5TE"
+    ]
+  },
+
+  {
+    "stepId": "step_charges_deductibles",
+    "label": "Étape 3 — Charges déductibles du revenu global (cadre 6)",
+    "position": 8,
+    "sourceUrl": "https://www.impots.gouv.fr/particulier/charges-deductibles",
+    "sourceTitle": "Charges déductibles – impots.gouv.fr",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Pensions alimentaires versées à des enfants mineurs (case 6GU) : déductibles intégralement si décision de justice, enfant en charge principale de l'autre parent. Incompatible avec le bénéfice d'une demi-part pour ce même enfant.",
+      "Pensions alimentaires versées à des enfants majeurs (case 6EL pour le 1er enfant, 6EM pour le 2e) : plafonnées à 6 794 € par enfant en 2026 (à vérifier sur la notice 2026 dès disponible).",
+      "Pensions alimentaires versées à des ascendants dans le besoin : déductibles du revenu global, sans plafond légal (mais soumises au contrôle de proportionnalité avec les ressources).",
+      "Versements sur un PER (Plan Épargne Retraite) individuel : déductibles du revenu global dans la limite de l'enveloppe épargne retraite (10 % des revenus 2025 plafonnés à 35 194 € pour les salariés, ou 10 % des BIC/BNC avec plafond majoré pour les TNS). Case 6NS ou 6NT selon le régime.",
+      "Déficit foncier imputé sur le revenu global (case 6DD via la déclaration 2044)."
+    ],
+    "frequentOmissions": [
+      "Oublier de déduire les versements PER de l'année : c'est souvent la charge déductible la plus importante pour les contribuables en TMI 30 %+.",
+      "Ne pas déduire une pension alimentaire versée à un parent âgé accueilli (voire hébergé) : si les parents sont hébergés gratuitement, un forfait de 4 039 € par personne hébergée est déductible (case 6EU).",
+      "Oublier le report de déficits fonciers antérieurs (case 6DD) si un déficit foncier a été constaté les années précédentes."
+    ],
+    "traps": [
+      "Pensions versées à un enfant en garde alternée : AUCUNE pension n'est déductible car chaque parent bénéficie déjà de la majoration de parts (garde alternée). Déclarer une pension dans ce cas constitue une erreur.",
+      "Rattachement d'un enfant majeur vs déduction de pension : mutuellement exclusifs pour le même enfant. Si l'enfant est rattaché, la pension versée n'est pas déductible.",
+      "Versements PER : les versements sur un PERCO (épargne salariale) ne sont pas déductibles du revenu global. Seuls les versements volontaires sur un PER individuel (ou PER entreprise obligatoire) le sont.",
+      "Nouveauté LF 2026 : la déductibilité des versements PER est supprimée pour les titulaires de 70 ans et plus (mesure LF 2026)."
+    ],
+    "keyCaseCodes": [
+      "6GU",
+      "6EL", "6EM",
+      "6EU",
+      "6NS", "6NT", "6OS", "6OT",
+      "6DD",
+      "6DE"
+    ]
+  },
+
+  {
+    "stepId": "step_reductions_credits_impot",
+    "label": "Étape 3 — Réductions et crédits d'impôt (cadre 7 — formulaire 2042 RICI)",
+    "position": 9,
+    "sourceUrl": "https://www.impots.gouv.fr/particulier/deductions-liees-la-famille",
+    "sourceTitle": "Déductions liées à la famille – impots.gouv.fr",
+    "sourceUrl2": "https://www.service-public.gouv.fr/particuliers/vosdroits/F12",
+    "sourceTitle2": "Crédit d'impôt emploi à domicile – Service-Public.gouv.fr (vérifié 20/02/2026)",
+    "sourceUrl3": "https://www.service-public.gouv.fr/particuliers/actualites/A18836",
+    "sourceTitle3": "Dispositif Coluche 2026 – Service-Public.gouv.fr",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "GARDE D'ENFANT (7GA/7GB/7GC) : saisir les dépenses NETTES (après déduction du CMG-Paje CAF/MSA et des aides employeur exonérées ≤ 2 540 €). Plafond 3 500 €/enfant. Crédit 50 %. Enfant né à partir du 1/1/2019 (moins de 6 ans au 1/1/2025).",
+      "EMPLOI À DOMICILE (7DB) : saisir le total des dépenses nettes (salaire net + cotisations patronales, déduction faite des aides : APA, CMG, CESU préfinancé, aide employeur…). Plafond de base 12 000 €. Crédit 50 %. NOUVEAU 2026 : une nouvelle case d'identification des bénéficiaires est obligatoire dans le formulaire 2042 RICI.",
+      "DONS (7UF/7UD) : saisir les dons éligibles au taux de 66 % en case 7UF (associations d'intérêt général) et au taux de 75 % en case 7UD (organismes Coluche : Restos du cœur, Secours populaire…). Pour les dons effectués à partir du 14 octobre 2025, le plafond Coluche est de 2 000 € (et non plus 1 000 €).",
+      "SCOLARITÉ DES ENFANTS (7EA, 7EC, 7EF) : si enfant scolarisé au 31/12/2025. Réduction de 61 € (collège), 153 € (lycée), 183 € (supérieur).",
+      "Vérifier que l'avance de 60 % versée en janvier 2026 est mentionnée dans le récapitulatif final."
+    ],
+    "frequentOmissions": [
+      "Oublier de déclarer les frais de garde d'enfant si les montants ont été avancés par le conjoint ou réglés via Pajemploi (ils peuvent être préremplis dans ce cas, à vérifier).",
+      "Ne pas déduire les aides CAF du montant brut avant de saisir en 7GA : l'administration croise ses données avec la CAF et un redressement est automatique.",
+      "Oublier les dons de fin d'année 2025 (novembre-décembre) notamment aux Restos du Cœur, Croix-Rouge, etc. — le reçu fiscal est le document de référence.",
+      "Ne pas utiliser la case 7UF pour les dons aux partis politiques ou syndicats (taux 66 %, plafond 15 000 € pour les partis politiques).",
+      "Oublier la nouvelle case d'identification des bénéficiaires emploi à domicile (2026) : son omission peut bloquer le crédit d'impôt."
+    ],
+    "traps": [
+      "Dons Coluche 2025 : deux règles coexistent selon la date du don. Dons effectués AVANT le 14 octobre 2025 → plafond 1 000 € à 75 %. Dons effectués À PARTIR DU 14 octobre 2025 → plafond 2 000 € à 75 %. Le logiciel de la DGFiP gère normalement cette bascule si les montants et dates sont correctement saisis.",
+      "La fraction des dons Coluche excédant le plafond (1 000 € ou 2 000 €) bascule automatiquement en case 7UF à 66 % — ne pas ressaisir ce montant en 7UF.",
+      "Emploi à domicile : le crédit d'impôt s'applique même si on n'est PAS imposable. L'excédent est remboursé. Ne pas confondre avec une réduction d'impôt (qui s'annule si l'impôt est nul).",
+      "Cumul garde d'enfant (7GA) et emploi à domicile (7DB) : possibles pour le même enfant si une nourrice garde l'enfant hors domicile (7GA) ET qu'une aide à domicile intervient au domicile (7DB). Les deux dispositifs ne s'excluent pas mais ont des plafonds indépendants.",
+      "Plafond global des niches fiscales : 10 000 € pour la plupart des avantages fiscaux. Les crédits d'impôt emploi à domicile et garde d'enfant y sont inclus. Au-delà, l'avantage est limité.",
+      "La réduction d'impôt scolarité (7EA/7EC/7EF) requiert de mentionner l'établissement scolaire et la classe suivie dans la rubrique 'Informations'."
+    ],
+    "keyCaseCodes": [
+      "7GA", "7GB", "7GC",
+      "7GE", "7GF",
+      "7DB",
+      "7UF",
+      "7UD",
+      "7EA", "7EB", "7EC", "7ED", "7EF", "7EG"
+    ]
+  },
+
+  {
+    "stepId": "step_recapitulatif_impot",
+    "label": "Étape 4 — Récapitulatif avant signature",
+    "position": 10,
+    "sourceUrl": "https://www.impots.gouv.fr/particulier/declarez-en-ligne",
+    "sourceTitle": "Déclarez en ligne – impots.gouv.fr",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "Vérifier l'impôt estimatif affiché : il doit être cohérent avec une estimation manuelle (ou le simulateur impots.gouv.fr).",
+      "Vérifier le solde final : montant de l'impôt calculé MOINS le prélèvement à la source déjà payé en 2025 MOINS l'avance de 60 % versée en janvier 2026 sur les crédits/réductions de l'année précédente.",
+      "Contrôler les coordonnées bancaires (IBAN) : si solde à rembourser, le remboursement sera viré sur ce compte. Si solde à payer, le prélèvement sera effectué sur ce compte.",
+      "Vérifier l'adresse e-mail : l'accusé de réception et l'avis de situation déclarative sont envoyés par e-mail.",
+      "Vérifier que toutes les rubriques cochées en étape 1 ont bien été complétées (un indicateur en haut de page signale les rubriques incomplètes).",
+      "Vérifier la case 3916 (comptes étrangers) : si pré-cochée et non désirée, revenir à 'Sélection des rubriques' via le menu gauche pour la décocher AVANT de valider."
+    ],
+    "frequentOmissions": [
+      "Ne pas vérifier l'IBAN prérempli : en cas de changement de banque en 2025, l'IBAN peut être obsolète.",
+      "Valider sans avoir simulé l'option barème (2OP) pour les revenus de capitaux mobiliers : une fois la déclaration validée, la modification n'est possible que dans la fenêtre de correction (jusqu'en décembre 2026).",
+      "Oublier de télécharger ou consulter l'avis de situation déclarative immédiatement disponible après validation : il sert de preuve de dépôt."
+    ],
+    "traps": [
+      "La validation est définitive en termes de délai : passé la date limite (21 mai, 28 mai ou 4 juin selon le département), une déclaration tardive entraîne une majoration de 10 % à 40 %.",
+      "Il est possible de corriger sa déclaration après validation jusqu'en décembre 2026 via le service de correction en ligne — mais uniquement les éléments que le contribuable peut modifier (pas les données transmises par des tiers).",
+      "En cas de solde à payer supérieur à 300 €, un prélèvement est effectué automatiquement en septembre 2026. Vérifier la provision sur le compte bancaire renseigné.",
+      "Si l'impôt estimatif affiché semble incohérent (ex. : impôt nettement plus élevé que prévu), revenir aux étapes précédentes avant de valider : une erreur de saisie est beaucoup plus simple à corriger avant validation."
+    ],
+    "keyCaseCodes": [],
+    "notes": "Après validation : un avis de situation déclarative à l'IR est délivré immédiatement et disponible dans l'espace Finances publiques. L'avis d'imposition définitif (avec calcul final) est envoyé en juillet-septembre 2026."
+  },
+
+  {
+    "stepId": "step_vigilance_transversale",
+    "label": "Points de vigilance transversaux — Campagne 2026",
+    "position": 99,
+    "sourceUrl": "https://www.impots.gouv.fr/les-modalites-de-la-declaration-de-revenus-en-2026",
+    "sourceTitle": "Modalités de la déclaration 2026 – impots.gouv.fr",
+    "confidenceLevel": "high",
+    "verifyNow": [
+      "PFU à 31,4 % pour les dividendes/intérêts (revenus de 2026) et les plus-values mobilières (2025) : impact sur la comparaison PFU vs barème.",
+      "Nouvelle case obligatoire emploi à domicile (7DB) : identifier le bénéficiaire des sommes versées (SIREN, nom de la structure) dans le formulaire 2042 RICI.",
+      "Dons Coluche : deux plafonds selon la date du don (1 000 € avant le 14/10/2025 ; 2 000 € à partir du 14/10/2025).",
+      "CDHR (Contribution Différentielle sur les Hauts Revenus) reconduite : si RFR > 250 000 € (célibataire) ou > 500 000 € (couple), vérifier l'acompte de décembre 2026.",
+      "Obligation de déclaration d'occupation des biens immobiliers (onglet 'Gérer mes biens immobiliers') : une omission peut entraîner une amende de 150 €."
+    ],
+    "frequentOmissions": [
+      "Revenus de plateformes numériques (Airbnb, Vinted, Leboncoin) : les plateformes transmettent les données au fisc dès 2 000 € de ventes ou 30 transactions. Pré-remplissage possible, à contrôler.",
+      "Indemnités de télétravail : exonérées dans certaines limites (forfait ou remboursement sur justificatif). Vérifier que les montants exonérés ne sont pas inclus dans la case 1AJ.",
+      "Cotisations syndicales : crédit d'impôt de 66 % dans la limite de 1 % des salaires — case 7AC."
+    ],
+    "traps": [
+      "Déclaration automatique et changement de situation : si un mariage, un PACS, une naissance ou un déménagement a été signalé via l'espace en ligne en 2025, on n'est plus éligible à la déclaration automatique — ne pas oublier de déposer une déclaration classique.",
+      "Ne pas confondre la correction en ligne (possible jusqu'en décembre 2026) et la réclamation contentieuse (délai plus court, procédure différente).",
+      "Retraités : l'abattement de 10 % sur les pensions est maintenu (réforme rejetée). Plancher 454 €/pensionné, plafond 4 439 €/foyer — il est appliqué automatiquement."
+    ],
+    "keyCaseCodes": [
+      "2OP",
+      "7DB",
+      "7UD", "7UF",
+      "7AC",
+      "1AD"
+    ]
+  }
+]

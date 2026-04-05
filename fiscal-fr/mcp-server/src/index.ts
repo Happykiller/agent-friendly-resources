@@ -11,6 +11,7 @@ import { QualifyTaxProfileUseCase } from "./usecases/domains/qualify-tool/qualif
 import { ListSupportingDocumentsUseCase } from "./usecases/domains/qualify-tool/list-supporting-documents.usecase.js";
 import { DetectReviewPointsUseCase } from "./usecases/domains/qualify-tool/detect-review-points.usecase.js";
 import { BuildPreDeclarationUseCase } from "./usecases/domains/qualify-tool/build-pre-declaration.usecase.js";
+import { EstimateImpactUseCase } from "./usecases/domains/qualify-tool/estimate-impact.usecase.js";
 
 const SERVER_INFO = {
   name: "fiscal-fr-mcp",
@@ -39,6 +40,9 @@ function createMcpServer() {
   const buildPreDeclarationUseCase = container.get<BuildPreDeclarationUseCase>(
     TYPES.BuildPreDeclarationUseCase
   );
+  const estimateImpactUseCase = container.get<EstimateImpactUseCase>(
+    TYPES.EstimateImpactUseCase
+  );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
@@ -66,6 +70,12 @@ function createMcpServer() {
           description:
             "Construit un brouillon de pre-declaration structure a partir du profil qualifie et des montants declares. Chaque rubrique est tracee vers sa source, son code case et son statut (confirme ou a renseigner).",
           inputSchema: buildPreDeclarationUseCase.getToolSchema(),
+        },
+        {
+          name: "estimate_impact",
+          description:
+            "Calcule une estimation indicative de l'impot sur le revenu (IR 2026, revenus 2025) a partir du profil qualifie et des montants declares. Applique le bareme progressif, le quotient familial, la decote, les reductions et credits d'impot. Resultat sans valeur juridique — toujours accompagne d'un disclaimer.",
+          inputSchema: estimateImpactUseCase.getToolSchema(),
         },
       ],
     };
@@ -197,6 +207,40 @@ function createMcpServer() {
       }
 
       const result = buildPreDeclarationUseCase.execute(parsed.data);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
+      };
+    }
+
+    if (request.params.name === "estimate_impact") {
+      const parsed = estimateImpactUseCase.validateInput(request.params.arguments);
+
+      if (!parsed.success) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  error: "INVALID_INPUT",
+                  details: parsed.error.flatten(),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const result = estimateImpactUseCase.execute(parsed.data);
 
       return {
         content: [

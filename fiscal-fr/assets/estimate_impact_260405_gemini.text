@@ -1,0 +1,222 @@
+Rapport d'expertise sur les paramètres déterministes de l'impôt sur le revenu 2026 portant sur les revenus de l'année 2025L'évolution structurelle de l'impôt sur le revenu et l'indexation sur l'inflationLa mécanique fiscale française repose sur le principe fondamental de la progressivité de l'impôt, visant à assurer une contribution équitable en fonction des facultés contributives de chaque foyer fiscal. La campagne déclarative de l'année 2026, qui traite de l'ensemble des revenus perçus au cours de l'année civile 2025, s'inscrit dans un contexte réglementaire stabilisé par la loi de finances pour 2026. L'une des mesures les plus structurantes pour les modèles algorithmiques d'estimation réside dans l'indexation automatique des tranches du barème sur l'évolution des prix à la consommation hors tabac, fixée à un taux d'accroissement de 0,9 %. Ce rehaussement évite le phénomène d'augmentation de la pression fiscale à revenu réel constant, une dérive souvent qualifiée de progression à froid.L'administration fiscale calcule l'impôt brut en divisant d'abord le revenu net imposable global par le nombre de parts de quotient familial affecté au foyer, une étape obligatoire pour déterminer l'assiette unitaire soumise au barème progressif. L'impôt théorique d'une part est ensuite multiplié par le nombre total de parts pour obtenir la charge fiscale brute totale. Ce processus garantit que la structure familiale module directement l'impact des tranches marginales d'imposition.Le barème applicable pour la campagne 2026, tel que défini par l'autorité législative et repris par les simulateurs officiels de la Direction générale des Finances publiques, se découpe en cinq tranches distinctes dotées de taux marginaux allant de 0 % à 45 %.Table 1 : Barème progressif de l'impôt sur le revenu 2026 pour une part fiscaleFraction du revenu imposable pour une partTaux d'imposition applicableJusqu'à 11 600 €0 %De 11 601 € à 29 579 €11 %De 29 580 € à 84 577 €30 %De 84 578 € à 181 917 €41 %Plus de 181 917 €45 %L'interprétation de ce tableau impose une distinction nette entre le taux marginal d'imposition, qui correspond au taux appliqué à la dernière tranche de revenus atteinte, et le taux moyen d'imposition, qui traduit la part réelle que représente l'impôt dans le revenu net global. Cette distinction est primordiale lors de l'intégration des règles de calcul au sein d'une base de données d'estimation.JSON{
+  "campaign": "2026",
+  "source_authority": "primary_official",
+  "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1419",
+  "source_title": "Barème de l'impôt sur le revenu 2026",
+  "confidence_level": "high",
+  "rule_id": "bareme_progressif_ir_2026",
+  "rule_type": "bareme",
+  "description": "Les 5 tranches du barème progressif de l'impôt sur le revenu pour une part fiscale.",
+  "data": {
+    "currency": "EUR",
+    "brackets": [
+      {
+        "threshold_low": 0,
+        "threshold_high": 11600,
+        "rate": 0.0
+      },
+      {
+        "threshold_low": 11601,
+        "threshold_high": 29579,
+        "rate": 0.11
+      },
+      {
+        "threshold_low": 29580,
+        "threshold_high": 84577,
+        "rate": 0.30
+      },
+      {
+        "threshold_low": 84578,
+        "threshold_high": 181917,
+        "rate": 0.41
+      },
+      {
+        "threshold_low": 181918,
+        "threshold_high": null,
+        "rate": 0.45
+      }
+    ]
+  },
+  "changed_from_2025": true,
+  "change_note": "Les seuils des tranches ont été revalorisés de 0,9 % par rapport à l'année précédente conformément à l'évolution de l'inflation."
+}
+Le mécanisme complexe du quotient familial et ses mesures d'encadrementLe quotient familial a pour vocation d'ajuster l'effort fiscal des foyers en fonction de leurs charges de famille, matérialisées par le nombre de personnes vivant sous le même toit fiscal. En divisant le revenu imposable par un nombre de parts proportionnel à la taille de la famille, le système réduit mécaniquement l'assiette soumise aux tranches d'imposition les plus élevées.Une personne célibataire, divorcée ou séparée bénéficie ainsi d'une part fiscale de plein droit, tandis qu'un couple marié ou lié par un pacte civil de solidarité dispose de deux parts. Les enfants à charge ouvrent droit à des majorations spécifiques : une demi-part pour chacun des deux premiers enfants, et une part complète à partir du troisième enfant.Pour éviter que ce correcteur ne procure un avantage disproportionné aux foyers disposant de revenus très élevés, le législateur a instauré un mécanisme de plafonnement du quotient familial. L'administration calcule l'impôt selon deux méthodes : la première applique le quotient familial réel, tandis que la seconde simule l'impôt sans les parts supplémentaires liées aux personnes à charge. Si la différence entre ces deux résultats dépasse un plafond légal fixé par demi-part, l'impôt est recalculé en appliquant le montant de ce plafond d'avantage maximal.Table 2 : Plafonds applicables au mécanisme du quotient familial pour 2026Situation générant la majoration de partMontant maximal de l'avantage fiscal accordéDemi-part supplémentaire liée aux enfants à charge1 807 €Quart de part supplémentaire pour enfants en garde alternée904 €Demi-part au titre de l'invalidité ou d'ancien combattant3 608 €Une dérogation majeure à ce système s'applique aux parents isolés assumant seuls la charge effective d'un ou de plusieurs enfants. Pour ces foyers monoparentaux, l'administration fiscale accorde une part complète pour le premier enfant au lieu d'une simple demi-part. Cette mesure vise à reconnaître la charge financière et matérielle accrue pesant sur un adulte isolé élevant seul ses enfants. Pour actionner ce droit, le contribuable doit cocher la case T de sa déclaration de revenus. L'avantage procuré par l'attribution de cette demi-part supplémentaire au titre du premier enfant isolé fait l'objet d'un plafonnement spécifique autonome.JSON{
+  "campaign": "2026",
+  "source_authority": "primary_official",
+  "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2705",
+  "source_title": "Plafonds du quotient familial pour 2026",
+  "confidence_level": "high",
+  "rule_id": "quotient_familial_standard",
+  "rule_type": "bareme",
+  "description": "Règles d'attribution des parts et limites de l'avantage fiscal lié aux personnes à charge.",
+  "data": {
+    "parts_base": {
+      "celibataire": 1.0,
+      "couple_impose_commun": 2.0
+    },
+    "majoration_enfants_charge_exclusive": {
+      "enfant_1": 0.5,
+      "enfant_2": 0.5,
+      "enfant_3_et_plus_par_enfant": 1.0
+    },
+    "plafonds_avantage_fiscal": {
+      "par_demi_part_enfant": 1807,
+      "par_quart_part_enfant_garde_alternee": 904,
+      "par_demi_part_invalidite_ou_ancien_combattant": 3608,
+      "parent_isole_case_t": {
+        "conditions_application": "Vivre seul et assumer la charge principale d'un enfant au moins.",
+        "avantage_premier_enfant_parts": 1.0,
+        "plafond_avantage_deux_premieres_demi_parts": 4224
+      }
+    }
+  }
+}
+Analyse comparée des abattements forfaitaires sur les salaires et les pensionsLe calcul du revenu net catégoriel repose sur l'application de déductions destinées à couvrir les frais engagés pour l'acquisition ou la conservation du revenu. Pour les traitements et salaires, l'administration applique par défaut une déduction forfaitaire de 10 %, présumant qu'elle couvre les frais professionnels courants tels que les déplacements du domicile au travail ou la restauration sur le lieu d'activité. Le contribuable conserve toutefois la liberté d'opter pour la déduction de ses frais réels s'il s'estime lésé par ce forfait automatique.Cette déduction de 10 % fait l'objet d'un encadrement strict par des seuils planchers et plafonds calculés individuellement pour chaque membre salarié composant le foyer fiscal. Le minimum forfaitaire garantit une protection fiscale aux revenus d'activité les plus faibles.En ce qui concerne les pensions de retraite et les rentes viagères, un mécanisme d'abattement de 10 % s'applique également de manière automatique. Cependant, la philosophie sous-jacente diffère : n'ayant plus de frais professionnels d'activité à justifier, les retraités bénéficient d'un abattement dont l'assiette maximale est beaucoup plus restreinte et s'apprécie globalement au niveau du foyer fiscal, et non par tête comme pour les salariés. Les données officielles consolident les paramètres comme suit :Table 3 : Encadrement des abattements forfaitaires sur les salaires et les pensionsCatégorie de revenusTaux de l'abattementSeuil minimal de déductionPlafond maximal de déductionTraitements et salaires10 %509 €14 555 €Pensions de retraite10 %Non applicable4 399 €La valeur de 4 399 € constitue le dernier plafond connu et documenté pour les pensions de retraite au titre des revenus de l'année précédente. Les modèles mathématiques d'estimation intègrent généralement cette valeur à titre indicatif ou conservatoire lorsque les documentations pratiques de l'année en cours n'ont pas encore fait l'objet d'une mise à jour formelle publiée par le ministère de l'Économie.JSON{
+  "campaign": "2026",
+  "source_authority": "primary_official",
+  "source_url": "https://www.impots.gouv.fr/particulier/questions/comment-puis-je-beneficier-de-la-deduction-forfaitaire-de-10",
+  "source_title": "Conditions de la déduction forfaitaire de 10 %",
+  "confidence_level": "medium",
+  "rule_id": "abattement_dix_pourcent_revenus",
+  "rule_type": "abattement",
+  "description": "Règles d'application de la déduction forfaitaire automatique de 10 % sur les salaires et les pensions.",
+  "data": {
+    "salaires": {
+      "taux": 0.10,
+      "plancher_minimum_eur": 509,
+      "plafond_maximum_eur": 14555,
+      "unite_application": "par salarie"
+    },
+    "pensions_retraite": {
+      "taux": 0.10,
+      "plancher_minimum_eur": null,
+      "plafond_maximum_eur": 4399,
+      "unite_application": "par foyer fiscal"
+    }
+  },
+  "missing_source": "Le montant exact du plafond de l'abattement sur les pensions de retraite pour l'année 2025 n'est pas encore confirmé dans la documentation courante. La valeur de 4 399 € correspond au dernier montant officiel connu."
+}
+Modalités d'imposition des dividendes et le Prélèvement Forfaitaire UniqueL'architecture fiscale des revenus de capitaux mobiliers s'articule autour d'un principe d'imposition forfaitaire par défaut, introduit pour simplifier le traitement des gains financiers et stimuler l'investissement. Le Prélèvement Forfaitaire Unique, communément désigné sous le terme de flat tax, constitue le régime de droit commun applicable aux dividendes et aux intérêts bancaires. Il est prélevé directement à la source par les établissements payeurs.La structure du Prélèvement Forfaitaire Unique combine l'impôt sur le revenu et les prélèvements sociaux de manière monolithique.Table 4 : Décomposition du Prélèvement Forfaitaire Unique (PFU)Composante fiscaleTaux applicableImpôt sur le revenu12,8 %Prélèvements sociaux (CSG, CRDS, etc.)17,2 %Taux global combiné30,0 %Le contribuable conserve néanmoins l'option expresse d'assujettir l'ensemble de ses revenus de capitaux mobiliers au barème progressif de l'impôt sur le revenu s'il y trouve un intérêt mathématique. Cette option doit être formalisée en cochant la case 2OP de la déclaration de revenus, et elle revêt un caractère irrévocable et global pour l'année d'imposition considérée.Dans l'hypothèse où le contribuable opte pour l'imposition au barème progressif, les dividendes bénéficient d'un mécanisme d'abattement d'assiette de 40 %. Cet abattement est conçu pour compenser la double imposition économique subie par les bénéfices distribués, ces derniers ayant déjà supporté l'impôt sur les sociétés au niveau de l'entreprise émettrice avant leur distribution aux associés. L'assiette imposable au barème correspond donc à 60 % du dividende brut perçu, après d'éventuelles déductions de frais de garde. Cet arbitrage s'avère avantageux pour les ménages non imposables ou situés dans la première tranche imposable à 11 %.JSON{
+  "campaign": "2026",
+  "source_authority": "primary_official",
+  "source_url": "https://www.service-public.fr/particuliers/vosdroits/F2329",
+  "source_title": "Le Prélèvement Forfaitaire Unique ou flat tax",
+  "confidence_level": "high",
+  "rule_id": "pfu_flat_tax",
+  "rule_type": "pfu",
+  "description": "Régime d'imposition forfaitaire de référence pour les revenus mobiliers et option pour le barème.",
+  "data": {
+    "taux_global": 0.30,
+    "decomposition": {
+      "impot_revenu": 0.128,
+      "prelevements_sociaux": 0.172
+    },
+    "application_defaut": "S'applique aux dividendes et aux intérêts bancaires.",
+    "option_bareme_progressif": {
+      "taux_abattement_dividendes": 0.40,
+      "base_calcul_abattement": "Sur le montant brut des dividendes distribués par les sociétés éligibles."
+    }
+  }
+}
+Les leviers fiscaux de la politique familiale et du domicile : garde d'enfants et services à la personneLa législation fiscale française recourt activement à des dispositifs de restitution d'impôt pour inciter à l'emploi et alléger le coût de la garde des jeunes enfants pour les parents actifs. Le crédit d'impôt pour frais de garde des enfants de moins de six ans à l'extérieur du domicile constitue une mesure d'aide directe.
+Pour y prétendre, l'enfant doit impérativement avoir moins de six ans au premier janvier de l'année d'imposition, ce qui implique une date de naissance fixée en 2019 ou ultérieurement pour la campagne déclarative de 2026.Le crédit d'impôt s'élève à 50 % des sommes décaissées pour la garde, mais l'assiette des dépenses retenues est rigoureusement bornée par l'administration. Les allocations et aides versées par des tiers, telles que le complément de libre choix du mode de garde de la Caisse d'Allocations Familiales, doivent être méticuleusement déduites des frais déclarés.En parallèle, le crédit d'impôt pour l'emploi d'un salarié à domicile constitue un pilier de l'économie des services à la personne. Il s'applique que l'employeur passe par un organisme mandataire ou procède au recrutement en direct. Le taux du crédit s'établit également à 50 % des dépenses facturées incluant les cotisations sociales. Cependant, l'assiette éligible obéit à un système de plafonnement complexe avec des majorations spécifiques liées à l'âge ou à l'état de santé des membres du foyer.Table 5 : Synthèse des crédits d'impôt pour la famille et le domicileDispositif fiscalTaux du créditPlafond d'assiette de droit communPlafonds majorés ou spécifiquesGarde d'enfant de moins de 6 ans50 %3 500 € par enfant1 750 € max en garde alternéeEmploi à domicile50 %12 000 € par foyerJusqu'à 15 000 € avec enfants ou plus de 65 ans. Plafond porté à 20 000 € en cas d'invaliditéLe plafond majoré à 20 000 € pour l'emploi à domicile s'adresse exclusivement aux foyers comptant au moins un membre titulaire d'une carte d'invalidité ou d'une obligation de recourir à l'assistance d'une tierce personne pour les actes essentiels du quotidien.JSON{
+  "campaign": "2026",
+  "source_authority": "primary_official",
+  "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F8",
+  "source_title": "Crédit d'impôt pour frais de garde des jeunes enfants",
+  "confidence_level": "high",
+  "rule_id": "credit_impot_garde_enfant_moins_6_ans",
+  "rule_type": "credit",
+  "description": "Prise en charge partielle des frais de crèche et d'assistante maternelle pour les enfants de moins de 6 ans.",
+  "data": {
+    "taux_credit_impot": 0.50,
+    "plafond_frais_eligibles_eur": 3500,
+    "credit_impot_maximal_eur": 1750,
+    "conditions_specifiques": {
+      "age_limite": "Moins de 6 ans au 1er janvier de l'année d'imposition.",
+      "partage_garde_alternee": "Plafond d'assiette divisé par deux soit 1 750 € d'assiette et 875 € de crédit par parent."
+    }
+  }
+}
+JSON{
+  "campaign": "2026",
+  "source_authority": "primary_official",
+  "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F12",
+  "source_title": "Emploi à domicile : crédit d'impôt",
+  "confidence_level": "high",
+  "rule_id": "credit_impot_emploi_domicile",
+  "rule_type": "credit",
+  "description": "Règles d'assiette et majorations pour l'emploi d'un salarié ou prestataire à domicile.",
+  "data": {
+    "taux_credit_impot": 0.50,
+    "plafond_droit_commun_eur": 12000,
+    "plafond_max_avec_majorations_eur": 15000,
+    "majoration_par_enfant_ou_personne_plus_65_ans_eur": 1500,
+    "plafond_derogatoire_invalidite_eur": 20000
+  }
+}
+Évolution du régime fiscal des dons et l'impact de la loi de finances pour 2026Le système fiscal français accorde des avantages substantiels aux libéralités consenties par les particuliers à des œuvres d'intérêt général ou d'utilité publique. Le modèle s'articule autour de deux strates distinctes qui obéissent à des règles de calcul et des plafonds différents.La strate de droit commun confère une réduction d'impôt calculée au taux de 66 % des sommes versées aux associations ou fondations reconnues. L'assiette de ces dons est toutefois circonscrite par un plafond global fixé à 20 % du revenu imposable net du foyer déclarant. En cas d'excédent au-delà de ce garde-fou de 20 %, la loi autorise un report automatique des sommes sur les cinq exercices déclaratifs suivants.La seconde strate correspond au dispositif Coluche, un mécanisme bonifié visant à encourager le soutien massif aux organismes fournissant gratuitement des prestations de première nécessité, telles que la distribution de repas, des soins médicaux de base ou des solutions d'hébergement d'urgence aux populations les plus démunies. Le taux de la réduction d'impôt y est porté à 75 %. Une évolution majeure a été introduite par la loi de finances pour 2026, qui a entériné le doublement du plafond de versement éligible au taux de 75 %, le fixant à 2 000 € pour tous les versements effectués à compter du 14 octobre 2025. Les sommes versées au-delà de cette frontière de 2 000 € demeurent éligibles à l'avantage fiscal, mais basculent sous le régime classique au taux de 66 %.JSON{
+  "campaign": "2026",
+  "source_authority": "primary_official",
+  "source_url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000053543932",
+  "source_title": "Article 200 du CGI - Réductions d'impôt pour dons",
+  "confidence_level": "high",
+  "rule_id": "reduction_impot_dons_particuliers",
+  "rule_type": "reduction",
+  "description": "Régimes de réduction d'impôt pour dons aux œuvres avec modification du plafond Coluche par la loi de finances pour 2026.",
+  "data": {
+    "regime_general": {
+      "taux_reduction": 0.66,
+      "plafond_assiette_pourcentage_revenu": 0.20
+    },
+    "regime_coluche_bonifie": {
+      "taux_reduction": 0.75,
+      "plafond_euro_2026": 2000,
+      "conditions_temporelles": "Applicable aux dons effectués à compter du 14 octobre 2025."
+    }
+  },
+  "changed_from_2025": true,
+  "change_note": "Le plafond des dons ouvrant droit à la réduction de 75 % est doublé et passe à 2 000 € à partir des versements d'octobre 2025."
+}
+L'architecture de la contribution exceptionnelle sur les hauts revenus (CEHR)En marge du barème classique de l'impôt progressif, le législateur a déployé une surtaxe ciblant spécifiquement les contribuables disposant de facultés contributives hors normes. La Contribution Exceptionnelle sur les Hauts Revenus est assise non pas sur le revenu net imposable du quotient familial, mais directement sur l'agrégat brut que constitue le Revenu Fiscal de Référence. Ce choix structurel évite que l'utilisation de mécanismes de réduction d'impôt ou d'optimisation d'assiette ne vide la contribution de sa substance.Le taux d'imposition de cette taxe additionnelle est progressif et se déclenche à des seuils qui dépendent exclusivement de la situation matrimoniale du foyer, sans prise en compte des enfants ou personnes à charge. L'absence de modification législative majeure maintient les structures de taux au même niveau pour 2026.Table 6 : Seuils et taux de la Contribution Exceptionnelle sur les Hauts Revenus (CEHR)Situation familiale du foyer fiscalTranche de Revenu Fiscal de RéférenceTaux applicableCélibataire, veuf, séparé ou divorcéJusqu'à 250 000 €0 %Célibataire, veuf, séparé ou divorcéDe 250 001 € à 500 000 €3 %Célibataire, veuf, séparé ou divorcéSupérieur à 500 000 €4 %Couple marié ou pacsé soumis à imposition communeJusqu'à 500 000 €0 %Couple marié ou pacsé soumis à imposition communeDe 500 001 € à 1 000 000 €3 %Couple marié ou pacsé soumis à imposition communeSupérieur à 1 000 000 €4 %La CEHR crée ainsi une rupture d'imposition par tranches pures qui doit être fidèlement retranscrite au sein d'une base de données de simulation pour refléter la charge fiscale globale des foyers à très hauts revenus.JSON{
+  "campaign": "2026",
+  "source_authority": "primary_official",
+  "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F31130",
+  "source_title": "Contribution exceptionnelle sur les hauts revenus",
+  "confidence_level": "high",
+  "rule_id": "cehr_sur_revenu_fiscal_reference",
+  "rule_type": "cehr",
+  "description": "Taxes additionnelles sur les très hauts revenus basées sur le RFR sans application du quotient familial.",
+  "data": {
+    "assiette": "Revenu Fiscal de Référence",
+    "seuils_celibataire": [
+      {"limite_inf": 0, "limite_sup": 250000, "taux": 0.00},
+      {"limite_inf": 250001, "limite_sup": 500000, "taux": 0.03},
+      {"limite_inf": 500001, "limite_sup": null, "taux": 0.04}
+    ],
+    "seuils_couple_impose_commun": [
+      {"limite_inf": 0, "limite_sup": 500000, "taux": 0.00},
+      {"limite_inf": 500001, "limite_sup": 1000000, "taux": 0.03},
+      {"limite_inf": 1000001, "limite_sup": null, "taux": 0.04}
+    ]
+  }
+}
+Simplification des modèles de revenus locatifs : le régime du micro-foncierLe régime du micro-foncier a été conçu par l'administration fiscale comme un sas de simplicité déclarative à destination des propriétaires bailleurs disposant de revenus immobiliers d'un montant modeste. Ce dispositif s'applique de plein droit dès lors que le montant brut annuel des loyers perçus par l'ensemble des membres du foyer fiscal n'excède pas le montant de 15 000 €.Le micro-foncier fait l'économie d'une comptabilisation analytique des charges réelles de propriété en appliquant une déduction forfaitaire représentative de charges de 30 % directement assise sur les recettes brutes encaissées. Le revenu net foncier, qui s'intègre ensuite dans le calcul global de l'assiette soumise au barème progressif, correspond de façon déterministe à 70 % des recettes brutes.Bien que très accessible et ne nécessitant aucun justificatif de dépenses auprès du contrôleur fiscal, le micro-foncier peut s'avérer économiquement contre-productif pour les bailleurs supportant des travaux de rénovation d'envergure ou des intérêts d'emprunts massifs liés à l'acquisition du bien. Le contribuable dispose alors de la faculté d'opter pour le régime réel d'imposition. Cette option pour les frais réels revêt un caractère contraignant puisque l'administration fige le choix pour une durée ferme et irrévocable de trois années consécutives avant d'autoriser un retour au régime forfaitaire.JSON{
+  "campaign": "2026",
+  "source_authority": "primary_official",
+  "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1991",
+  "source_title": "Régime du micro-foncier",
+  "confidence_level": "high",
+  "rule_id": "regime_micro_foncier_simplifie",
+  "rule_type": "abattement",
+  "description": "Régime d'abattement forfaitaire pour les revenus fonciers n'excédant pas 15 000 €.",
+  "data": {
+    "plafond_recettes_brutes_eur": 15000,
+    "taux_abattement_forfaitaire": 0.30,
+    "formule_revenu_imposable": "Recettes brutes x 0.70",
+    "option_regime_reel": {
+      "possible": true,
+      "duree_engagement_annees": 3
+    }
+  }
+}

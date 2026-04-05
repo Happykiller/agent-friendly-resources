@@ -1,4 +1,5 @@
 import type {
+  EstimateImpactKnowledge,
   PreDeclarationKnowledge,
   QualificationConfig,
   QualificationCorpus,
@@ -14,4 +15,5 @@ export interface QualifyToolRepository {
   getSupportingDocumentsKnowledge(): SupportingDocumentsKnowledge;
   getReviewPointsKnowledge(): ReviewPointsKnowledge;
   getPreDeclarationKnowledge(): PreDeclarationKnowledge;
+  getEstimateImpactKnowledge(): EstimateImpactKnowledge;
 }

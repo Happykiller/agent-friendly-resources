@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { z } from "zod";
 import type { DbAdapter } from "./db.abstract.js";
 import type {
+  EstimateImpactKnowledge,
   PreDeclarationKnowledge,
   QualificationConfig,
   QualificationCorpus,
@@ -171,6 +172,129 @@ const PreDeclarationKnowledgeSchema = z.object({
   ),
 });
 
+const BaremeTrancheSchema = z.object({
+  de: z.number(),
+  a: z.number().nullable(),
+  taux: z.number(),
+});
+
+const DecoteParamsSchema = z.object({
+  seuil: z.number(),
+  base: z.number(),
+  taux: z.number(),
+});
+
+const MicroEntrepreneurAbattementSchema = z.object({
+  taux: z.number(),
+  minimumAbattement: z.number(),
+});
+
+const EstimateImpactKnowledgeSchema = z.object({
+  campaign: z.string(),
+  revenusAnnee: z.string(),
+  sources: z.array(
+    z.object({
+      ruleId: z.string(),
+      url: z.string().url(),
+      title: z.string(),
+      authority: z.string(),
+      confidence: z.enum(["high", "low"]),
+    })
+  ),
+  baremeIR: z.object({
+    tranches: z.array(BaremeTrancheSchema).min(1),
+  }),
+  decote: z.object({
+    celibataire: DecoteParamsSchema,
+    couple: DecoteParamsSchema,
+  }),
+  quotientFamilial: z.object({
+    partsBase: z.object({
+      celibataire: z.number(),
+      marie_pacse: z.number(),
+    }),
+    majorationsEnfants: z.object({
+      chargeExclusive1: z.number(),
+      chargeExclusive2: z.number(),
+      chargeExclusive3etPlus: z.number(),
+      gardeAlternee1: z.number(),
+      gardeAlternee2: z.number(),
+      gardeAlternee3etPlus: z.number(),
+    }),
+    parentIsole: z.object({
+      majoration: z.number(),
+    }),
+    plafonds: z.object({
+      avantageParDemiPart: z.number(),
+      avantageParentIsolePremierePartSpecifique: z.number(),
+    }),
+  }),
+  abattements: z.object({
+    salaires: z.object({
+      taux: z.number(),
+      plancherParDeclarant: z.number(),
+      plafondParDeclarant: z.number(),
+    }),
+    pensions: z.object({
+      taux: z.number(),
+      plancherParPensionne: z.number(),
+      plafondParFoyer: z.number(),
+    }),
+    microFoncier: z.object({
+      taux: z.number(),
+      plafondRecettesBrutes: z.number(),
+    }),
+    dividendesOptionBareme: z.object({
+      taux: z.number(),
+    }),
+    microEntrepreneur: z.object({
+      bicVente: MicroEntrepreneurAbattementSchema,
+      bicServices: MicroEntrepreneurAbattementSchema,
+      bncLiberal: MicroEntrepreneurAbattementSchema,
+    }),
+  }),
+  pfu: z.object({
+    tauxGlobal: z.number(),
+    tauxIR: z.number(),
+    tauxPS: z.number(),
+  }),
+  creditsImpot: z.object({
+    gardeEnfant: z.object({
+      taux: z.number(),
+      plafondDepensesParEnfant: z.number(),
+      plafondDepensesGardeAlterneeParParent: z.number(),
+    }),
+    emploiDomicile: z.object({
+      taux: z.number(),
+      plafondBase: z.number(),
+      majorationParEnfantACharge: z.number(),
+      majorationParEnfantGardeAlternee: z.number(),
+      majorationParMembrePlus65ans: z.number(),
+      plafondAvecMajorations: z.number(),
+      plafondInvalidite: z.number(),
+    }),
+  }),
+  reductionsImpot: z.object({
+    dons: z.object({
+      taux66: z.object({
+        taux: z.number(),
+        plafondPctRevenuImposable: z.number(),
+        caseDeclaration: z.string(),
+      }),
+      taux75Coluche: z.object({
+        taux: z.number(),
+        plafondDons: z.number(),
+        dateApplicationNouveauPlafond: z.string(),
+        caseDeclaration: z.string(),
+      }),
+    }),
+  }),
+  cehr: z.object({
+    celibataire: z.array(BaremeTrancheSchema),
+    couple: z.array(BaremeTrancheSchema),
+  }),
+});
+
 export class JsonDbAdapter implements DbAdapter {
   private readonly qualificationConfig: QualificationConfig;
   private readonly qualificationKnowledge: QualificationKnowledge;
@@ -178,6 +302,7 @@ export class JsonDbAdapter implements DbAdapter {
   private readonly supportingDocumentsKnowledge: SupportingDocumentsKnowledge;
   private readonly reviewPointsKnowledge: ReviewPointsKnowledge;
   private readonly preDeclarationKnowledge: PreDeclarationKnowledge;
+  private readonly estimateImpactKnowledge: EstimateImpactKnowledge;
 
   constructor() {
     const dbRaw = readFileSync(new URL("../../data/qualify-tool.db.json", import.meta.url), "utf8");
@@ -197,6 +322,11 @@ export class JsonDbAdapter implements DbAdapter {
       "utf8"
     );
     const preDeclarationParsed = PreDeclarationKnowledgeSchema.parse(JSON.parse(preDeclarationRaw));
+    const estimateImpactRaw = readFileSync(
+      new URL("../../data/estimate-impact.db.json", import.meta.url),
+      "utf8"
+    );
+    const estimateImpactParsed = EstimateImpactKnowledgeSchema.parse(JSON.parse(estimateImpactRaw));
 
     this.qualificationConfig = dbParsed.qualificationConfig;
     this.qualificationKnowledge = dbParsed.qualificationKnowledge;
@@ -204,6 +334,7 @@ export class JsonDbAdapter implements DbAdapter {
     this.supportingDocumentsKnowledge = documentsParsed;
     this.reviewPointsKnowledge = reviewPointsParsed;
     this.preDeclarationKnowledge = preDeclarationParsed;
+    this.estimateImpactKnowledge = estimateImpactParsed;
   }
 
   getQualificationConfig() {
@@ -228,5 +359,9 @@ export class JsonDbAdapter implements DbAdapter {
 
   getPreDeclarationKnowledge() {
     return this.preDeclarationKnowledge;
+  }
+
+  getEstimateImpactKnowledge() {
+    return this.estimateImpactKnowledge;
   }
 }

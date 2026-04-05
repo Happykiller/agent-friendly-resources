@@ -187,33 +187,34 @@ Regle de modelisation MCP obligatoire:
 
 ## Phase 3 - Estimation prudente
 
-**Statut actuel: TODO (maj 2026-04-04)**
+**Statut actuel: DONE (maj 2026-04-05)**
 
 **Tool a livrer**
 
-5. `estimate_impact` - **TODO**
+5. `estimate_impact` - **DONE**
 
-**A faire**
+**Etat constate (maj 2026-04-05)**
 
-- calcul indicatif uniquement pour cas simples,
-- exposer hypotheses, niveau de confiance et avertissements,
-- bloquer la precision abusive en donnees incompletes.
+- `estimate_impact` implemente et expose en MCP :
+  - bareme IR 2026 progressif (5 tranches, CGI art. 197),
+  - quotient familial avec plafonnement (1 807 €/demi-part, 4 262 € parent isole),
+  - abattements : salaires 10% (plancher 509€, plafond 14 555€), pensions 10% (plancher 454€, plafond 4 439€), micro-foncier 30%, dividendes barème 40%, micro-entrepreneur (BIC vente 71%, services 50%, BNC 34%),
+  - decote : celibataire (seuil 1 982€, base 897€) et couple (seuil 3 277€, base 1 483€),
+  - PFU 31,4% (12,8% IR + 18,6% PS) sur revenus du capital hors option bareme,
+  - reductions dons 66%/75% Coluche (plafond 2 000€ depuis 14/10/2025),
+  - credits garde enfant (50%, plaf. 3 500€/enfant) et emploi domicile (50%, plaf. 12 000€+),
+  - CEHR/CDHR (3% et 4% selon seuils),
+  - disclaimer indicatif systematique + warnings contextuels,
+  - regles externalisees dans `estimate-impact.db.json` (7 sources primaires officielles, haute confiance),
+  - 15 tests couvrant tous les cas cibles, 100% verts,
+- 57 tests au total, 100% verts.
 
-**Livrables**
+**Limites du perimetre MVP**
 
-- estimation utile mais non trompeuse.
-
-**Definition de done**
-
-- resultat toujours tague `indicative`,
-- avertissement present si incomplet/incertain.
-
-**Reste a faire pour passer DONE**
-
-- implementer le tool `estimate_impact`,
-- ajouter hypotheses explicites et niveau de confiance,
-- forcer un avertissement si donnees incompletes,
-- interdire toute formulation de calcul definitif.
+- pensions alimentaires deduites de facon simplifiee (pas de plafonnement CGI art. 156),
+- micro-entrepreneur : abattement BIC services 50% par defaut (warning si type different),
+- RFR pour CDHR calcule hors revenus PFU (warning explicite),
+- pas de gestion de l'imposition separee des epoux, ni des revenus exceptionnels.
 
 ## Phase 4 - Copilote de saisie
 

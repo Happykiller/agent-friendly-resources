@@ -283,3 +283,166 @@ export type SupportingDocumentsKnowledge = {
     note?: string;
   }>;
 };
+
+// ── estimate_impact types ──────────────────────────────────────────────────
+
+export type EstimateImpactSourceRef = {
+  ruleId: string;
+  url: string;
+  title: string;
+  authority: string;
+  confidence: "high" | "low";
+};
+
+export type BaremeTranche = {
+  de: number;
+  a: number | null;
+  taux: number;
+};
+
+export type DecoteParams = {
+  seuil: number;
+  base: number;
+  taux: number;
+};
+
+export type MicroEntrepreneurAbattement = {
+  taux: number;
+  minimumAbattement: number;
+};
+
+export type EstimateImpactKnowledge = {
+  campaign: string;
+  revenusAnnee: string;
+  sources: EstimateImpactSourceRef[];
+  baremeIR: {
+    tranches: BaremeTranche[];
+  };
+  decote: {
+    celibataire: DecoteParams;
+    couple: DecoteParams;
+  };
+  quotientFamilial: {
+    partsBase: {
+      celibataire: number;
+      marie_pacse: number;
+    };
+    majorationsEnfants: {
+      chargeExclusive1: number;
+      chargeExclusive2: number;
+      chargeExclusive3etPlus: number;
+      gardeAlternee1: number;
+      gardeAlternee2: number;
+      gardeAlternee3etPlus: number;
+    };
+    parentIsole: {
+      majoration: number;
+    };
+    plafonds: {
+      avantageParDemiPart: number;
+      avantageParentIsolePremierePartSpecifique: number;
+    };
+  };
+  abattements: {
+    salaires: {
+      taux: number;
+      plancherParDeclarant: number;
+      plafondParDeclarant: number;
+    };
+    pensions: {
+      taux: number;
+      plancherParPensionne: number;
+      plafondParFoyer: number;
+    };
+    microFoncier: {
+      taux: number;
+      plafondRecettesBrutes: number;
+    };
+    dividendesOptionBareme: {
+      taux: number;
+    };
+    microEntrepreneur: {
+      bicVente: MicroEntrepreneurAbattement;
+      bicServices: MicroEntrepreneurAbattement;
+      bncLiberal: MicroEntrepreneurAbattement;
+    };
+  };
+  pfu: {
+    tauxGlobal: number;
+    tauxIR: number;
+    tauxPS: number;
+  };
+  creditsImpot: {
+    gardeEnfant: {
+      taux: number;
+      plafondDepensesParEnfant: number;
+      plafondDepensesGardeAlterneeParParent: number;
+    };
+    emploiDomicile: {
+      taux: number;
+      plafondBase: number;
+      majorationParEnfantACharge: number;
+      majorationParEnfantGardeAlternee: number;
+      majorationParMembrePlus65ans: number;
+      plafondAvecMajorations: number;
+      plafondInvalidite: number;
+    };
+  };
+  reductionsImpot: {
+    dons: {
+      taux66: {
+        taux: number;
+        plafondPctRevenuImposable: number;
+        caseDeclaration: string;
+      };
+      taux75Coluche: {
+        taux: number;
+        plafondDons: number;
+        dateApplicationNouveauPlafond: string;
+        caseDeclaration: string;
+      };
+    };
+  };
+  cehr: {
+    celibataire: BaremeTranche[];
+    couple: BaremeTranche[];
+  };
+};
+
+export type EstimateImpactInput = {
+  profileSnapshot: QualifyTaxProfileInput;
+  declaredAmounts: Record<string, number>;
+  options?: {
+    dividendesOptionBareme?: boolean;
+  };
+};
+
+export type EstimateImpactDetailLine = {
+  step: string;
+  label: string;
+  value: number;
+  details?: string;
+};
+
+export type EstimateImpactResult = {
+  campaign: string;
+  revenusAnnee: string;
+  nombreParts: number;
+  revenuNetImposable: number;
+  impotBrut: number;
+  decote: number;
+  impotAvantCredits: number;
+  reductionsImpot: number;
+  creditsImpot: number;
+  impotNet: number;
+  cehr: number;
+  totalDu: number;
+  pfuDetails?: {
+    base: number;
+    impotPfu: number;
+  };
+  details: EstimateImpactDetailLine[];
+  warnings: string[];
+  disclaimer: string;
+  sourcesUsed: EstimateImpactSourceRef[];
+};

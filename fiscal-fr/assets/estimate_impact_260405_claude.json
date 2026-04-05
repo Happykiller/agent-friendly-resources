@@ -1,0 +1,405 @@
+{
+  "meta": {
+    "generated": "2026-04-05",
+    "campaign": "2026",
+    "revenus_annee": "2025",
+    "loi_reference": "LOI n° 2026-103 du 19 février 2026 de finances pour 2026",
+    "lfss_reference": "Loi n° 2025-1403 du 30 décembre 2025 de financement de la Sécurité sociale pour 2026",
+    "note": "Toutes les règles ci-dessous s'appliquent à la déclaration 2026 des revenus perçus en 2025, sauf mention contraire."
+  },
+
+  "rules": [
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.economie.gouv.fr/particuliers/impots-et-fiscalite/gerer-mon-impot-sur-le-revenu/comment-calculer-votre-impot-dapres-le-bareme-de-limpot-sur-le-revenu",
+      "source_title": "Comment calculer votre impôt d'après le barème de l'impôt sur le revenu – economie.gouv.fr (LF 2026)",
+      "source_url_2": "https://www.service-public.gouv.fr/particuliers/actualites/A18045",
+      "source_title_2": "Tranches et taux d'imposition 2026 – Service-Public.gouv.fr",
+      "confidence_level": "high",
+      "rule_id": "bareme_ir_2026",
+      "rule_type": "bareme",
+      "description": "Barème progressif IR 2026 (revenus 2025), 5 tranches, par part de quotient familial. Revalorisé de +0,9 % par l'article 2 de la LF 2026.",
+      "changed_from_2025": true,
+      "change_note": "Revalorisation de +0,9 % (contre +1,8 % en 2025). Les seuils passent respectivement de 11 497 / 29 315 / 83 823 / 180 294 € (IR 2025) à 11 600 / 29 579 / 84 577 / 181 917 € (IR 2026).",
+      "data": {
+        "tranches": [
+          { "de": 0,      "a": 11600,  "taux": 0.00, "commentaire": "Tranche à 0 %" },
+          { "de": 11601,  "a": 29579,  "taux": 0.11, "commentaire": "Tranche à 11 %" },
+          { "de": 29580,  "a": 84577,  "taux": 0.30, "commentaire": "Tranche à 30 %" },
+          { "de": 84578,  "a": 181917, "taux": 0.41, "commentaire": "Tranche à 41 %" },
+          { "de": 181918, "a": null,   "taux": 0.45, "commentaire": "Tranche à 45 % (au-delà de 181 917 €)" }
+        ],
+        "application": "Par part de quotient familial. Appliquer le barème au revenu net imposable / nb parts, puis multiplier le résultat par le nb parts.",
+        "decote": {
+          "seuil_celibataire": 1982,
+          "seuil_couple": 3277,
+          "formule_celibataire": "897 − 0.4525 × impôt_brut",
+          "formule_couple": "1483 − 0.4525 × impôt_brut",
+          "note": "La décote s'applique automatiquement si l'impôt brut est inférieur aux seuils ci-dessus."
+        }
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F1419",
+      "source_title": "Barème de l'impôt sur le revenu – Service-Public.gouv.fr",
+      "source_url_2": "https://www.service-public.gouv.fr/particuliers/vosdroits/F2702",
+      "source_title_2": "Quotient familial d'une personne seule – Service-Public.gouv.fr",
+      "confidence_level": "high",
+      "rule_id": "quotient_familial_2026",
+      "rule_type": "bareme",
+      "description": "Nombre de parts de quotient familial selon situation familiale, plafonnement de l'avantage par demi-part et règle parent isolé (case T).",
+      "changed_from_2025": true,
+      "change_note": "Le plafond de l'avantage par demi-part passe de 1 791 € (IR 2025) à 1 807 € (IR 2026). Le plafond parent isolé (1ère demi-part) passe de 4 224 € à 4 262 €.",
+      "data": {
+        "parts_base": {
+          "celibataire_sans_enfant": 1.0,
+          "marie_pacse_sans_enfant": 2.0,
+          "enfant_1_ou_2_charge_exclusive": 0.5,
+          "enfant_a_partir_3e_charge_exclusive": 1.0,
+          "enfant_1_ou_2_garde_alternee": 0.25,
+          "enfant_a_partir_3e_garde_alternee": 0.5,
+          "note": "Situation appréciée au 1er janvier 2025 ; naissance en cours d'année retient la situation au 31 décembre si plus favorable."
+        },
+        "plafonnement_avantage_demi_part": {
+          "demi_part_droit_commun_EUR": 1807,
+          "commentaire": "Avantage fiscal maximal en euros par demi-part supplémentaire (au-delà de la part ou des 2 parts de base). Source : LF 2026."
+        },
+        "parent_isole_case_T": {
+          "condition": "Personne célibataire/divorcée/séparée qui élève seul(e) au moins un enfant au 1er janvier 2025",
+          "avantage_premiere_part_EUR": 4262,
+          "note": "La première demi-part accordée en tant que parent isolé procure un avantage plafonné à 4 262 € (et non 1 807 €)."
+        },
+        "autres_plafonds": {
+          "personne_seule_ancien_enfant_a_charge_5ans_EUR": 1079,
+          "veuf_avec_personnes_a_charge_part_conservee_EUR": 2011
+        }
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.impots.gouv.fr/particulier/frais-professionnels",
+      "source_title": "Frais professionnels – impots.gouv.fr",
+      "source_url_2": "https://droit-finances.commentcamarche.com/impots/guide-impots/2717-deduction-des-frais-reels-option-exemples-forfait/",
+      "source_title_2": "Frais réels ou forfait 10 % – droit-finances (données issues du simulateur DGFiP 2026)",
+      "confidence_level": "high",
+      "rule_id": "abattement_10pct_salaires_2026",
+      "rule_type": "abattement",
+      "description": "Abattement forfaitaire de 10 % pour frais professionnels sur les salaires (traitements et salaires). Appliqué automatiquement.",
+      "changed_from_2025": true,
+      "change_note": "Plancher revalorisé de +0,9 % : passe de 504 € (IR 2025) à 509 €. Plafond : passe de 14 426 € (IR 2025) à 14 555 €.",
+      "data": {
+        "taux": 0.10,
+        "plancher_EUR": 509,
+        "plafond_EUR": 14555,
+        "note_plancher": "Plancher par déclarant percevant des salaires.",
+        "note_plafond": "Plafond par déclarant (apprécié par personne, et non par foyer pour les salaires).",
+        "alternative": "Le contribuable peut opter pour les frais réels (déduction du montant réel des frais professionnels justifiés)."
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://droit-finances.commentcamarche.com/impots/guide-impots/2717-deduction-des-frais-reels-option-exemples-forfait/",
+      "source_title": "Abattement 10 % pensions – données DGFiP simulateur 2026 (confirmé LF 2026 maintien du dispositif, rejet réforme en nov. 2025)",
+      "source_url_2": "https://lcp.fr/actualites/budget-2026-les-deputes-rejettent-la-suppression-de-l-abattement-de-10-sur-les-pensions",
+      "source_title_2": "Rejet de la suppression de l'abattement 10 % sur pensions – LCP Assemblée nationale, 13 nov. 2025",
+      "confidence_level": "high",
+      "rule_id": "abattement_10pct_pensions_2026",
+      "rule_type": "abattement",
+      "description": "Abattement de 10 % sur les pensions de retraite et rentes. Maintenu intégralement (la réforme forfait 2 000 € a été rejetée par 213 voix contre 17 à l'AN le 13 novembre 2025).",
+      "changed_from_2025": false,
+      "data": {
+        "taux": 0.10,
+        "plancher_EUR_par_pensionné": 454,
+        "plafond_EUR_par_foyer": 4439,
+        "note_plancher": "Minimum de 454 € par personne percevant une pension au sein du foyer fiscal.",
+        "note_plafond": "Maximum global de 4 439 € pour l'ensemble du foyer fiscal (commun pour un couple).",
+        "difference_avec_salaires": "Le plancher s'apprécie par pensionné (comme pour les salaires), mais le plafond est GLOBAL par foyer (contrairement aux salaires où le plafond est individuel).",
+        "assiette": "Pensions de vieillesse, retraite complémentaire (Agirc-Arrco, Ircantec), rentes viagères à titre gratuit. Exclut l'ASPA et le minimum vieillesse."
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.impots.gouv.fr/particulier/dividendes",
+      "source_title": "Dividendes – impots.gouv.fr (CGI art. 158, 3-2°)",
+      "confidence_level": "high",
+      "rule_id": "abattement_40pct_dividendes_bareme_2026",
+      "rule_type": "abattement",
+      "description": "Abattement de 40 % sur les dividendes en cas d'option pour le barème progressif (au lieu du PFU). S'applique sur le montant brut des dividendes éligibles.",
+      "changed_from_2025": false,
+      "data": {
+        "taux_abattement": 0.40,
+        "base_calcul": "Dividendes bruts encaissés (distributions de bénéfices par sociétés soumises à l'IS françaises ou étrangères équivalentes).",
+        "resultat": "40 % non imposables, 60 % imposables au barème progressif.",
+        "condition": "Option barème exercée globalement pour tous les revenus de capitaux mobiliers et plus-values de l'année (case 2OP).",
+        "avantages_suppl_si_bareme": [
+          "Déductibilité de la CSG à hauteur de 6,8 % du revenu global de l'année suivante.",
+          "Déductibilité des frais et charges (frais de garde, droits de garde, intérêts d'emprunt pour acquisition de titres)."
+        ],
+        "note_pfu": "Par défaut (sans option barème), les dividendes sont soumis au PFU (voir règle pfu_2026)."
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://entreprendre.service-public.gouv.fr/actualites/A18796",
+      "source_title": "Évolution du taux du PFU – Service-Public Entreprendre, 10 février 2026",
+      "source_url_2": "https://www.legifiscal.fr/actualites-fiscales/4320-plfss-2026-flat-tax-314-adopte.html",
+      "source_title_2": "PLFSS 2026 : flat tax à 31,4 % – LégiFiscal",
+      "confidence_level": "high",
+      "rule_id": "pfu_flat_tax_2026",
+      "rule_type": "pfu",
+      "description": "Prélèvement Forfaitaire Unique (flat tax) applicable aux dividendes, intérêts et plus-values mobilières. Taux global porté à 31,4 % par la LFSS 2026.",
+      "changed_from_2025": true,
+      "change_note": "Hausse de +1,4 point issue de la LFSS 2026 (loi n° 2025-1403 du 30 déc. 2025) : la CSG sur revenus de placement passe de 9,2 % à 10,6 %, portant les prélèvements sociaux de 17,2 % à 18,6 % et le PFU global de 30 % à 31,4 %. Le taux IR du PFU (12,8 %) reste inchangé.",
+      "data": {
+        "taux_global": 0.314,
+        "decomposition": {
+          "taux_ir_forfaitaire": 0.128,
+          "taux_prelevements_sociaux": 0.186,
+          "detail_prelevements_sociaux": {
+            "CSG": 0.106,
+            "CRDS": 0.005,
+            "prelevement_solidarite": 0.075
+          }
+        },
+        "application_par_defaut": true,
+        "revenus_concernes_taux_31_4": [
+          "Dividendes (compte-titres ordinaire, perçus depuis le 1er janv. 2026)",
+          "Intérêts de livrets fiscalisés, comptes à terme (perçus depuis le 1er janv. 2026)",
+          "Plus-values de cession de valeurs mobilières (rétroactif sur cessions réalisées dès le 1er janv. 2025 pour les revenus du patrimoine)",
+          "Gains sur crypto-actifs non professionnels"
+        ],
+        "exclusions_maintenues_a_30pct": [
+          "Assurance-vie (prélèvements sociaux maintenus à 17,2 % → PFU 30 %)",
+          "PEL/CEL (PS à 17,2 %)",
+          "Revenus fonciers (PS à 17,2 %)"
+        ],
+        "option_bareme": "Le contribuable peut opter globalement pour le barème progressif via case 2OP. L'option est intéressante si TMI ≤ 11 % (et permet l'abattement 40 % sur dividendes + déductibilité CSG 6,8 %).",
+        "note_retro_2025": "Les plus-values de cession de titres (revenus du patrimoine) réalisées dès le 1er janvier 2025 sont imposées au nouveau taux PS de 18,6 %, soit PFU effectif de 31,4 %. Les dividendes et intérêts (produits de placement) ne sont concernés qu'à partir du 1er janvier 2026."
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.impots.gouv.fr/particulier/questions/je-fais-garder-mon-jeune-enfant-lexterieur-du-domicile-que-puis-je-deduire",
+      "source_title": "Frais de garde d'enfant hors domicile – impots.gouv.fr (mis à jour déclaration 2026 revenus 2025)",
+      "source_url_2": "https://www.economie.gouv.fr/particuliers/gerer-mon-argent/beneficier-daides-et-de-reductions-dimpots/impot-quelles-sont-les",
+      "source_title_2": "Aides fiscales liées à la famille – economie.gouv.fr",
+      "confidence_level": "high",
+      "rule_id": "credit_impot_garde_enfant_7GA_2026",
+      "rule_type": "credit",
+      "description": "Crédit d'impôt pour frais de garde d'enfant de moins de 6 ans hors du domicile (case 7GA). Taux 50 %, plafond 3 500 € par enfant (base de dépenses nettes après déduction des aides CAF/employeur).",
+      "changed_from_2025": false,
+      "data": {
+        "taux_credit": 0.50,
+        "condition_age": "Enfant de moins de 6 ans au 1er janvier 2025 (né à partir du 1er janvier 2019 inclus).",
+        "plafond_depenses_par_enfant_EUR": 3500,
+        "credit_max_par_enfant_EUR": 1750,
+        "plafond_garde_alternee_par_parent_EUR": 1750,
+        "credit_max_garde_alternee_par_parent_EUR": 875,
+        "assiette_nette": "Dépenses brutes de garde MOINS les aides reçues : complément de libre choix du mode de garde (CMG/Paje versé par CAF/MSA), aides de l'employeur ou du CSE (exonérées d'IR dans la limite de 2 540 € — montant déclaration 2026).",
+        "depenses_exclues": [
+          "Frais de nourriture",
+          "Suppléments exceptionnels"
+        ],
+        "depenses_incluses_assistante_maternelle": "Salaire net + cotisations sociales patronales + indemnités d'entretien à hauteur de 2,65 € minimum par jour d'accueil.",
+        "cases_declaration": ["7GA", "7GB", "7GC (enfants en charge exclusive)", "7GE, 7GF… (garde alternée)"],
+        "eligible_si_non_imposable": true,
+        "note": "Garde hors domicile uniquement (crèche, halte-garderie, assistante maternelle agréée, garderie scolaire, centre de loisirs). Pour garde à domicile, voir règle credit_impot_emploi_domicile_2026."
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F12",
+      "source_title": "Crédit d'impôt pour l'emploi d'un salarié à domicile – Service-Public.gouv.fr (vérifié 20 février 2026, à jour LF 2026)",
+      "source_url_2": "https://www.economie.gouv.fr/particuliers/gerer-mon-argent/beneficier-daides-et-de-reductions-dimpots/tout-savoir-sur-le-credit",
+      "source_title_2": "Tout savoir sur le crédit d'impôt emploi à domicile – economie.gouv.fr",
+      "confidence_level": "high",
+      "rule_id": "credit_impot_emploi_domicile_7DB_2026",
+      "rule_type": "credit",
+      "description": "Crédit d'impôt pour l'emploi d'un salarié à domicile (case 7DB). Taux 50 %. Plafond de base 12 000 €, majorations possibles. Les tentatives de réforme (abaissement à 40 % ou réduction du plafond) ont toutes été rejetées au Parlement.",
+      "changed_from_2025": false,
+      "data": {
+        "taux_credit": 0.50,
+        "plafond_base_EUR": 12000,
+        "credit_max_base_EUR": 6000,
+        "majorations": {
+          "par_enfant_a_charge": 1500,
+          "par_enfant_garde_alternee": 750,
+          "par_membre_foyer_plus_65ans": 1500,
+          "par_ascendant_plus_65ans_APA": 1500,
+          "plafond_global_avec_majorations_EUR": 15000
+        },
+        "premiere_annee_emploi_direct": {
+          "plafond_EUR": 15000,
+          "plafond_avec_majorations_EUR": 18000,
+          "note": "Applicable uniquement si le contribuable emploie directement un salarié pour la première fois (sans avoir bénéficié du crédit pour emploi direct dans les années antérieures)."
+        },
+        "plafond_invalidite_lourde_EUR": 20000,
+        "note_invalidite": "Plafond de 20 000 € si un membre du foyer est titulaire de la carte CMI mention 'invalidité' + pension d'invalidité 3e catégorie (ou AEEH complément).",
+        "case_declaration": "7DB (montant total des dépenses d'emploi à domicile payées en 2025)",
+        "nouveaute_2026": "La déclaration 2026 introduit une nouvelle case obligatoire d'identification des bénéficiaires des sommes versées (salarié direct, prestataire, SIREN) dans le formulaire 2042 RICI. Risque de blocage du crédit en cas d'omission.",
+        "assiette_nette": "Dépenses brutes MOINS les aides reçues (APA, PCH, CMG, aide financière employeur, CESU préfinancé).",
+        "eligible_si_non_imposable": true
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.service-public.gouv.fr/particuliers/actualites/A18836",
+      "source_title": "Dispositif Coluche – dons aux associations et réductions d'impôts : nouvelles règles 2026 – Service-Public.gouv.fr",
+      "source_url_2": "https://www.legifiscal.fr/actualites-fiscales/4411-plf-2026-49-3-maintien-plafond-reduction-impot-dons-coluche-porte-2-000.html",
+      "source_title_2": "Maintien du plafond Coluche à 2 000 € après 49-3 – LégiFiscal",
+      "confidence_level": "high",
+      "rule_id": "reduction_dons_2026",
+      "rule_type": "reduction",
+      "description": "Réduction d'impôt sur les dons aux organismes d'intérêt général. Taux 66 % (droit commun) et 75 % 'Coluche' (personnes en difficulté). Le plafond Coluche est doublé à 2 000 € pour les dons à partir du 14 octobre 2025.",
+      "changed_from_2025": true,
+      "change_note": "Plafond Coluche (taux 75 %) doublé de 1 000 € à 2 000 € par l'article 9 de la LF 2026, applicable aux dons effectués depuis le 14 octobre 2025 (date de présentation du PLF en conseil des ministres). Réduction maximale Coluche : 1 500 € (75 % × 2 000 €).",
+      "data": {
+        "taux_66pct": {
+          "taux": 0.66,
+          "plafond_base": "20 % du revenu imposable",
+          "organismes_eligibles": "Organismes d'intérêt général ou reconnus d'utilité publique (associations, fondations, partis politiques…), et fraction des dons Coluche dépassant le plafond de 2 000 €.",
+          "report_excedent": "L'excédent non imputable (si dons > 20 % du RNI) est reportable sur 5 ans.",
+          "case_declaration": "7UF"
+        },
+        "taux_75pct_coluche": {
+          "taux": 0.75,
+          "plafond_dons_EUR": 2000,
+          "credit_max_EUR": 1500,
+          "date_application_nouveau_plafond": "2025-10-14",
+          "note_transitoire": "Pour les dons effectués AVANT le 14 octobre 2025, l'ancien plafond de 1 000 € s'applique. Pour les dons À PARTIR DU 14 octobre 2025, le nouveau plafond de 2 000 € s'applique. En déclaration 2026, les deux règles peuvent coexister selon la date des dons.",
+          "organismes_eligibles": [
+            "Associations fournissant gratuitement des repas aux personnes en difficulté",
+            "Associations œuvrant pour le logement des personnes en difficulté",
+            "Associations d'aide aux soins des personnes en difficulté",
+            "Organismes d'aide aux victimes de violences domestiques"
+          ],
+          "cas_depassement": "La fraction des dons au-delà de 2 000 € (ou 1 000 € avant le 14/10/2025) bascule automatiquement en réduction à 66 %, dans la limite de 20 % du revenu imposable.",
+          "case_declaration": "7UD"
+        }
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.service-public.gouv.fr/particuliers/vosdroits/F31130",
+      "source_title": "Contribution exceptionnelle sur les hauts revenus – Service-Public.gouv.fr",
+      "source_url_2": "https://www.economie.gouv.fr/particuliers/impots-et-fiscalite/gerer-mon-impot-sur-le-revenu/comment-calculer-votre-impot-dapres-le-bareme-de-limpot-sur-le-revenu",
+      "source_title_2": "CDHR reconduite par LF 2026 – economie.gouv.fr",
+      "confidence_level": "high",
+      "rule_id": "cehr_cdhr_2026",
+      "rule_type": "cehr",
+      "description": "Contribution Exceptionnelle sur les Hauts Revenus (CEHR, art. 223 sexies CGI) inchangée. Contribution Différentielle sur les Hauts Revenus (CDHR, art. 224 CGI) reconduite et pérennisée jusqu'au retour du déficit public sous 3 % du PIB.",
+      "changed_from_2025": true,
+      "change_note": "La CDHR, instaurée pour la seule année 2025 par la LF 2025, est pérennisée par l'article 2 de la LF 2026 jusqu'à ce que le déficit du budget général soit inférieur à 3 % du PIB (amendement Matteï/MoDem retenu dans le texte 49-3). Les seuils et le taux minimal de 20 % sont inchangés.",
+      "data": {
+        "CEHR": {
+          "description": "Contribution Exceptionnelle sur les Hauts Revenus (existante depuis 2012, art. 223 sexies CGI)",
+          "seuils_et_taux_celibataire": [
+            { "de": 250001, "a": 500000, "taux": 0.03 },
+            { "de": 500001, "a": null,   "taux": 0.04 }
+          ],
+          "seuils_et_taux_couple": [
+            { "de": 500001, "a": 1000000, "taux": 0.03 },
+            { "de": 1000001, "a": null,   "taux": 0.04 }
+          ],
+          "assiette": "Revenu fiscal de référence (RFR)",
+          "changed_from_2025": false
+        },
+        "CDHR": {
+          "description": "Contribution Différentielle sur les Hauts Revenus (art. 224 CGI) – garantit un taux minimum d'imposition de 20 % pour les foyers les plus aisés",
+          "seuil_celibataire_EUR": 250000,
+          "seuil_couple_EUR": 500000,
+          "taux_minimal_imposition": 0.20,
+          "note_seuil": "Les seuils ne sont pas majorés en fonction du nombre de personnes à charge.",
+          "decote": {
+            "plafond_decote_celibataire_EUR": 330000,
+            "plafond_decote_couple_EUR": 660000,
+            "formule": "CDHR = 20 % × RFR − (IR + CEHR + prélèvements libératoires + majoration forfaitaire) ; décote appliquée si RFR entre seuil et plafond de décote"
+          },
+          "duree_application": "Jusqu'à l'imposition des revenus de l'année au titre de laquelle le déficit du budget général est inférieur à 3 % du PIB (art. 2 LF 2026).",
+          "acompte": "95 % de la contribution estimée, à verser entre le 1er et le 15 décembre 2026."
+        }
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.impots.gouv.fr/particulier/micro-foncier",
+      "source_title": "Régime micro-foncier – impots.gouv.fr (CGI art. 32)",
+      "confidence_level": "high",
+      "rule_id": "micro_foncier_2026",
+      "rule_type": "abattement",
+      "description": "Régime micro-foncier : abattement forfaitaire de 30 % sur les recettes brutes foncières. Applicable si recettes brutes annuelles ≤ 15 000 €.",
+      "changed_from_2025": false,
+      "data": {
+        "taux_abattement": 0.30,
+        "assiette": "Recettes brutes foncières annuelles (loyers encaissés, charges locataires incluses, hors dépôts de garantie)",
+        "revenu_foncier_net_imposable": "Recettes brutes × 70 %",
+        "formule": "revenu_net = recettes_brutes × (1 - 0.30)",
+        "plafond_recettes_brutes_EUR": 15000,
+        "note_plafond": "Si les recettes brutes dépassent 15 000 € sur l'année, le régime réel s'applique obligatoirement.",
+        "exclusions": [
+          "Immeubles bénéficiant de régimes spéciaux (monuments historiques, Borloo ancien, Malraux…)",
+          "Parts de SCPI"
+        ],
+        "declaration": "Reporter directement le revenu foncier net (recettes × 70 %) en case 4BE de la déclaration 2044."
+      }
+    },
+
+    {
+      "campaign": "2026",
+      "source_authority": "primary_official",
+      "source_url": "https://www.impots.gouv.fr/professionnel/micro-entrepreneur",
+      "source_title": "Régimes micro-BIC et micro-BNC – impots.gouv.fr (CGI art. 50-0 et 102 ter)",
+      "confidence_level": "high",
+      "rule_id": "micro_entrepreneur_abattements_2026",
+      "rule_type": "abattement",
+      "description": "Abattements forfaitaires pour charges applicables aux micro-entrepreneurs (BIC/BNC) sans option pour le versement libératoire. Le revenu imposable est le chiffre d'affaires après abattement.",
+      "changed_from_2025": false,
+      "data": {
+        "BIC_vente": {
+          "taux_abattement": 0.71,
+          "assiette": "Chiffre d'affaires brut (ventes de marchandises, fournitures, denrées, activités d'hébergement)",
+          "revenu_imposable": "CA × 29 %",
+          "note": "Abattement minimum de 305 €"
+        },
+        "BIC_services": {
+          "taux_abattement": 0.50,
+          "assiette": "Chiffre d'affaires brut (prestations de services commerciales ou artisanales)",
+          "revenu_imposable": "CA × 50 %",
+          "note": "Abattement minimum de 305 €"
+        },
+        "BNC_liberal": {
+          "taux_abattement": 0.34,
+          "assiette": "Recettes brutes (professions libérales, activités non commerciales)",
+          "revenu_imposable": "Recettes × 66 %",
+          "note": "Abattement minimum de 305 €"
+        },
+        "condition": "Sans option pour le versement libératoire de l'IR (prélèvement libératoire). Si versement libératoire : l'IR est payé en cours d'année directement sur le CA, sans passage au barème progressif.",
+        "declaration": "Le revenu net (CA après abattement) est intégré dans le revenu global et soumis au barème progressif."
+      }
+    }
+
+  ]
+}
