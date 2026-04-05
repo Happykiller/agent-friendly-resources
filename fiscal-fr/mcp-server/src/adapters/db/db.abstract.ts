@@ -1,5 +1,6 @@
 import type {
   EstimateImpactKnowledge,
+  GuideFilingKnowledge,
   PreDeclarationKnowledge,
   QualificationConfig,
   QualificationCorpus,
@@ -16,4 +17,5 @@ export interface DbAdapter {
   getReviewPointsKnowledge(): ReviewPointsKnowledge;
   getPreDeclarationKnowledge(): PreDeclarationKnowledge;
   getEstimateImpactKnowledge(): EstimateImpactKnowledge;
+  getGuideFilingKnowledge(): GuideFilingKnowledge;
 }

@@ -137,3 +137,18 @@ test("input validation rejects invalid profile snapshot", () => {
 
   assert.equal(parsed.success, false);
 });
+
+// ── Contrat : validateInput accepte un input valide ───────────────────────────
+
+test("validateInput accepte un input valide (contrat OK)", () => {
+  const useCase = createUseCase();
+  const parsed = useCase.validateInput({
+    profileSnapshot: {
+      householdStatus: "single",
+      dependentsCount: 0,
+      incomeTypes: ["salary"],
+    },
+  });
+
+  assert.equal(parsed.success, true);
+});

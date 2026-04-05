@@ -12,6 +12,7 @@ import { ListSupportingDocumentsUseCase } from "./usecases/domains/qualify-tool/
 import { DetectReviewPointsUseCase } from "./usecases/domains/qualify-tool/detect-review-points.usecase.js";
 import { BuildPreDeclarationUseCase } from "./usecases/domains/qualify-tool/build-pre-declaration.usecase.js";
 import { EstimateImpactUseCase } from "./usecases/domains/qualify-tool/estimate-impact.usecase.js";
+import { GuideFilingStepUseCase } from "./usecases/domains/qualify-tool/guide-filing-step.usecase.js";
 
 const SERVER_INFO = {
   name: "fiscal-fr-mcp",
@@ -42,6 +43,9 @@ function createMcpServer() {
   );
   const estimateImpactUseCase = container.get<EstimateImpactUseCase>(
     TYPES.EstimateImpactUseCase
+  );
+  const guideFilingStepUseCase = container.get<GuideFilingStepUseCase>(
+    TYPES.GuideFilingStepUseCase
   );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
@@ -76,6 +80,12 @@ function createMcpServer() {
           description:
             "Calcule une estimation indicative de l'impot sur le revenu (IR 2026, revenus 2025) a partir du profil qualifie et des montants declares. Applique le bareme progressif, le quotient familial, la decote, les reductions et credits d'impot. Resultat sans valeur juridique — toujours accompagne d'un disclaimer.",
           inputSchema: estimateImpactUseCase.getToolSchema(),
+        },
+        {
+          name: "guide_filing_step",
+          description:
+            "Fournit le guide de saisie etape par etape pour la declaration en ligne sur impots.gouv.fr. Pour une etape donnee, retourne : ce qu'il faut verifier maintenant, les oublis frequents, et les pieges a eviter. Contexte optionnel pour personnaliser les points de vigilance selon le profil.",
+          inputSchema: guideFilingStepUseCase.getToolSchema(),
         },
       ],
     };
@@ -250,6 +260,58 @@ function createMcpServer() {
           },
         ],
       };
+    }
+
+    if (request.params.name === "guide_filing_step") {
+      const parsed = guideFilingStepUseCase.validateInput(request.params.arguments);
+
+      if (!parsed.success) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  error: "INVALID_INPUT",
+                  details: parsed.error.flatten(),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      try {
+        const result = guideFilingStepUseCase.execute(parsed.data);
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(result, null, 2),
+            },
+          ],
+        };
+      } catch (err) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  error: "UNKNOWN_STEP",
+                  message: err instanceof Error ? err.message : String(err),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+          isError: true,
+        };
+      }
     }
 
     return {

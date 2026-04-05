@@ -1,6 +1,6 @@
 ---
 name: assistant-fiscal
-description: Lance un assistant fiscal français pour qualification, justificatifs, points de vigilance ou préparation de pré-déclaration.
+description: Lance un assistant fiscal français pour qualification, justificatifs, points de vigilance, pré-déclaration, estimation indicative ou guidage écran par écran de la saisie.
 disable-model-invocation: true
 ---
 
@@ -111,6 +111,49 @@ Dans ce mode :
   - Statut global du brouillon
   - Prochaine action utilisateur.
 - si `draftStatus` vaut `incomplete`, inviter l'utilisateur à compléter les montants manquants avant de continuer.
+
+### 5. Mode `estimation`
+Objectif :
+- fournir une estimation indicative de l'impôt sur le revenu (IR 2026, revenus 2025) à titre pédagogique uniquement.
+
+Dans ce mode :
+- si la situation n'est pas encore qualifiée, commence par `qualify_tax_profile`,
+- recueille les montants déclarés si absents,
+- appelle `estimate_impact` avec :
+  - `profileSnapshot`,
+  - `declaredAmounts` (mêmes clés que `build_pre_declaration`),
+  - `options` : `{ forcePfuOption?: boolean }` si pertinent,
+- restitue obligatoirement avec les sections suivantes :
+  - Résumé fiscal (nombre de parts, revenu net imposable, quotient familial)
+  - Impôt avant décote et après décote/abattements
+  - Réductions et crédits d'impôt appliqués
+  - Contributions exceptionnelles (CEHR/CDHR) si applicables
+  - Estimation finale nette
+  - Avertissements contextuels (warnings) le cas échéant
+  - Disclaimer indicatif (toujours présent)
+  - Prochaine action utilisateur.
+- insister sur le caractère indicatif et non opposable du résultat.
+- si `draftStatus` vaut `incomplete`, signaler que l'estimation est partielle.
+
+### 6. Mode `copilote`
+Objectif :
+- guider l'utilisateur écran par écran lors de la saisie en ligne sur impots.gouv.fr.
+
+Dans ce mode :
+- demande quelle étape l'utilisateur est en train de renseigner si non précisée,
+- appelle `guide_filing_step` avec :
+  - `currentStep` (identifiant de l'étape : step_connexion, step_declaration_automatique, step_selection_rubriques, step_etat_civil, step_revenus_salaires, step_revenus_capitaux_mobiliers, step_revenus_fonciers, step_micro_entrepreneur, step_charges_deductibles, step_reductions_credits_impot, step_recapitulatif_impot, step_vigilance_transversale),
+  - `knownContext` (optionnel) : `{ incomeTypes?, charges? }` si le profil est connu,
+- restitue obligatoirement avec les sections suivantes :
+  - Ce qu'il faut vérifier maintenant (`verifyNow`)
+  - Oublis fréquents à cette étape (`frequentOmissions`)
+  - Pièges à éviter (`traps`)
+  - Cases clés à cette étape (`keyCaseCodes`) si non vide
+  - Points de vigilance personnalisés (`contextualHighlights`) si présents
+  - Source officielle de référence
+  - Étapes disponibles (pour proposer la navigation vers l'étape suivante ou à step_vigilance_transversale)
+- après restitution, propose à l'utilisateur de passer à l'étape suivante ou de consulter `step_vigilance_transversale`.
+- si `step_vigilance_transversale` est demandé : restituer les points transversaux sans notion d'ordre.
 
 ## Gestion hors périmètre
 - Si `mvpDecision` vaut `human_review`, le signaler explicitement.

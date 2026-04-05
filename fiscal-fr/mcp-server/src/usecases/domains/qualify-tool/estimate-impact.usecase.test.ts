@@ -293,3 +293,20 @@ test("sourcesUsed est non vide et contient les sources documentaires", () => {
   assert.ok(result.sourcesUsed[0].ruleId !== undefined);
   assert.ok(result.sourcesUsed[0].url !== undefined);
 });
+
+// ── Contrat : validateInput accepte un input valide ───────────────────────────
+
+test("validateInput accepte un input valide (contrat OK)", () => {
+  const useCase = createUseCase();
+  const result = useCase.validateInput({
+    profileSnapshot: {
+      householdStatus: "single",
+      dependentsCount: 0,
+      incomeTypes: ["salary"],
+    },
+    declaredAmounts: { salary: 30000 },
+    options: {},
+  });
+
+  assert.equal(result.success, true);
+});

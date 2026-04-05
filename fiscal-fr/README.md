@@ -6,62 +6,63 @@ Convention de documentation: le contenu est redige en francais. Quand utile pour
 
 Objectif: vous aider a preparer votre dossier plus vite et plus sereinement, sans remplacer un expert-comptable ni un conseiller fiscal.
 
-## Cadrage fonctionnel
+## Ce que le plugin fait
 
-### 4.1 Objectif
+L'assistant couvre l'integralite du parcours de preparation:
 
-Fournir un plugin MCP d'assistance a la preparation de la declaration de revenus francaise pour cas simples, capable de:
+| Mode | Commande | Ce que ca fait |
+|------|----------|----------------|
+| `qualification` | "Lance le mode qualification" | Qualifie la situation fiscale, classe en simple/a surveiller/hors perimetre |
+| `justificatifs` | "Passe en mode justificatifs" | Liste les documents obligatoires, recommandes, manquants |
+| `vigilance` | "Detecte les points de vigilance" | Repere les incoherences, regimes a trancher, cas hors perimetre |
+| `predeclaration` | "Prepare une pre-declaration" | Produit un brouillon structure avec codes cases et origines tracees |
+| `estimation` | "Estime mon impot" | Estimation indicative IR 2026 (bareme progressif, quotient familial, decote, reductions/credits) |
+| `copilote` | "Guide-moi ecran par ecran" | Copilote de saisie sur impots.gouv.fr, etape par etape |
 
-- Qualifier le profil fiscal.
-- Detecter les points d'attention.
-- Lister les justificatifs.
-- Estimer un impact indicatif.
-- Generer une pre-declaration structuree.
+## Perimetres couverts
 
-### 4.2 Utilisateur cible
+### Situations familiales
 
-- Particulier francais.
-- Cas standard.
-- Besoin d'aide pedagogique et structuree.
+- Celibataire (`single`), marie (`married`), pacse (`civil_union`), divorce (`divorced`), veuf (`widowed`).
+- Personnes a charge: principale, residence alternee, enfant majeur rattache.
 
-### 4.3 Entrees
+### Revenus
 
-- Situation familiale.
-- Revenus.
-- Charges.
-- Credits/reductions.
-- Evenements de vie.
-- Pieces justificatives disponibles.
+Pris en charge: salaires (`salary`), pensions (`pension`), interets bancaires (`bank_interest`), dividendes/RCM (`dividends`), revenus locatifs nus (`rental_income`), location meublee (`furnished_rental`), micro-entrepreneur (`micro_entrepreneur`).
 
-### 4.4 Sorties
+Hors perimetre (detectes et signales): revenus etrangers (`foreign_income`), crypto-actifs (`crypto`), activites BIC/BNC complexes.
 
-- Profil fiscal.
-- Checklist de documents.
-- Points de vigilance.
-- Estimation indicative.
-- Structure de pre-declaration.
-- Guide etape par etape.
+### Charges et reductions
 
-### 4.5 Limites
+Prises en charge: dons (`donations`), frais de garde (`childcare`), emploi a domicile (`home_services`), pension alimentaire versee (`alimony`).
+
+### Calculs fiscaux (estimation indicative)
+
+- Bareme IR 2026 progressif (5 tranches, CGI art. 197).
+- Quotient familial avec plafonnement (1 807 €/demi-part, 4 262 € parent isole).
+- Abattements: salaires 10%, pensions 10%, micro-foncier 30%, dividendes 40%, micro-entrepreneur (BIC 71%/50%, BNC 34%).
+- Decote (celibataire et couple).
+- PFU 31,4% sur revenus du capital hors option bareme.
+- Reductions dons 66%/75% Coluche (plafond 2 000 € depuis 14/10/2025).
+- Credits garde enfant (50%, plaf. 3 500 €/enfant) et emploi domicile (50%, plaf. 12 000 €+).
+- CEHR/CDHR (3% et 4% selon seuils).
+
+### Limites importantes
 
 - Pas de conseil juridique opposable.
-- Pas de depot automatique.
-- Pas de prise en charge des cas complexes.
+- Pas de depot automatique de la declaration.
+- Cas complexes (revenus etrangers, crypto, controle fiscal) → revue humaine recommandee.
+- Estimation indicative sans valeur contractuelle, accompagnee systematiquement d'un disclaimer.
 
-## Pour qui ?
+## Installation (5 minutes)
 
-- Particuliers qui preparent leur declaration de revenus en ligne.
-- Utilisateurs qui veulent un copilote pour verifier les rubriques et les justificatifs avant saisie manuelle.
-
-## Installation simple (5 minutes)
-
-Prerequis:
+### Prerequis
 
 - Node.js 20+
 - npm
-- Un client compatible MCP/Claude Code plugin
+- Claude Code (CLI ou desktop)
 
-Etapes:
+### Etapes
 
 1. Recuperer le plugin
 
@@ -76,145 +77,60 @@ cd fiscal-fr
 npm ci --prefix mcp-server
 ```
 
-3. Lancer le plugin
+3. Lancer Claude Code depuis le dossier du plugin
 
-- Si votre client lit `.mcp.json`, le serveur sera lance automatiquement.
-- Sinon, lancez-le manuellement:
+```bash
+claude
+```
+
+Le fichier `.mcp.json` presente a la racine demarre le serveur MCP automatiquement.
+
+### Demarrage manuel du serveur (si besoin)
 
 ```bash
 npm run dev --prefix mcp-server
 ```
 
-### Lancer Claude Code avec le plugin
-
-Depuis le dossier parent du plugin:
+### Mode HTTP (optionnel)
 
 ```bash
-claude --plugin-dir ./fiscal-fr
+MCP_TRANSPORT=http MCP_PORT=3333 npm run dev --prefix mcp-server
 ```
 
-Depuis la racine du plugin:
+## Utilisation
 
-```bash
-claude --plugin-dir .
+Dans la session Claude Code, demandez simplement:
+
+```
+Lance l'assistant fiscal en mode qualification
 ```
 
-Ensuite, dans la session Claude, vous pouvez demander:
+Ou demarrez directement avec votre situation:
 
-- "Lance l'assistant fiscal en mode qualification"
-- "Passe en mode justificatifs"
-- "Prepare une predeclaration"
+```
+Je suis celibataire, salarie, avec un credit immobilier. Aide-moi a preparer ma declaration.
+```
 
-4. Utiliser l'assistant en conversation
-
-- Demandez un mode: `qualification`, `justificatifs`, ou `predeclaration`.
-- Exemple: "Lance le mode qualification pour ma situation fiscale".
-
-## Ce que le plugin couvre deja (MVP actuel)
-
-Aujourd'hui, le coeur fonctionnel disponible est la **qualification fiscale initiale** via l'outil MCP `qualify_tax_profile`.
-
-### Cas actuellement supportes par l'agent
-
-Le MVP sait traiter les situations standards avec:
-
-- Situation familiale: celibataire (`single`), marie (`married`), pacse (`civil_union`), divorce (`divorced`), veuf (`widowed`).
-- Revenus pris en charge en qualification: salaires (`salary`), pensions (`pension`), interets bancaires (`bank_interest`), dividendes/RCM (`dividends`), revenus locatifs nus (`rental_income`), location meublee (`furnished_rental`), micro-entrepreneur (`micro_entrepreneur`), autres revenus (`other`).
-- Charges prises en charge: dons (`donations`), frais de garde (`childcare`), emploi a domicile (`home_services`), pension versee (`alimony`), aucune charge (`none`), autres charges (`other`).
-- Evenements de vie reconnus sur le MVP:
-  - mariage/Pacs,
-  - enfant devenant majeur,
-  - autres evenements simples non bloquants.
-- Contextes qualifies (si fournis) pour affiner les recommandations:
-  - personnes a charge: charge principale / residence alternee / rattachement enfant majeur,
-  - dons: interet general / aide aux personnes en difficulte / patrimoine religieux / dons Mayotte,
-  - emploi a domicile: premiere annee en emploi direct / aides perçues / ascendant APA,
-  - pension versee: soutien enfant majeur / ex-conjoint / autre contexte.
-
-### Cas traites avec vigilance renforcee (mais encore supportables)
-
-- Presence de personnes a charge.
-- Dons (ventilation et justificatifs).
-- Frais de garde d'enfants.
-- Emploi a domicile.
-- Rattachement d'enfant majeur et coherence avec pension versee.
-- Revenus fonciers (orientation micro-foncier / reel).
-- Location meublee (qualification LMNP/LMP a confirmer).
-- Micro-entrepreneur (orientation 2042 C PRO selon type d'activite).
-
-Dans ces cas, l'assistant classe generalement le dossier en a surveiller (`monitor`) avec un statut prudent.
-
-### Cas hors perimetre (revue humaine recommandee)
-
-Le MVP detecte et signale comme potentiellement hors perimetre:
-
-- Revenus etrangers (`foreign_income`).
-- Crypto-actifs (`crypto`).
-- Activites BIC/BNC (`bic_bnc`).
-- Investissements locatifs fiscaux complexes (Pinel/Denormandie/Loc'Avantages) : qualification initiale possible mais revue humaine recommandee.
-- Evenements complexes detectes dans le texte (ex: non-resident, controle fiscal, separation/divorce complexe).
-
-Dans ces cas, le resultat est typiquement hors perimetre (`out_of_scope`) et l'assistant recommande une revue humaine.
-
-### Ce que renvoie concretement l'agent aujourd'hui
-
-Sur un dossier qualifie, l'agent fournit deja:
-
-- Faits confirmes.
-- Hypotheses.
-- Points a confirmer.
-- Niveau de complexite (simple (`simple`), a surveiller (`monitor`), hors perimetre (`out_of_scope`)).
-- Decision MVP (supporte (`supported`) / supporte avec prudence (`supported_with_caution`) / revue humaine (`human_review`)).
-- Prochaines questions pour completer le dossier.
-- Recommandations de rubriques/cases probables (selon les regles actives).
-- Justificatifs utiles a preparer.
-
-### Themes fiscaux deja bien cadres dans la base de connaissances
-
-- Salaires et pensions (verification pre-remplissage).
-- Interets bancaires (IFU, coherence des montants).
-- Dons (cases probables et points de controle).
-- Frais de garde d'enfants.
-- Emploi a domicile.
-- Mariage/Pacs.
-- Enfant atteignant la majorite.
-
-### Limite importante de l'existant
-
-Le mode conversationnel `justificatifs` est maintenant outille par le tool MCP `list_supporting_documents`. Le mode `predeclaration` reste en structuration conversationnelle en attendant le tool dedie `build_pre_declaration`.
-
-Important: le plugin ne depose jamais la declaration a votre place.
-
-## Vision cible (en cours)
-
-Le produit vise un assistant fiscal conversationnel plus complet:
-
-- Qualifier la situation fiscale.
-- Detecter les rubriques/cases probables a revoir.
-- Expliquer les regles de maniere pedagogique.
-- Lister les justificatifs attendus.
-- Estimer un impact indicatif.
-- Produire une pre-declaration structuree.
-
-Et un copilote de saisie:
-
-- Guider l'utilisateur etape par etape.
-- Dire quoi verifier a chaque ecran.
-- Signaler les incoherences.
-- Preparer les montants et justificatifs avant saisie manuelle.
-
-## Transparence et limites
-
-- Le plugin est une aide a la preparation, pas un conseil fiscal definitif.
-- En cas de situation complexe (ex: revenus etrangers, cas atypiques), une revue humaine est recommandee.
-- Les recommandations sont basees sur une base de connaissance tracee (sources officielles priorisees).
+L'assistant propose ensuite les etapes dans l'ordre:
+1. Qualification de la situation
+2. Liste des justificatifs a reunir
+3. Points de vigilance a verifier
+4. Brouillon de pre-declaration
+5. Estimation indicative de l'impot
+6. Copilote de saisie sur impots.gouv.fr
 
 ## Commandes utiles
 
-Depuis la racine du projet:
-
 ```bash
+# Installer les dependances
 npm ci --prefix mcp-server
+
+# Compiler
 npm run build --prefix mcp-server
+
+# Lancer en mode dev (stdio)
 npm run dev --prefix mcp-server
+
+# Lancer les tests
+npm test --prefix mcp-server
 ```

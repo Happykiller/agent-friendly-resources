@@ -284,6 +284,51 @@ export type SupportingDocumentsKnowledge = {
   }>;
 };
 
+// ── guide_filing_step types ────────────────────────────────────────────────
+
+export type GuideFilingStep = {
+  stepId: string;
+  label: string;
+  position: number;
+  verifyNow: string[];
+  frequentOmissions: string[];
+  traps: string[];
+  keyCaseCodes: string[];
+  sourceUrl: string;
+  sourceTitle: string;
+  confidenceLevel: "high" | "medium" | "low";
+  notes?: string;
+};
+
+export type GuideFilingKnowledge = {
+  campaign: string;
+  steps: GuideFilingStep[];
+};
+
+export type GuideFilingStepInput = {
+  currentStep: string;
+  knownContext?: {
+    incomeTypes?: string[];
+    charges?: string[];
+  };
+};
+
+export type GuideFilingStepResult = {
+  stepId: string;
+  label: string;
+  position: number;
+  verifyNow: string[];
+  frequentOmissions: string[];
+  traps: string[];
+  keyCaseCodes: string[];
+  sourceUrl: string;
+  sourceTitle: string;
+  notes?: string;
+  contextualHighlights: string[];
+  availableSteps: Array<{ stepId: string; label: string; position: number }>;
+  campaign: string;
+};
+
 // ── estimate_impact types ──────────────────────────────────────────────────
 
 export type EstimateImpactSourceRef = {

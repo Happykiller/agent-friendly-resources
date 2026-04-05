@@ -3,6 +3,7 @@ import { z } from "zod";
 import type { DbAdapter } from "./db.abstract.js";
 import type {
   EstimateImpactKnowledge,
+  GuideFilingKnowledge,
   PreDeclarationKnowledge,
   QualificationConfig,
   QualificationCorpus,
@@ -295,6 +296,25 @@ const EstimateImpactKnowledgeSchema = z.object({
   }),
 });
 
+const GuideFilingStepSchema = z.object({
+  stepId: z.string(),
+  label: z.string(),
+  position: z.number(),
+  verifyNow: z.array(z.string()),
+  frequentOmissions: z.array(z.string()),
+  traps: z.array(z.string()),
+  keyCaseCodes: z.array(z.string()),
+  sourceUrl: z.string().url(),
+  sourceTitle: z.string(),
+  confidenceLevel: z.enum(["high", "medium", "low"]),
+  notes: z.string().optional(),
+});
+
+const GuideFilingKnowledgeSchema = z.object({
+  campaign: z.string(),
+  steps: z.array(GuideFilingStepSchema).min(1),
+});
+
 export class JsonDbAdapter implements DbAdapter {
   private readonly qualificationConfig: QualificationConfig;
   private readonly qualificationKnowledge: QualificationKnowledge;
@@ -303,6 +323,7 @@ export class JsonDbAdapter implements DbAdapter {
   private readonly reviewPointsKnowledge: ReviewPointsKnowledge;
   private readonly preDeclarationKnowledge: PreDeclarationKnowledge;
   private readonly estimateImpactKnowledge: EstimateImpactKnowledge;
+  private readonly guideFilingKnowledge: GuideFilingKnowledge;
 
   constructor() {
     const dbRaw = readFileSync(new URL("../../data/qualify-tool.db.json", import.meta.url), "utf8");
@@ -327,6 +348,11 @@ export class JsonDbAdapter implements DbAdapter {
       "utf8"
     );
     const estimateImpactParsed = EstimateImpactKnowledgeSchema.parse(JSON.parse(estimateImpactRaw));
+    const guideFilingRaw = readFileSync(
+      new URL("../../data/guide-filing.db.json", import.meta.url),
+      "utf8"
+    );
+    const guideFilingParsed = GuideFilingKnowledgeSchema.parse(JSON.parse(guideFilingRaw));
 
     this.qualificationConfig = dbParsed.qualificationConfig;
     this.qualificationKnowledge = dbParsed.qualificationKnowledge;
@@ -335,6 +361,7 @@ export class JsonDbAdapter implements DbAdapter {
     this.reviewPointsKnowledge = reviewPointsParsed;
     this.preDeclarationKnowledge = preDeclarationParsed;
     this.estimateImpactKnowledge = estimateImpactParsed;
+    this.guideFilingKnowledge = guideFilingParsed;
   }
 
   getQualificationConfig() {
@@ -363,5 +390,9 @@ export class JsonDbAdapter implements DbAdapter {
 
   getEstimateImpactKnowledge() {
     return this.estimateImpactKnowledge;
+  }
+
+  getGuideFilingKnowledge() {
+    return this.guideFilingKnowledge;
   }
 }

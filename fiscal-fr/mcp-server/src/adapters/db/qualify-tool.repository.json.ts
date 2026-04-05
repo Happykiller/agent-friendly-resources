@@ -35,4 +35,8 @@ export class JsonQualifyToolRepository implements QualifyToolRepository {
   getEstimateImpactKnowledge() {
     return this.db.getEstimateImpactKnowledge();
   }
+
+  getGuideFilingKnowledge() {
+    return this.db.getGuideFilingKnowledge();
+  }
 }

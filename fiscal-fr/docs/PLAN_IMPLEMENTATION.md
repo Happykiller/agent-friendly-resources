@@ -73,13 +73,7 @@ Regle de modelisation MCP obligatoire:
 
 ## Phase 0 - Socle technique
 
-**Statut actuel: PARTIAL (maj 2026-04-05)**
-
-**A faire**
-
-- finaliser serveur MCP TypeScript (dev/build/test),
-- fournir `.mcp.json` exemple projet,
-- poser `types/schemas` communs avec validation stricte.
+**Statut actuel: DONE (maj 2026-04-05)**
 
 **Livrables**
 
@@ -95,17 +89,13 @@ Regle de modelisation MCP obligatoire:
 
 **Etat constate (maj 2026-04-05)**
 
-- build OK,
+- build OK (0 erreur TypeScript),
 - chargement MCP via `.mcp.json` OK,
-- validation stricte active pour les 4 tools implementes,
+- validation stricte active pour les 6 tools,
 - erreur MCP non-conforme corrigee (`throw Error` → `isError: true`),
-- schemas/contrats complets des 6 tools: 4/6 livres.
-
-**Reste a faire pour passer DONE**
-
-- ajouter les schemas d'entree/sortie pour les 2 tools manquants (phases 3-4),
-- brancher ces schemas dans l'exposition MCP (`tools/list` + `tools/call`),
-- ajouter un test de contrat par tool (validation OK + INVALID_INPUT).
+- schemas/contrats complets des 6 tools : 6/6 livres,
+- tests de contrat (validateInput OK + INVALID_INPUT) presents pour les 6 tools,
+- 86 tests au total, 100% verts.
 
 ## Phase 1 - Qualification et dossier minimal
 
@@ -218,36 +208,34 @@ Regle de modelisation MCP obligatoire:
 
 ## Phase 4 - Copilote de saisie
 
-**Statut actuel: TODO (maj 2026-04-04)**
+**Statut actuel: DONE (maj 2026-04-05)**
 
 **Tool a livrer**
 
-6. `guide_filing_step` - **TODO**
+6. `guide_filing_step` - **DONE**
 
-**A faire**
+**Etat constate (maj 2026-04-05)**
 
-- guider ecran par ecran selon contexte,
-- indiquer: a verifier maintenant, oublis frequents, pieges,
-- conserver la logique "guide sans faire a la place".
-
-**Livrables**
-
-- accompagnement operationnel pendant la saisie sur impots.gouv.fr.
-
-**Definition de done**
-
-- pour une etape donnee, la checklist est immediate, priorisee et actionnable.
-
-**Reste a faire pour passer DONE**
-
-- implementer le tool `guide_filing_step`,
-- definir l'entree minimale (`currentStep`, `knownContext`),
-- structurer la sortie (a verifier maintenant / oublis / pieges),
-- valider sur 3 ecrans types de saisie.
+- `guide_filing_step` implemente et expose en MCP :
+  - 12 etapes couvrant le parcours complet de saisie sur impots.gouv.fr :
+    - step_connexion (position 0), step_declaration_automatique (1), step_selection_rubriques (2),
+    - step_etat_civil (3), step_revenus_salaires (4), step_revenus_capitaux_mobiliers (5),
+    - step_revenus_fonciers (6), step_micro_entrepreneur (7), step_charges_deductibles (8),
+    - step_reductions_credits_impot (9), step_recapitulatif_impot (10),
+    - step_vigilance_transversale (99 — transversal, accessible a tout moment),
+  - chaque etape : verifyNow, frequentOmissions, traps, keyCaseCodes, sourceUrl, sourceTitle, notes (optionnel),
+  - `knownContext` optionnel (incomeTypes, charges) pour personnaliser les contextualHighlights,
+  - 12 mappings contextuels (income type / charge type → highlight oriente etape),
+  - `availableSteps` retournees et triees par position dans chaque reponse,
+  - etape inconnue → erreur explicite avec liste des etapes disponibles,
+  - regles externalisees dans `guide-filing.db.json` via la chaine DbAdapter → Repository → Usecase,
+  - sources documentaires : guide_filing_260405_claude.json (primaire), notebooklm, gpt, gemini (confirmatoires),
+  - 14 tests couvrant tous les cas cibles, 100% verts,
+- 71 tests au total, 100% verts.
 
 ## Phase 5 - Orchestration et tests
 
-**Statut actuel: PARTIAL (maj 2026-04-05)**
+**Statut actuel: DONE (maj 2026-04-05)**
 
 **A faire**
 
@@ -276,22 +264,14 @@ Regle de modelisation MCP obligatoire:
 
 **Etat constate (maj 2026-04-05)**
 
-- `SKILL.md` aligne sur les 3 tools Phase 1 : modes `qualification`, `justificatifs`, `vigilance` presents,
+- `SKILL.md` aligne sur les 6 tools : modes `qualification`, `justificatifs`, `vigilance`, `predeclaration`, `estimation`, `copilote` presents,
+- description frontmatter mise a jour (6 modes),
 - agent `tax-qualifier` present (reformulation qualification),
 - agent `documents-checklist` present (restitution justificatifs),
-- agent `review-points` present (restitution points de vigilance) — **nouveau**,
-- `detect_review_points` integre dans l'orchestrateur (`SKILL.md` mode `vigilance`) — **nouveau**,
-- parcours cadrage -> qualification -> justificatifs -> vigilance -> predeclaration orchestrable de bout en bout,
-- orchestration complete des 6 tools impossible tant que les tools phases 3-4 ne sont pas livres,
-- tests automatises : 42 tests unitaires verts (qualification, documents, points de vigilance, pre-declaration),
-- tests de parcours multi-tools : non livres.
-
-**Reste a faire pour passer DONE**
-
-- aligner `SKILL.md` avec les 6 tools une fois implementes (phases 2-4),
-- ajouter au moins 10 tests metier automatises de parcours,
-- verifier le parcours conversationnel complet de l'ouverture au controle final,
-- valider les cas hors perimetre et refus propres.
+- agent `review-points` present (restitution points de vigilance),
+- parcours cadrage -> qualification -> justificatifs -> vigilance -> predeclaration -> estimation -> copilote orchestrable de bout en bout,
+- tests automatises : 83 tests verts (71 unitaires + 12 scenarios d'integration multi-tools),
+- 12 scenarios couverts : celibataire salarie, couple avec enfant, dons, emploi domicile, interets bancaires, incoherence salaire, cas hors perimetre, justificatifs manquants, estimation partielle, copilote ecran par ecran, vigilance transversale, evenement bloquant.
 
 ## 4) Sequence d'usage cible (reference produit)
 

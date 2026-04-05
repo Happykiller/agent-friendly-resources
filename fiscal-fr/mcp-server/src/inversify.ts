@@ -8,6 +8,7 @@ import { ListSupportingDocumentsUseCase } from "./usecases/domains/qualify-tool/
 import { DetectReviewPointsUseCase } from "./usecases/domains/qualify-tool/detect-review-points.usecase.js";
 import { BuildPreDeclarationUseCase } from "./usecases/domains/qualify-tool/build-pre-declaration.usecase.js";
 import { EstimateImpactUseCase } from "./usecases/domains/qualify-tool/estimate-impact.usecase.js";
+import { GuideFilingStepUseCase } from "./usecases/domains/qualify-tool/guide-filing-step.usecase.js";
 
 export const TYPES = {
   DbAdapter: Symbol.for("DbAdapter"),
@@ -17,6 +18,7 @@ export const TYPES = {
   DetectReviewPointsUseCase: Symbol.for("DetectReviewPointsUseCase"),
   BuildPreDeclarationUseCase: Symbol.for("BuildPreDeclarationUseCase"),
   EstimateImpactUseCase: Symbol.for("EstimateImpactUseCase"),
+  GuideFilingStepUseCase: Symbol.for("GuideFilingStepUseCase"),
 };
 
 const container = new Container();
@@ -72,6 +74,14 @@ container
     const qualifyUseCase = context.get<QualifyTaxProfileUseCase>(TYPES.QualifyTaxProfileUseCase);
     const repository = context.get<QualifyToolRepository>(TYPES.QualifyToolRepository);
     return new EstimateImpactUseCase(qualifyUseCase, repository);
+  })
+  .inSingletonScope();
+
+container
+  .bind<GuideFilingStepUseCase>(TYPES.GuideFilingStepUseCase)
+  .toDynamicValue((context) => {
+    const repository = context.get<QualifyToolRepository>(TYPES.QualifyToolRepository);
+    return new GuideFilingStepUseCase(repository);
   })
   .inSingletonScope();
 
