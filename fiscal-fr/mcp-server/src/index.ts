@@ -10,6 +10,7 @@ import { container, TYPES } from "./inversify.js";
 import { QualifyTaxProfileUseCase } from "./usecases/domains/qualify-tool/qualify-tax-profile.usecase.js";
 import { ListSupportingDocumentsUseCase } from "./usecases/domains/qualify-tool/list-supporting-documents.usecase.js";
 import { DetectReviewPointsUseCase } from "./usecases/domains/qualify-tool/detect-review-points.usecase.js";
+import { BuildPreDeclarationUseCase } from "./usecases/domains/qualify-tool/build-pre-declaration.usecase.js";
 
 const SERVER_INFO = {
   name: "fiscal-fr-mcp",
@@ -35,6 +36,9 @@ function createMcpServer() {
   const detectReviewPointsUseCase = container.get<DetectReviewPointsUseCase>(
     TYPES.DetectReviewPointsUseCase
   );
+  const buildPreDeclarationUseCase = container.get<BuildPreDeclarationUseCase>(
+    TYPES.BuildPreDeclarationUseCase
+  );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
@@ -56,6 +60,12 @@ function createMcpServer() {
           description:
             "Detecte les points de vigilance et incoherences dans un profil fiscal qualifie (regimes non tranches, justificatifs manquants, cas hors perimetre).",
           inputSchema: detectReviewPointsUseCase.getToolSchema(),
+        },
+        {
+          name: "build_pre_declaration",
+          description:
+            "Construit un brouillon de pre-declaration structure a partir du profil qualifie et des montants declares. Chaque rubrique est tracee vers sa source, son code case et son statut (confirme ou a renseigner).",
+          inputSchema: buildPreDeclarationUseCase.getToolSchema(),
         },
       ],
     };
@@ -153,6 +163,40 @@ function createMcpServer() {
       }
 
       const result = detectReviewPointsUseCase.execute(parsed.data);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
+      };
+    }
+
+    if (request.params.name === "build_pre_declaration") {
+      const parsed = buildPreDeclarationUseCase.validateInput(request.params.arguments);
+
+      if (!parsed.success) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  error: "INVALID_INPUT",
+                  details: parsed.error.flatten(),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const result = buildPreDeclarationUseCase.execute(parsed.data);
 
       return {
         content: [

@@ -216,6 +216,58 @@ export type DetectReviewPointsResult = {
   };
 };
 
+export type PreDeclarationFieldMapping = {
+  id: string;
+  sectionId: string;
+  sectionLabel: string;
+  label: string;
+  caseCode: string | null;
+  triggeredByIncomeType?: string;
+  triggeredByChargeType?: string;
+  amountKey: string;
+  origin: string;
+  sourceUrls: string[];
+};
+
+export type PreDeclarationKnowledge = {
+  campaign: string;
+  fieldMappings: PreDeclarationFieldMapping[];
+  sectionOrder: string[];
+};
+
+export type PreDeclarationEntry = {
+  id: string;
+  label: string;
+  caseCode: string | null;
+  value: number | null;
+  status: "confirmed" | "to_confirm";
+  origin: string;
+  sourceUrls: string[];
+};
+
+export type PreDeclarationSection = {
+  id: string;
+  label: string;
+  entries: PreDeclarationEntry[];
+};
+
+export type BuildPreDeclarationInput = {
+  profileSnapshot: QualifyTaxProfileInput;
+  declaredAmounts: Record<string, number>;
+  knownFacts: string[];
+};
+
+export type BuildPreDeclarationResult = {
+  sections: PreDeclarationSection[];
+  draftStatus: "complete" | "incomplete";
+  pointsToConfirm: string[];
+  profileSummary: {
+    complexity: ComplexityLevel;
+    mvpDecision: DecisionLevel;
+    detectedTopics: string[];
+  };
+};
+
 export type SupportingDocumentsKnowledge = {
   campaign: string;
   recommendedByIncomeType: Record<string, string[]>;

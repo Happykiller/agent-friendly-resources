@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { z } from "zod";
 import type { DbAdapter } from "./db.abstract.js";
 import type {
+  PreDeclarationKnowledge,
   QualificationConfig,
   QualificationCorpus,
   QualificationKnowledge,
@@ -151,12 +152,32 @@ const ReviewPointsKnowledgeSchema = z.object({
   ),
 });
 
+const PreDeclarationKnowledgeSchema = z.object({
+  campaign: z.string(),
+  sectionOrder: z.array(z.string()),
+  fieldMappings: z.array(
+    z.object({
+      id: z.string(),
+      sectionId: z.string(),
+      sectionLabel: z.string(),
+      label: z.string(),
+      caseCode: z.string().nullable(),
+      triggeredByIncomeType: z.string().optional(),
+      triggeredByChargeType: z.string().optional(),
+      amountKey: z.string(),
+      origin: z.string(),
+      sourceUrls: z.array(z.string().url()),
+    })
+  ),
+});
+
 export class JsonDbAdapter implements DbAdapter {
   private readonly qualificationConfig: QualificationConfig;
   private readonly qualificationKnowledge: QualificationKnowledge;
   private readonly qualificationCorpus: QualificationCorpus;
   private readonly supportingDocumentsKnowledge: SupportingDocumentsKnowledge;
   private readonly reviewPointsKnowledge: ReviewPointsKnowledge;
+  private readonly preDeclarationKnowledge: PreDeclarationKnowledge;
 
   constructor() {
     const dbRaw = readFileSync(new URL("../../data/qualify-tool.db.json", import.meta.url), "utf8");
@@ -171,12 +192,18 @@ export class JsonDbAdapter implements DbAdapter {
       "utf8"
     );
     const reviewPointsParsed = ReviewPointsKnowledgeSchema.parse(JSON.parse(reviewPointsRaw));
+    const preDeclarationRaw = readFileSync(
+      new URL("../../data/build-pre-declaration.db.json", import.meta.url),
+      "utf8"
+    );
+    const preDeclarationParsed = PreDeclarationKnowledgeSchema.parse(JSON.parse(preDeclarationRaw));
 
     this.qualificationConfig = dbParsed.qualificationConfig;
     this.qualificationKnowledge = dbParsed.qualificationKnowledge;
     this.qualificationCorpus = dbParsed.qualificationCorpus;
     this.supportingDocumentsKnowledge = documentsParsed;
     this.reviewPointsKnowledge = reviewPointsParsed;
+    this.preDeclarationKnowledge = preDeclarationParsed;
   }
 
   getQualificationConfig() {
@@ -197,5 +224,9 @@ export class JsonDbAdapter implements DbAdapter {
 
   getReviewPointsKnowledge() {
     return this.reviewPointsKnowledge;
+  }
+
+  getPreDeclarationKnowledge() {
+    return this.preDeclarationKnowledge;
   }
 }

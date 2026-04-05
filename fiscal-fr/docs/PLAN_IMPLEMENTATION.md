@@ -73,7 +73,7 @@ Regle de modelisation MCP obligatoire:
 
 ## Phase 0 - Socle technique
 
-**Statut actuel: PARTIAL (maj 2026-04-04)**
+**Statut actuel: PARTIAL (maj 2026-04-05)**
 
 **A faire**
 
@@ -93,17 +93,17 @@ Regle de modelisation MCP obligatoire:
 - chargement MCP OK,
 - validations IO actives.
 
-**Etat constate (maj 2026-04-04)**
+**Etat constate (maj 2026-04-05)**
 
 - build OK,
 - chargement MCP via `.mcp.json` OK,
-- validation stricte active pour les 3 tools implementes,
+- validation stricte active pour les 4 tools implementes,
 - erreur MCP non-conforme corrigee (`throw Error` → `isError: true`),
-- schemas/contrats complets des 6 tools: 3/6 livres.
+- schemas/contrats complets des 6 tools: 4/6 livres.
 
 **Reste a faire pour passer DONE**
 
-- ajouter les schemas d'entree/sortie pour les 3 tools manquants (phases 2-4),
+- ajouter les schemas d'entree/sortie pour les 2 tools manquants (phases 3-4),
 - brancher ces schemas dans l'exposition MCP (`tools/list` + `tools/call`),
 - ajouter un test de contrat par tool (validation OK + INVALID_INPUT).
 
@@ -147,11 +147,11 @@ Regle de modelisation MCP obligatoire:
 
 ## Phase 2 - Pre-declaration exploitable
 
-**Statut actuel: TODO (maj 2026-04-04)**
+**Statut actuel: DONE (maj 2026-04-05)**
 
 **Tool a livrer**
 
-4. `build_pre_declaration` - **TODO**
+4. `build_pre_declaration` - **DONE**
 
 **A faire**
 
@@ -172,12 +172,18 @@ Regle de modelisation MCP obligatoire:
 - sortie stable et affichable telle quelle.
 - aucune confusion entre libelle utilisateur et valeur technique.
 
-**Reste a faire pour passer DONE**
+**Etat constate (maj 2026-04-05)**
 
-- implementer le tool `build_pre_declaration`,
-- definir un format de sortie stable (rubrique, valeur, source, statut),
-- ajouter validation stricte de l'entree et de la sortie,
-- tester un cas complet avec donnees partielles + points a confirmer.
+- `build_pre_declaration` implemente et expose en MCP :
+  - 11 mappings de rubriques (salary, pension, bank_interest, dividends, rental_income, furnished_rental, micro_entrepreneur, donations, childcare, home_services, alimony),
+  - chaque rubrique tracee : label lisible, code case, amountKey technique, origine documentaire, sourceUrls,
+  - statut par rubrique : `confirmed` (montant declare) ou `to_confirm` (montant absent),
+  - sections ordonnees : revenus_activite → revenus_capitaux → revenus_fonciers → revenus_bic_bnc → charges_deductions,
+  - `draftStatus` global : `complete` ou `incomplete`,
+  - regles externalisees dans `build-pre-declaration.db.json` via la chaine DbAdapter → Repository → Usecase,
+  - 10 tests couvrant tous les cas cibles, 100% verts,
+- 42 tests au total, 100% verts,
+- mode `predeclaration` du SKILL.md aligne sur le contrat du tool.
 
 ## Phase 3 - Estimation prudente
 
@@ -240,7 +246,7 @@ Regle de modelisation MCP obligatoire:
 
 ## Phase 5 - Orchestration et tests
 
-**Statut actuel: PARTIAL (maj 2026-04-04)**
+**Statut actuel: PARTIAL (maj 2026-04-05)**
 
 **A faire**
 
@@ -267,12 +273,16 @@ Regle de modelisation MCP obligatoire:
 - parcours complet executable de l'ouverture au controle final,
 - README utilisateur + exemple `.mcp.json` presents.
 
-**Etat constate (maj 2026-04-04)**
+**Etat constate (maj 2026-04-05)**
 
-- `SKILL.md` present,
-- orchestration des 3 premiers tools possible (qualification -> docs -> vigilance),
-- orchestration complete des 6 tools impossible tant que les tools phases 2-4 ne sont pas livres,
-- tests automatises : 32 tests unitaires verts (qualification, documents, points de vigilance),
+- `SKILL.md` aligne sur les 3 tools Phase 1 : modes `qualification`, `justificatifs`, `vigilance` presents,
+- agent `tax-qualifier` present (reformulation qualification),
+- agent `documents-checklist` present (restitution justificatifs),
+- agent `review-points` present (restitution points de vigilance) — **nouveau**,
+- `detect_review_points` integre dans l'orchestrateur (`SKILL.md` mode `vigilance`) — **nouveau**,
+- parcours cadrage -> qualification -> justificatifs -> vigilance -> predeclaration orchestrable de bout en bout,
+- orchestration complete des 6 tools impossible tant que les tools phases 3-4 ne sont pas livres,
+- tests automatises : 42 tests unitaires verts (qualification, documents, points de vigilance, pre-declaration),
 - tests de parcours multi-tools : non livres.
 
 **Reste a faire pour passer DONE**

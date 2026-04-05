@@ -1,4 +1,5 @@
 import type {
+  PreDeclarationKnowledge,
   QualificationConfig,
   QualificationCorpus,
   QualificationKnowledge,
@@ -12,4 +13,5 @@ export interface DbAdapter {
   getQualificationCorpus(): QualificationCorpus;
   getSupportingDocumentsKnowledge(): SupportingDocumentsKnowledge;
   getReviewPointsKnowledge(): ReviewPointsKnowledge;
+  getPreDeclarationKnowledge(): PreDeclarationKnowledge;
 }

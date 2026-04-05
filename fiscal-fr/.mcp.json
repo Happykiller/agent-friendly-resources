@@ -4,7 +4,7 @@
       "command": "bash",
       "args": [
         "-lc",
-        "npm run dev --prefix \"$PWD/mcp-server\""
+        "if [ -f \"$PWD/mcp-server/package.json\" ]; then npm run dev --prefix \"$PWD/mcp-server\"; else npm run dev --prefix \"$PWD/fiscal-fr/mcp-server\"; fi"
       ]
     }
   }

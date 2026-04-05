@@ -1,0 +1,133 @@
+{
+  "campaign": "2025",
+  "sectionOrder": [
+    "revenus_activite",
+    "revenus_capitaux",
+    "revenus_fonciers",
+    "revenus_bic_bnc",
+    "charges_deductions"
+  ],
+  "fieldMappings": [
+    {
+      "id": "salary_net_d1",
+      "sectionId": "revenus_activite",
+      "sectionLabel": "Salaires, traitements et pensions",
+      "label": "Salaire net imposable (déclarant 1)",
+      "caseCode": "1AJ",
+      "triggeredByIncomeType": "salary",
+      "amountKey": "salary",
+      "origin": "Attestation fiscale employeur ou dernier bulletin de salaire",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/les-salaires-et-assimiles"]
+    },
+    {
+      "id": "pension_retraite_d1",
+      "sectionId": "revenus_activite",
+      "sectionLabel": "Salaires, traitements et pensions",
+      "label": "Pensions et retraites (déclarant 1)",
+      "caseCode": "1AS",
+      "triggeredByIncomeType": "pension",
+      "amountKey": "pension",
+      "origin": "Relevé annuel de pension (Assurance retraite, Agirc-Arrco, etc.)",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/les-pensions-et-rentes"]
+    },
+    {
+      "id": "bank_interest",
+      "sectionId": "revenus_capitaux",
+      "sectionLabel": "Revenus de capitaux mobiliers",
+      "label": "Intérêts et produits de placement à revenu fixe",
+      "caseCode": "2TR",
+      "triggeredByIncomeType": "bank_interest",
+      "amountKey": "bank_interest",
+      "origin": "Imprimé fiscal unique (IFU) fourni par l'établissement bancaire",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/les-revenus-de-capitaux-mobiliers"]
+    },
+    {
+      "id": "dividends",
+      "sectionId": "revenus_capitaux",
+      "sectionLabel": "Revenus de capitaux mobiliers",
+      "label": "Dividendes et distributions",
+      "caseCode": "2DC",
+      "triggeredByIncomeType": "dividends",
+      "amountKey": "dividends",
+      "origin": "Imprimé fiscal unique (IFU) ou relevé de compte-titres",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/les-revenus-de-capitaux-mobiliers"]
+    },
+    {
+      "id": "rental_income_micro",
+      "sectionId": "revenus_fonciers",
+      "sectionLabel": "Revenus fonciers",
+      "label": "Revenus fonciers bruts (micro-foncier, case à confirmer selon régime)",
+      "caseCode": "4BE",
+      "triggeredByIncomeType": "rental_income",
+      "amountKey": "rental_income",
+      "origin": "Quittances de loyers ou relevé annuel de gestion locative",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/les-revenus-fonciers"]
+    },
+    {
+      "id": "furnished_rental_micro_bic",
+      "sectionId": "revenus_bic_bnc",
+      "sectionLabel": "Revenus BIC / BNC",
+      "label": "Recettes location meublée non professionnelle (micro-BIC, case à confirmer selon statut LMNP/LMP)",
+      "caseCode": "5ND",
+      "triggeredByIncomeType": "furnished_rental",
+      "amountKey": "furnished_rental",
+      "origin": "Relevé des loyers perçus pour les locations meublées",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/la-location-meublee"]
+    },
+    {
+      "id": "micro_entrepreneur_bic_services",
+      "sectionId": "revenus_bic_bnc",
+      "sectionLabel": "Revenus BIC / BNC",
+      "label": "Chiffre d'affaires micro-entrepreneur (case à confirmer selon nature BIC/BNC)",
+      "caseCode": "5KO",
+      "triggeredByIncomeType": "micro_entrepreneur",
+      "amountKey": "micro_entrepreneur",
+      "origin": "Attestation annuelle URSSAF ou déclaration CA mensuelle/trimestrielle",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/le-micro-entrepreneur"]
+    },
+    {
+      "id": "donations",
+      "sectionId": "charges_deductions",
+      "sectionLabel": "Charges et réductions d'impôt",
+      "label": "Dons aux organismes d'intérêt général",
+      "caseCode": "7UF",
+      "triggeredByChargeType": "donations",
+      "amountKey": "donations",
+      "origin": "Reçu fiscal délivré par l'organisme bénéficiaire",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/les-dons-et-cotisations"]
+    },
+    {
+      "id": "childcare_fees",
+      "sectionId": "charges_deductions",
+      "sectionLabel": "Charges et réductions d'impôt",
+      "label": "Frais de garde d'enfant de moins de 6 ans",
+      "caseCode": "7GA",
+      "triggeredByChargeType": "childcare",
+      "amountKey": "childcare",
+      "origin": "Attestation de la crèche, halte-garderie ou assistante maternelle",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/les-enfants-a-charge"]
+    },
+    {
+      "id": "home_services",
+      "sectionId": "charges_deductions",
+      "sectionLabel": "Charges et réductions d'impôt",
+      "label": "Emploi d'un salarié à domicile",
+      "caseCode": "7DB",
+      "triggeredByChargeType": "home_services",
+      "amountKey": "home_services",
+      "origin": "Attestation CESU annuelle ou relevé PAJEMPLOI / URSSAF",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/lemploi-dun-salarie-a-domicile"]
+    },
+    {
+      "id": "alimony_paid",
+      "sectionId": "charges_deductions",
+      "sectionLabel": "Charges et réductions d'impôt",
+      "label": "Pensions alimentaires versées",
+      "caseCode": "6GI",
+      "triggeredByChargeType": "alimony",
+      "amountKey": "alimony",
+      "origin": "Justificatifs des versements effectués (virement, chèque, etc.)",
+      "sourceUrls": ["https://www.impots.gouv.fr/particulier/les-pensions-alimentaires"]
+    }
+  ]
+}
