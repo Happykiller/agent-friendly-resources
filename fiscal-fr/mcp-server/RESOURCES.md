@@ -21,6 +21,14 @@ The server currently does **not** expose MCP resources (`resources/list`, `resou
 
 The functional surface is currently provided through MCP tools.
 
+Registered tools:
+- `qualify_tax_profile`
+- `list_supporting_documents`
+- `detect_review_points`
+- `build_pre_declaration`
+- `estimate_impact`
+- `guide_filing_step`
+
 ## MCP tools
 
 ### `qualify_tax_profile`
@@ -116,6 +124,84 @@ Optional fields:
 - `missing`: subset of required documents still missing
 - `notes`: caution and progress notes
 - `profileSummary`: `complexity`, `mvpDecision`, `detectedTopics`
+
+### `detect_review_points`
+
+Detects blocking and non-blocking review points from a qualified profile and optional declared amounts.
+
+#### Input schema
+
+Required fields:
+- `profileSnapshot`: same payload as `qualify_tax_profile`
+
+Optional fields:
+- `knownFacts`: array of confirmed facts
+- `declaredAmounts`: map of amount keys to numbers (used for consistency checks)
+
+#### Output payload
+
+- `reviewPoints`: prioritized list with `severity`, `blocking`, justification and suggested actions
+- `hasBlockingPoints`: boolean
+- `summary`: complexity, MVP decision, counts
+
+### `build_pre_declaration`
+
+Builds a structured pre-declaration draft with traceability per section/rubric.
+
+#### Input schema
+
+Required fields:
+- `profileSnapshot`: same payload as `qualify_tax_profile`
+
+Optional fields:
+- `declaredAmounts`: map of technical keys to numbers
+- `knownFacts`: array of confirmed facts
+
+#### Output payload
+
+- `sections`: ordered sections with rubrics (`label`, `caseCode`, `amountKey`, value/status/source)
+- `pointsToConfirm`: missing amounts and confirmations
+- `draftStatus`: `complete | incomplete`
+
+### `estimate_impact`
+
+Returns an indicative IR estimate for campaign 2026 on 2025 incomes.
+
+#### Input schema
+
+Required fields:
+- `profileSnapshot`: same payload as `qualify_tax_profile`
+
+Optional fields:
+- `declaredAmounts`: map of technical keys to numbers
+- `options`: currently supports `dividendesOptionBareme?: boolean`
+
+#### Output payload
+
+- `summary`: parts, taxable income, quotient familial
+- `estimation`: tax before/after decote and final net estimate
+- `details`: computation lines (abattements, PFU, credits/reductions, CEHR/CDHR)
+- `warnings`: contextual warnings
+- `disclaimer`: indicative/non-binding notice
+
+### `guide_filing_step`
+
+Provides screen-by-screen guidance for a target filing step on impots.gouv.fr.
+
+#### Input schema
+
+Required fields:
+- `currentStep`: step id
+
+Optional fields:
+- `knownContext`: profile context (`incomeTypes`, `charges`, `dependentContexts`)
+
+#### Output payload
+
+- `verifyNow`, `frequentOmissions`, `traps`
+- `keyCaseCodes`, optional `notes`, source metadata
+- `contextualHighlights` (static + context-aware)
+- `availableSteps` sorted by position
 
 ## Quick manual test
 

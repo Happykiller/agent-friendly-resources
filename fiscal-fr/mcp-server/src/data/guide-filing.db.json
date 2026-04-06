@@ -96,7 +96,10 @@
       "keyCaseCodes": ["T", "W", "P", "F", "G", "H", "I"],
       "sourceUrl": "https://www.service-public.gouv.fr/particuliers/vosdroits/F358",
       "sourceTitle": "Déclaration de revenus annuelle – Service-Public.gouv.fr",
-      "confidenceLevel": "high"
+      "confidenceLevel": "high",
+      "contextualHighlights": [
+        "Case T (Parent Isolé) : Si vous vivez seul(e) avec vos enfants, cocher cette case peut vous faire gagner une demi-part fiscale (soit jusqu'à 4 262 € d'économie d'impôt)."
+      ]
     },
     {
       "stepId": "step_revenus_salaires",
@@ -124,7 +127,10 @@
       "keyCaseCodes": ["1AJ", "1BJ", "1AS", "1BS", "1AP", "1BP", "1AK", "1BK", "1AD", "1GH", "1HH"],
       "sourceUrl": "https://www.impots.gouv.fr/particulier/traitements-et-salaires",
       "sourceTitle": "Traitements et salaires – impots.gouv.fr",
-      "confidenceLevel": "high"
+      "confidenceLevel": "high",
+      "contextualHighlights": [
+        "Frais Réels (1AK) : Si vos frais de transport et repas 2025 dépassent 10% de votre salaire, l'option pour les frais réels est plus avantageuse. Calculez-les via le barème kilométrique."
+      ]
     },
     {
       "stepId": "step_revenus_capitaux_mobiliers",
@@ -152,7 +158,10 @@
       "keyCaseCodes": ["2DC", "2TR", "2BH", "2CK", "2OP", "2CA", "2TS", "2CG", "2DF"],
       "sourceUrl": "https://www.impots.gouv.fr/www2/fichiers/documentation/brochure/ir_2025/pdf_som/08-RCM_119a134.pdf",
       "sourceTitle": "Notice 2042 — Revenus des valeurs et capitaux mobiliers – impots.gouv.fr",
-      "confidenceLevel": "high"
+      "confidenceLevel": "high",
+      "contextualHighlights": [
+        "Option Barème (2OP) : Si vous êtes peu ou pas imposable, cocher 2OP peut vous faire économiser 12,8% d'impôt sur vos intérêts et dividendes."
+      ]
     },
     {
       "stepId": "step_revenus_fonciers",
@@ -160,12 +169,12 @@
       "position": 6,
       "verifyNow": [
         "Déterminer le régime applicable : micro-foncier si recettes brutes annuelles ≤ 15 000 € ET aucun bien sous régime spécial → case 4BE. Régime réel si recettes > 15 000 € ou sur option → formulaire 2044.",
-        "En micro-foncier (4BE) : saisir directement le revenu net imposable = recettes brutes × 70 %. Ne pas saisir le brut.",
+        "En micro-foncier (4BE) : saisir les recettes brutes (hors charges). L'abattement forfaitaire de 30 % est appliqué automatiquement.",
         "En régime réel (2044) : vérifier l'intégralité des charges déductibles (travaux, intérêts d'emprunt, charges de copropriété, assurances, taxe foncière). Reporter le résultat en case 4BA (bénéfice) ou 4BC (déficit imputable sur revenu global, plafond 10 700 €/an).",
         "Vérifier si des immeubles sont détenus en indivision ou via une SCI à l'IR : reporter la quote-part du résultat."
       ],
       "frequentOmissions": [
-        "Confondre recettes brutes et revenu net : en micro-foncier, case 4BE = recettes × 70 % (et non les recettes brutes).",
+        "Confondre recettes brutes et revenu net : en micro-foncier, la case 4BE attend les recettes brutes (hors charges), pas un montant net recalculé.",
         "Oublier de déclarer les revenus de SCPI à l'IR : ils peuvent ne pas être préremplis.",
         "Ne pas déduire la taxe foncière en régime réel.",
         "Oublier le report des déficits fonciers des années antérieures (case 4BD ou 4BF) : reportables pendant 10 ans."
@@ -258,7 +267,10 @@
       "keyCaseCodes": ["7GA", "7GB", "7GC", "7GE", "7GF", "7DB", "7UF", "7UD", "7EA", "7EB", "7EC", "7ED", "7EF", "7EG"],
       "sourceUrl": "https://www.impots.gouv.fr/particulier/deductions-liees-la-famille",
       "sourceTitle": "Déductions liées à la famille – impots.gouv.fr",
-      "confidenceLevel": "high"
+      "confidenceLevel": "high",
+      "contextualHighlights": [
+        "Dons Coluche (7UD) : Pour les dons faits après le 14/10/2025, le plafond à 75% a été doublé à 2 000 € (contre 1 000 € auparavant). Profitez-en pour maximiser votre réduction."
+      ]
     },
     {
       "stepId": "step_recapitulatif_impot",

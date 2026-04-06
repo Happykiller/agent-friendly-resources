@@ -2,6 +2,14 @@
 
 ## 1) Cadrage unique
 
+### Vision
+
+Notre vision pour l'assistant fiscal s'articule autour de trois axes fondamentaux :
+
+1.  **Assister** : Aider, guider et accompagner le déclarant dans sa démarche. Rendre simple une procédure administrative complexe.
+2.  **Conseiller** : Apporter une expertise pour obtenir le maximum de ses droits. Apporter une valeur monétaire par l'optimisation (questions, suggestions, études).
+3.  **Rapidité** : Faire gagner du temps. Supprimer les recherches fastidieuses et fluidifier la saisie pour une déclaration efficace.
+
 ### Objectif
 
 Fournir un plugin MCP d'assistance a la preparation de la declaration de revenus francaise (cas simples), qui qualifie la situation, prepare le dossier, et guide la saisie sans remplacer un conseil fiscal humain.

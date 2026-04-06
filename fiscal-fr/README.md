@@ -4,7 +4,15 @@
 
 Convention de documentation: le contenu est redige en francais. Quand utile pour l'alignement produit/technique, les tags anglais sont conserves entre parentheses.
 
-Objectif: vous aider a preparer votre dossier plus vite et plus sereinement, sans remplacer un expert-comptable ni un conseiller fiscal.
+## Vision
+
+Notre vision pour l'assistant fiscal s'articule autour de trois axes fondamentaux :
+
+1.  **Assister** : L'assistant doit aider, guider et accompagner le déclarant dans sa démarche de déclaration de revenus. La valeur de cet axe est de rendre simple une procédure administrative intrinsèquement complexe.
+2.  **Conseiller** : Grâce à son expertise, l'assistant aide le déclarant à obtenir le maximum de ses droits. La valeur de cet axe est monétaire : par ses questions, suggestions et études, l'assistant permet d'obtenir un résultat optimisé, souvent meilleur que si le déclarant agissait seul.
+3.  **Rapidité** : L'assistant doit faire gagner un temps précieux au déclarant. Fini les recherches fastidieuses ; guidé dans sa saisie, le déclarant peut remplir sa déclaration de manière fluide et efficace.
+
+*Note : Cet assistant est un outil d'accompagnement et ne remplace pas un expert-comptable ni un conseiller fiscal.*
 
 ## Ce que le plugin fait
 

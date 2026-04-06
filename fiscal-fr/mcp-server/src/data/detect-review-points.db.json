@@ -107,6 +107,51 @@
           "requiredIncomeType": "salary"
         }
       }
+    },
+    {
+      "id": "optimization_2op",
+      "severity": "info",
+      "blocking": false,
+      "topic": "Optimisation : Option pour le barème (case 2OP)",
+      "justificationTemplate": "Vous avez des revenus de capitaux mobiliers. L'imposition forfaitaire (PFU) de 31,4% s'applique par défaut, mais l'option pour le barème progressif (case 2OP) pourrait être plus avantageuse.",
+      "suggestedActions": [
+        "Comparer l'impôt avec et sans l'option 2OP (si votre tranche marginale est de 0% ou 11%, c'est souvent gagnant).",
+        "Vérifier si l'abattement de 40% sur les dividendes (éligibles) rend l'option intéressante.",
+        "Cocher la case 2OP dans la rubrique 'Revenus de capitaux mobiliers' pour tester l'impact sur le simulateur officiel."
+      ],
+      "when": {
+        "incomeTypesAny": ["dividends", "bank_interest"]
+      }
+    },
+    {
+      "id": "optimization_frais_reels",
+      "severity": "info",
+      "blocking": false,
+      "topic": "Optimisation : Frais réels (case 1AK)",
+      "justificationTemplate": "L'abattement de 10% est appliqué par défaut sur vos salaires. Si vos frais professionnels (transport, repas) sont élevés, l'option pour les frais réels pourrait réduire votre impôt.",
+      "suggestedActions": [
+        "Calculer vos frais kilométriques (barème kilométrique DGFiP) et vos frais de bouche.",
+        "Comparer le total obtenu avec l'abattement forfaitaire de 10% (automatique).",
+        "Si le total est supérieur, renseigner le montant en case 1AK et conserver tous les justificatifs."
+      ],
+      "when": {
+        "incomeTypesAny": ["salary"]
+      }
+    },
+    {
+      "id": "optimization_parent_isole",
+      "severity": "info",
+      "blocking": false,
+      "topic": "Optimisation : Majoration Parent Isolé (case T)",
+      "justificationTemplate": "Vous avez des enfants à charge. Si vous vivez seul(e) au 1er janvier 2025, vous pourriez bénéficier d'une demi-part supplémentaire.",
+      "suggestedActions": [
+        "Vérifier si vous remplissez les conditions du statut 'Parent Isolé'.",
+        "Cocher la case T dans la section 'État civil' de votre déclaration.",
+        "S'assurer que vous ne vivez pas en concubinage (vie maritale) au 1er janvier de l'année d'imposition."
+      ],
+      "when": {
+        "dependentContextsAny": ["children_exclusive_custody", "children_shared_custody"]
+      }
     }
   ]
 }

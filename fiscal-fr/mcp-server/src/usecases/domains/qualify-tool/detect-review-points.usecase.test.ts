@@ -24,8 +24,8 @@ const baseProfile = {
   alimonyContexts: [],
 };
 
-// --- cas simple sans alerte ---
-test("no review points for simple salaried case with known facts", () => {
+// --- cas simple sans alerte bloquante ---
+test("one review point (optimization) for simple salaried case with known facts", () => {
   const useCase = createUseCase();
   const result = useCase.execute({
     profileSnapshot: baseProfile,
@@ -33,7 +33,9 @@ test("no review points for simple salaried case with known facts", () => {
   });
 
   assert.equal(result.hasBlockingPoints, false);
-  assert.equal(result.reviewPoints.length, 0);
+  // Expect 1 point: optimization_frais_reels (triggered by 'salary')
+  assert.equal(result.reviewPoints.length, 1);
+  assert.equal(result.reviewPoints[0].id, "optimization_frais_reels");
   assert.equal(result.summary.complexity, "simple");
   assert.equal(result.summary.mvpDecision, "supported");
 });

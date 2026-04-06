@@ -28,13 +28,17 @@ const CHARGE_TYPE_STEP_MAP: Record<string, string[]> = {
 
 // Highlighted items by incomeType / chargeType for a specific step
 const CONTEXTUAL_HIGHLIGHTS: Record<string, Record<string, string>> = {
+  step_etat_civil: {
+    children_exclusive_custody: "En tant que parent isolé élevant seul vos enfants, n'oubliez pas de cocher la case T pour bénéficier d'une part supplémentaire.",
+    children_shared_custody: "En garde alternée, chaque parent bénéficie d'une part partagée. Vérifiez la cohérence avec l'autre parent.",
+  },
   step_revenus_salaires: {
-    salary: "Votre profil inclut des salaires : vérifier particulièrement la case 1AJ avec le net fiscal du bulletin de décembre.",
+    salary: "Optimisation Frais Réels : Si vos frais de transport/repas dépassent 10% de votre salaire, l'option pour les frais réels (1AK) est plus avantageuse.",
     pension: "Votre profil inclut des pensions : vérifier les cases 1AS/1BS avec l'attestation fiscale de la caisse de retraite.",
   },
   step_revenus_capitaux_mobiliers: {
     bank_interest: "Votre profil inclut des intérêts bancaires : vérifier la case 2TR et l'IFU de chaque établissement.",
-    dividends: "Votre profil inclut des dividendes : évaluer l'option barème (case 2OP) si votre TMI est ≤ 11 %.",
+    dividends: "Optimisation Case 2OP : L'option barème peut être plus avantageuse que le PFU de 31,4% si vous êtes peu imposable.",
   },
   step_revenus_fonciers: {
     rental_income: "Votre profil inclut des revenus fonciers : vérifier le régime applicable (micro-foncier ≤ 15 000 € ou régime réel).",
@@ -48,7 +52,7 @@ const CONTEXTUAL_HIGHLIGHTS: Record<string, Record<string, string>> = {
     per: "Votre profil inclut un PER : vérifier les cases 6NS/6NT et les plafonds de déductibilité.",
   },
   step_reductions_credits_impot: {
-    donations: "Votre profil inclut des dons : distinguer la case 7UF (66 %) et la case 7UD (75 % Coluche, plafond 2 000 € depuis le 14/10/2025).",
+    donations: "Optimisation Dons (7UF/7UD) : Le plafond à 75% est de 2 000 € depuis le 14/10/2025. Vérifiez vos reçus fiscaux.",
     childcare: "Votre profil inclut des frais de garde d'enfant : saisir le montant NET après déduction des aides CAF (case 7GA).",
     home_services: "Votre profil inclut de l'emploi à domicile : saisir le montant NET après aides, et renseigner la nouvelle case d'identification du bénéficiaire (7DB).",
   },
@@ -62,6 +66,7 @@ const GuideFilingStepInputSchema = z.object({
     .object({
       incomeTypes: z.array(z.string()).optional(),
       charges: z.array(z.string()).optional(),
+      dependentContexts: z.array(z.string()).optional(),
     })
     .optional(),
 });
@@ -101,6 +106,12 @@ export class GuideFilingStepUseCase {
               description:
                 "Charges et déductions du profil (donations, childcare, home_services, alimony, per).",
             },
+            dependentContexts: {
+              type: "array",
+              items: { type: "string" },
+              description:
+                "Contextes familiaux (children_exclusive_custody, children_shared_custody).",
+            },
           },
         },
       },
@@ -128,12 +139,19 @@ export class GuideFilingStepUseCase {
 
     const contextualHighlights: string[] = [];
 
+    // Add static highlights from the step itself (from JSON DB)
+    const stepInDb = (step as any);
+    if (stepInDb.contextualHighlights && Array.isArray(stepInDb.contextualHighlights)) {
+      contextualHighlights.push(...stepInDb.contextualHighlights);
+    }
+
     if (input.knownContext) {
       const stepHighlights = CONTEXTUAL_HIGHLIGHTS[step.stepId];
       if (stepHighlights) {
         const allContextKeys = [
           ...(input.knownContext.incomeTypes ?? []),
           ...(input.knownContext.charges ?? []),
+          ...(input.knownContext.dependentContexts ?? []),
         ];
         for (const key of allContextKeys) {
           if (stepHighlights[key]) {

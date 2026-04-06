@@ -308,6 +308,7 @@ const GuideFilingStepSchema = z.object({
   sourceTitle: z.string(),
   confidenceLevel: z.enum(["high", "medium", "low"]),
   notes: z.string().optional(),
+  contextualHighlights: z.array(z.string()).optional(),
 });
 
 const GuideFilingKnowledgeSchema = z.object({

@@ -60,6 +60,8 @@ Ce fichier couvre:
 - `tools/call` pour `list_supporting_documents`
 - `tools/call` pour `detect_review_points`
 - `tools/call` pour `build_pre_declaration`
+- `tools/call` pour `estimate_impact`
+- `tools/call` pour `guide_filing_step`
 - un cas `INVALID_INPUT`
 
 ## Tools exposes
@@ -68,6 +70,8 @@ Ce fichier couvre:
 - `list_supporting_documents`
 - `detect_review_points`
 - `build_pre_declaration`
+- `estimate_impact`
+- `guide_filing_step`
 
 Pour les schemas d'entree/sortie et la politique de sources, voir `mcp-server/RESOURCES.md`.
 
@@ -79,6 +83,8 @@ Les regles chargees au runtime sont dans:
 - `mcp-server/src/data/list-supporting-documents.db.json`
 - `mcp-server/src/data/detect-review-points.db.json`
 - `mcp-server/src/data/build-pre-declaration.db.json`
+- `mcp-server/src/data/estimate-impact.db.json`
+- `mcp-server/src/data/guide-filing.db.json`
 
 Ces DB sont alimentees a partir des assets documentaires du repo:
 

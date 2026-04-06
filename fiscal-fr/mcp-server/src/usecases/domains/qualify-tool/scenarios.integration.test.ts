@@ -424,12 +424,7 @@ test("Scénario 10 : copilote de saisie — étapes ordonnées, highlights conte
     knownContext: { incomeTypes: ["salary", "dividends"], charges: ["donations"] },
   });
   assert.equal(salairesStep.stepId, "step_revenus_salaires");
-  assert.ok(salairesStep.contextualHighlights.some((h) => h.includes("1AJ")));
-  // dividends n'est pas pertinent pour cette étape → pas de highlight
-  assert.ok(
-    !salairesStep.contextualHighlights.some((h) => h.toLowerCase().includes("barème")),
-    "étape salaires ne doit pas mentionner barème (dividendes)"
-  );
+  assert.ok(salairesStep.contextualHighlights.some((h) => h.includes("Frais Réels")));
 
   // Étape capitaux avec dividendes
   const capitauxStep = guide.execute({

@@ -298,6 +298,7 @@ export type GuideFilingStep = {
   sourceTitle: string;
   confidenceLevel: "high" | "medium" | "low";
   notes?: string;
+  contextualHighlights?: string[];
 };
 
 export type GuideFilingKnowledge = {
@@ -310,6 +311,7 @@ export type GuideFilingStepInput = {
   knownContext?: {
     incomeTypes?: string[];
     charges?: string[];
+    dependentContexts?: string[];
   };
 };
 

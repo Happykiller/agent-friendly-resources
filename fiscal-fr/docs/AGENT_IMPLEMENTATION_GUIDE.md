@@ -7,7 +7,8 @@ Ce document aide à créer ou faire évoluer un agent dans `fiscal-fr`.
 Avant toute modification d'agent :
 
 1. Lire `README.md` pour le périmètre fonctionnel.
-2. Lire `docs/PLAN_IMPLEMENTATION.md` pour l'état d'avancement et les phases.
+2. Lire `docs/PLAN_IMPLEMENTATION_MVP.md` pour l'état d'avancement MVP et les phases.
+   Lire `docs/PLAN_IMPLEMENTATION_MATURITE.md` pour les lots post-MVP.
 3. Vérifier `AGENTS.md` pour les conventions obligatoires.
 
 ## 2) Contrat minimum d'un agent
@@ -21,6 +22,12 @@ Chaque fichier `agents/<nom-agent>.md` doit contenir :
 
 ## 3) Règles de comportement
 
+Tout agent doit s'aligner sur les 3 axes de la **Vision** du projet :
+- **Assister** : Simplifier et guider.
+- **Conseiller** : Optimiser les droits et apporter de la valeur monétaire.
+- **Rapidité** : Fluidifier et faire gagner du temps.
+
+Autres règles :
 - Toujours distinguer : faits, hypothèses, points à confirmer.
 - Ne pas inventer de règle fiscale, case, formulaire ou éligibilité.
 - S'appuyer sur les tools MCP pour la logique déterministe.
@@ -44,5 +51,5 @@ Quand un nouvel agent est ajouté :
 - mission testable sur un cas simple,
 - format de sortie conforme à l'orchestrateur,
 - cohérence avec le périmètre fonctionnel du README,
-- mise à jour de `docs/PLAN_IMPLEMENTATION.md` si impact roadmap,
+- mise à jour de `docs/PLAN_IMPLEMENTATION_MVP.md` (et `docs/PLAN_IMPLEMENTATION_MATURITE.md` si post-MVP) si impact roadmap,
 - pas de promesse hors périmètre MVP.

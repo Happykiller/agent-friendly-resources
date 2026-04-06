@@ -61,11 +61,11 @@ test("étape inconnue → throw Error avec la liste des étapes disponibles", ()
 
 // ── Cas 4 : step_revenus_salaires sans contexte ───────────────────────────
 
-test("step_revenus_salaires sans contexte : contextualHighlights vide", () => {
+test("step_revenus_salaires sans contexte : contient les highlights statiques du DB", () => {
   const useCase = createUseCase();
   const result = useCase.execute({ currentStep: "step_revenus_salaires" });
 
-  assert.deepEqual(result.contextualHighlights, []);
+  assert.ok(result.contextualHighlights.some(h => h.includes("Frais Réels (1AK)")));
   assert.ok(result.verifyNow.some((v) => v.includes("1AJ")), "doit mentionner la case 1AJ");
   assert.ok(result.keyCaseCodes.includes("1AJ"));
   assert.ok(result.keyCaseCodes.includes("1AS"));
@@ -82,8 +82,8 @@ test("step_revenus_salaires avec incomeType salary → highlight contextuel", ()
 
   assert.ok(result.contextualHighlights.length > 0, "doit avoir au moins un highlight");
   assert.ok(
-    result.contextualHighlights.some((h) => h.includes("1AJ")),
-    "le highlight salary doit mentionner 1AJ"
+    result.contextualHighlights.some((h) => h.includes("Frais Réels")),
+    "le highlight salary doit mentionner les Frais Réels"
   );
 });
 

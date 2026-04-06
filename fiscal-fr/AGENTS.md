@@ -7,14 +7,21 @@ Ce fichier décrit les agents du plugin Claude Code `fiscal-fr` et les conventio
 Pour éviter les écarts entre produit, implémentation et agents, appliquer cette hiérarchie :
 
 1. `README.md` : référence fonctionnelle (périmètre utilisateur, cas couverts, limites).
-2. `docs/PLAN_IMPLEMENTATION.md` : référence d'exécution (phases, statut DONE|PARTIAL|TODO, reste à faire).
+2. `docs/PLAN_IMPLEMENTATION_MVP.md` : référence d'exécution MVP (phases, statut DONE|PARTIAL|TODO, reste à faire).
+   `docs/PLAN_IMPLEMENTATION_MATURITE.md` : référence d'exécution post-MVP (lots de maturité).
 3. `docs/AGENT_IMPLEMENTATION_GUIDE.md` : aide pratique pour créer/faire évoluer un agent Claude.
 
 Quand le périmètre fonctionnel change, mettre à jour **README + plan** dans la même PR.
 
 ## Objectif du projet
 
-`fiscal-fr` est un plugin MVP d'assistance à la préparation de déclaration de revenus française.
+`fiscal-fr` est un plugin d'assistance à la préparation de déclaration de revenus française.
+
+Notre vision s'articule autour de trois axes fondamentaux que chaque agent doit respecter :
+
+1.  **Assister** : Aider, guider et accompagner le déclarant. Simplifier la complexité administrative.
+2.  **Conseiller** : Apporter une expertise pour optimiser les droits du déclarant. Maximiser la valeur monétaire du résultat.
+3.  **Rapidité** : Faire gagner du temps. Supprimer les recherches fastidieuses et fluidifier la saisie.
 
 Le plugin s'appuie sur :
 - un orchestrateur (skill `assistant-fiscal`),
@@ -81,7 +88,7 @@ L'orchestrateur doit suivre le fil conversationnel cible :
 3. Décrire explicitement les limites et cas hors périmètre.
 4. Définir un format de sortie clair et stable.
 5. Mettre à jour le skill orchestrateur si ce nouvel agent doit être invoqué.
-6. Mettre à jour la documentation associée si le périmètre fonctionnel est impacté (`README.md`, `docs/PLAN_IMPLEMENTATION.md`).
+6. Mettre à jour la documentation associée si le périmètre fonctionnel est impacté (`README.md`, `docs/PLAN_IMPLEMENTATION_MVP.md`, et `docs/PLAN_IMPLEMENTATION_MATURITE.md` si post-MVP).
 
 ## Architecture du serveur MCP — règle obligatoire
 
@@ -113,6 +120,8 @@ Usecase                      ← reçoit le repository par injection, appelle th
 5. Le usecase utilise `this.repository.getX()` uniquement
 
 ## Vérification rapide
+
+Check-list de reference: `docs/DOCUMENTATION_COHERENCE_CHECKLIST.md`
 
 Avant commit :
 - vérifier que le frontmatter est valide,
