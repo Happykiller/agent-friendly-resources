@@ -37,9 +37,35 @@ Avant chaque phase d'implementation, une etape de **recherche documentaire** est
 Le prompt de recherche est fourni dans ce plan.
 Le resultat de la recherche alimente les `.db.json` avant le code.
 
+### Suivi d'avancement (consigne forte)
+
+- Ce plan doit etre mis a jour au fil de l'eau a chaque avancee significative.
+- Statuts autorises : `TODO` | `PARTIAL` | `DONE`.
+- A chaque mise a jour : date, lot, etat, livrables faits, reste a faire.
+
+#### Journal d'avancement
+
+- 2026-04-06 — Lot 1 — `PARTIAL`
+  - Fait : alignement documentaire PFU (30% revenus 2025 / 31,4% a partir de 2026 selon type de revenu) dans README + plan MVP + present plan.
+  - Fait : creation de `mcp-server/src/data/compare-tax-options.db.json` avec 4 arbitrages et `rateSets` temporels.
+  - Fait : integration de la chaine architecture (`DbAdapter` -> `Repository` -> types) pour `compareTaxOptionsKnowledge`.
+  - Fait : implementation initiale du usecase `compare_tax_options` + exposition du tool MCP + tests unitaires de base.
+  - Fait : extension des tests lot 1 a 20+ cas (4 arbitrages couverts) et correction du build TypeScript.
+  - Fait : recherche documentaire 1.0 formalisee dans `assets/research/compare-tax-options.research.md`.
+  - Fait : durcissement initial des formules `PFU vs bareme` (dividendes eligibles/non eligibles, frais deductibles 2CA, option CSG differee) et `rattachement vs detachement` (proxy TMI + plafond QF).
+  - Fait : integration parcours orchestrateur via mise a jour `skills/assistant-fiscal/SKILL.md` (mode `arbitrages` + fil cible) et README (mode + sequence).
+  - Fait : calibration metier complementaire des hypotheses de calcul + tests additionnels (dividendes eligibles/non eligibles, frais 2CA, effet CSG differe, priorite estimation rattachement fournie).
+  - Fait : prise en compte de la recherche avancee `assets/compare-tax-options_260406_gpt.md` pour challenger les hypotheses metier (2OP globale, heuristique micro-foncier, choix par declarant en frais reels, validation foyer complete pour rattachement/pension).
+  - Fait : preparation de la grille de validation manuelle 5 cas dans `assets/research/lot1-manual-validation-cases.md`.
+
+- 2026-04-06 — Lot 1 — `DONE`
+  - Fait : cloture du lot 1 en pilotage produit apres completion des livrables techniques, tests, integration orchestrateur et grille de validation manuelle preparee.
+
 ---
 
 ## Lot 1 — Moteur d'arbitrages fiscaux
+
+**Statut actuel: DONE (maj 2026-04-06)**
 
 ### Pourquoi maintenant
 
@@ -56,7 +82,7 @@ C'est LE lot qui transforme l'assistant de "formulaire intelligent" en "assistan
 ### Perimetre fonctionnel
 
 Nouveau tool `compare_tax_options` avec 4 arbitrages :
-1. PFU (30%) vs option bareme progressif (globale pour tous les RCM),
+1. PFU (30% sur revenus 2025 ; 31,4% a partir de 2026 selon type de revenu) vs option bareme progressif (globale pour tous les RCM),
 2. abattement 10% salaires vs frais reels (montant global fourni par l'utilisateur),
 3. micro-foncier (30%) vs regime reel (charges globales fournies),
 4. rattachement enfant majeur vs detachement + pension alimentaire deductible.
@@ -92,7 +118,7 @@ double d'un ingenieur knowledge qui structure des regles pour un assistant fisca
 Je construis un assistant fiscal MCP pour particuliers francais.
 Le MVP (lot 0) calcule l'IR 2026 (bareme progressif, QF, decote, PFU, reductions/credits).
 Le lot 1 ajoute un moteur d'arbitrages comparatifs pour 4 options :
-1. PFU (30% flat tax, dont 12,8% IR + 17,2% PS) vs option bareme progressif pour les RCM
+1. PFU (30% sur revenus percus en 2025, dont 12,8% IR + 17,2% PS ; 31,4% a partir de 2026, dont 12,8% IR + 18,6% PS selon type de revenu) vs option bareme progressif pour les RCM
    (dividendes avec abattement 40%, interets sans abattement).
 2. Abattement 10% sur salaires vs frais reels.
 3. Micro-foncier (abattement 30%, revenus < 15 000 €) vs regime reel (formulaire 2044).
@@ -238,8 +264,8 @@ interface ComparisonResult {
 **Action** : implementer les 4 fonctions de comparaison dans le usecase.
 
 **Arbitrage 1 : PFU vs bareme**
-- Option A (PFU) : 12,8% IR + 17,2% PS sur (interets + dividendes).
-- Option B (bareme) : dividendes avec abattement 40% integres au revenu imposable, interets integres sans abattement, ajouter au revenu imposable, recalculer l'IR, retrancher le credit d'impot de 12,8% deja preleve. PS 17,2% dans les deux cas.
+- Option A (PFU) : appliquer un taux parametre par annee/type de revenu (campagne IR 2026 sur revenus 2025 : 12,8% IR + 17,2% PS sur interets + dividendes ; revenus percus a partir de 2026 : 12,8% IR + 18,6% PS selon type de revenu).
+- Option B (bareme) : dividendes avec abattement 40% integres au revenu imposable, interets integres sans abattement, ajouter au revenu imposable, recalculer l'IR, retrancher le credit d'impot de 12,8% deja preleve ; appliquer les PS selon annee/type de revenu (17,2% pour revenus 2025 ; 18,6% a partir de 2026 selon type de revenu).
 - Warning : option globale (tous les RCM passent au bareme).
 - Seuil indicatif : TMI <= 11% → bareme souvent favorable.
 
@@ -1374,17 +1400,17 @@ Meme structure : fichier de regles, repository/usecase, extension des tools exis
 
 ## Resume de la roadmap
 
-| Lot | Nom | Tools | Tests | Priorite |
-|-----|-----|-------|-------|----------|
-| 1 | Moteur d'arbitrages | `compare_tax_options` | 20 | ★★★★★ |
-| 1b | Frais reels detailles | `calculate_real_expenses` | 15 | ★★★★☆ |
-| 2 | PER / epargne retraite | `optimize_per_contribution` | 15 | ★★★★★ |
-| 3 | Detection proactive + Pinel + plafonnement | `detect_potential_advantages`, `check_niche_ceiling` | 30 | ★★★★★ |
-| 4 | Evenements de vie | `simulate_life_event` | 20 | ★★★★☆ |
-| 5 | Foncier reel + deficit | `model_rental_income_real` | 15 | ★★★★☆ |
-| 6 | Plus-values mobilieres | extension `estimate_impact` | 20 | ★★★☆☆ |
-| 7 | LMNP reel simplifie | `simulate_lmnp_real` | 15 | ★★★☆☆ |
-| 8 | Parents separes approfondi | extension `detect_review_points` + `compare_tax_options` | 20 | ★★★☆☆ |
+| Lot | Nom | Tools | Tests | Priorite | Statut |
+|-----|-----|-------|-------|----------|--------|
+| 1 | Moteur d'arbitrages | `compare_tax_options` | 20 | ★★★★★ | DONE |
+| 1b | Frais reels detailles | `calculate_real_expenses` | 15 | ★★★★☆ | TODO |
+| 2 | PER / epargne retraite | `optimize_per_contribution` | 15 | ★★★★★ | TODO |
+| 3 | Detection proactive + Pinel + plafonnement | `detect_potential_advantages`, `check_niche_ceiling` | 30 | ★★★★★ | TODO |
+| 4 | Evenements de vie | `simulate_life_event` | 20 | ★★★★☆ | TODO |
+| 5 | Foncier reel + deficit | `model_rental_income_real` | 15 | ★★★★☆ | TODO |
+| 6 | Plus-values mobilieres | extension `estimate_impact` | 20 | ★★★☆☆ | TODO |
+| 7 | LMNP reel simplifie | `simulate_lmnp_real` | 15 | ★★★☆☆ | TODO |
+| 8 | Parents separes approfondi | extension `detect_review_points` + `compare_tax_options` | 20 | ★★★☆☆ | TODO |
 
 ### Parcours cible complet (apres tous les lots)
 

@@ -13,6 +13,7 @@ import { DetectReviewPointsUseCase } from "./usecases/domains/qualify-tool/detec
 import { BuildPreDeclarationUseCase } from "./usecases/domains/qualify-tool/build-pre-declaration.usecase.js";
 import { EstimateImpactUseCase } from "./usecases/domains/qualify-tool/estimate-impact.usecase.js";
 import { GuideFilingStepUseCase } from "./usecases/domains/qualify-tool/guide-filing-step.usecase.js";
+import { CompareTaxOptionsUseCase } from "./usecases/domains/qualify-tool/compare-tax-options.usecase.js";
 
 const SERVER_INFO = {
   name: "fiscal-fr-mcp",
@@ -47,6 +48,9 @@ function createMcpServer() {
   const guideFilingStepUseCase = container.get<GuideFilingStepUseCase>(
     TYPES.GuideFilingStepUseCase
   );
+  const compareTaxOptionsUseCase = container.get<CompareTaxOptionsUseCase>(
+    TYPES.CompareTaxOptionsUseCase
+  );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => {
     return {
@@ -80,6 +84,12 @@ function createMcpServer() {
           description:
             "Calcule une estimation indicative de l'impot sur le revenu (IR 2026, revenus 2025) a partir du profil qualifie et des montants declares. Applique le bareme progressif, le quotient familial, la decote, les reductions et credits d'impot. Resultat sans valeur juridique — toujours accompagne d'un disclaimer.",
           inputSchema: estimateImpactUseCase.getToolSchema(),
+        },
+        {
+          name: "compare_tax_options",
+          description:
+            "Compare des options fiscales (PFU vs bareme, frais reels vs 10%, micro-foncier vs reel, rattachement enfant majeur vs pension) et retourne une recommandation conditionnelle avec hypotheses et donnees manquantes.",
+          inputSchema: compareTaxOptionsUseCase.getToolSchema(),
         },
         {
           name: "guide_filing_step",
@@ -312,6 +322,40 @@ function createMcpServer() {
           isError: true,
         };
       }
+    }
+
+    if (request.params.name === "compare_tax_options") {
+      const parsed = compareTaxOptionsUseCase.validateInput(request.params.arguments);
+
+      if (!parsed.success) {
+        return {
+          content: [
+            {
+              type: "text",
+              text: JSON.stringify(
+                {
+                  error: "INVALID_INPUT",
+                  details: parsed.error.flatten(),
+                },
+                null,
+                2
+              ),
+            },
+          ],
+          isError: true,
+        };
+      }
+
+      const result = compareTaxOptionsUseCase.execute(parsed.data);
+
+      return {
+        content: [
+          {
+            type: "text",
+            text: JSON.stringify(result, null, 2),
+          },
+        ],
+      };
     }
 
     return {

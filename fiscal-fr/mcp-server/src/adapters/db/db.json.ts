@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { z } from "zod";
 import type { DbAdapter } from "./db.abstract.js";
 import type {
+  CompareTaxOptionsKnowledge,
   EstimateImpactKnowledge,
   GuideFilingKnowledge,
   PreDeclarationKnowledge,
@@ -296,6 +297,56 @@ const EstimateImpactKnowledgeSchema = z.object({
   }),
 });
 
+const CompareTaxRateSetSchema = z.object({
+  incomeYear: z.string(),
+  appliesTo: z.array(z.string()).min(1),
+  pfu: z.object({
+    tauxIR: z.number(),
+    tauxPS: z.number(),
+    tauxGlobal: z.number(),
+  }),
+  notes: z.array(z.string()).optional(),
+});
+
+const CompareTaxOptionDefinitionSchema = z.object({
+  label: z.string(),
+  formula: z.string(),
+  caseCodes: z.array(z.string()),
+});
+
+const CompareTaxArbitrageSchema = z.object({
+  arbitrageId: z.enum([
+    "pfu_vs_bareme",
+    "real_expenses_vs_10pct",
+    "micro_vs_real_rental",
+    "child_attachment_vs_detachment",
+  ]),
+  title: z.string(),
+  eligibility: z.array(z.string()).min(1),
+  optionA: CompareTaxOptionDefinitionSchema,
+  optionB: CompareTaxOptionDefinitionSchema,
+  breakEvenRule: z.string().optional(),
+  rateSets: z.array(CompareTaxRateSetSchema).optional(),
+  exclusions: z.array(z.string()),
+  warnings: z.array(z.string()),
+  sourceRuleIds: z.array(z.string()).min(1),
+});
+
+const CompareTaxOptionsKnowledgeSchema = z.object({
+  campaign: z.string(),
+  revenusAnneeDefaut: z.string(),
+  sources: z.array(
+    z.object({
+      ruleId: z.string(),
+      url: z.string().url(),
+      title: z.string(),
+      authority: z.string(),
+      confidence: z.enum(["high", "low"]),
+    })
+  ),
+  arbitrages: z.array(CompareTaxArbitrageSchema).min(4),
+});
+
 const GuideFilingStepSchema = z.object({
   stepId: z.string(),
   label: z.string(),
@@ -324,6 +375,7 @@ export class JsonDbAdapter implements DbAdapter {
   private readonly reviewPointsKnowledge: ReviewPointsKnowledge;
   private readonly preDeclarationKnowledge: PreDeclarationKnowledge;
   private readonly estimateImpactKnowledge: EstimateImpactKnowledge;
+  private readonly compareTaxOptionsKnowledge: CompareTaxOptionsKnowledge;
   private readonly guideFilingKnowledge: GuideFilingKnowledge;
 
   constructor() {
@@ -349,6 +401,13 @@ export class JsonDbAdapter implements DbAdapter {
       "utf8"
     );
     const estimateImpactParsed = EstimateImpactKnowledgeSchema.parse(JSON.parse(estimateImpactRaw));
+    const compareTaxOptionsRaw = readFileSync(
+      new URL("../../data/compare-tax-options.db.json", import.meta.url),
+      "utf8"
+    );
+    const compareTaxOptionsParsed = CompareTaxOptionsKnowledgeSchema.parse(
+      JSON.parse(compareTaxOptionsRaw)
+    );
     const guideFilingRaw = readFileSync(
       new URL("../../data/guide-filing.db.json", import.meta.url),
       "utf8"
@@ -362,6 +421,7 @@ export class JsonDbAdapter implements DbAdapter {
     this.reviewPointsKnowledge = reviewPointsParsed;
     this.preDeclarationKnowledge = preDeclarationParsed;
     this.estimateImpactKnowledge = estimateImpactParsed;
+    this.compareTaxOptionsKnowledge = compareTaxOptionsParsed;
     this.guideFilingKnowledge = guideFilingParsed;
   }
 
@@ -391,6 +451,10 @@ export class JsonDbAdapter implements DbAdapter {
 
   getEstimateImpactKnowledge() {
     return this.estimateImpactKnowledge;
+  }
+
+  getCompareTaxOptionsKnowledge() {
+    return this.compareTaxOptionsKnowledge;
   }
 
   getGuideFilingKnowledge() {

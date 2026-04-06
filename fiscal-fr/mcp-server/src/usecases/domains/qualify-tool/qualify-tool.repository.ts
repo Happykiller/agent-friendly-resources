@@ -1,4 +1,5 @@
 import type {
+  CompareTaxOptionsKnowledge,
   EstimateImpactKnowledge,
   GuideFilingKnowledge,
   PreDeclarationKnowledge,
@@ -17,5 +18,6 @@ export interface QualifyToolRepository {
   getReviewPointsKnowledge(): ReviewPointsKnowledge;
   getPreDeclarationKnowledge(): PreDeclarationKnowledge;
   getEstimateImpactKnowledge(): EstimateImpactKnowledge;
+  getCompareTaxOptionsKnowledge(): CompareTaxOptionsKnowledge;
   getGuideFilingKnowledge(): GuideFilingKnowledge;
 }

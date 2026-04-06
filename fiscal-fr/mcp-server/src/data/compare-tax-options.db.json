@@ -1,0 +1,168 @@
+{
+  "campaign": "2026",
+  "revenusAnneeDefaut": "2025",
+  "sources": [
+    {
+      "ruleId": "pfu_rate_2025_2026",
+      "url": "https://entreprendre.service-public.gouv.fr/actualites/A18796",
+      "title": "Evolution PFU - Service-Public Entreprendre",
+      "authority": "primary_official",
+      "confidence": "high"
+    },
+    {
+      "ruleId": "salary_deduction_10pct",
+      "url": "https://simulateur-ir-ifi.impots.gouv.fr/calcul_impot/2026/aides/frais.htm",
+      "title": "Abattement 10% salaires - Simulateur DGFiP",
+      "authority": "primary_official",
+      "confidence": "high"
+    },
+    {
+      "ruleId": "micro_foncier",
+      "url": "https://www.impots.gouv.fr/particulier/les-regimes-dimposition",
+      "title": "Regimes fonciers et micro-foncier - impots.gouv.fr",
+      "authority": "primary_official",
+      "confidence": "high"
+    },
+    {
+      "ruleId": "child_attachment_and_alimony",
+      "url": "https://www.legifrance.gouv.fr/codes/article_lc/LEGIARTI000006302221",
+      "title": "CGI art. 156 - Pension alimentaire deductible",
+      "authority": "primary_official",
+      "confidence": "high"
+    }
+  ],
+  "arbitrages": [
+    {
+      "arbitrageId": "pfu_vs_bareme",
+      "title": "PFU vs bareme progressif (RCM)",
+      "eligibility": [
+        "Presence d'interets et/ou dividendes imposables",
+        "Option bareme 2OP applicable globalement a tous les RCM"
+      ],
+      "optionA": {
+        "label": "PFU",
+        "formula": "interets + dividendes -> taux forfaitaire (IR + PS) selon annee/type de revenu",
+        "caseCodes": ["2TR", "2DC", "2CK"]
+      },
+      "optionB": {
+        "label": "Bareme",
+        "formula": "dividendes x (1 - abattement 40%) + interets integres au revenu imposable ; IR recalcule ; acompte 2CK impute",
+        "caseCodes": ["2OP", "2TR", "2DC", "2BH", "2CK"]
+      },
+      "breakEvenRule": "Le bareme devient souvent favorable pour TMI <= 11%, a simuler au cas par cas",
+      "rateSets": [
+        {
+          "incomeYear": "2025",
+          "appliesTo": ["dividends", "interests"],
+          "pfu": {
+            "tauxIR": 0.128,
+            "tauxPS": 0.172,
+            "tauxGlobal": 0.3
+          },
+          "notes": [
+            "Campagne IR 2026 sur revenus 2025: taux de reference pour dividendes/interets"
+          ]
+        },
+        {
+          "incomeYear": "2026",
+          "appliesTo": ["dividends", "interests"],
+          "pfu": {
+            "tauxIR": 0.128,
+            "tauxPS": 0.186,
+            "tauxGlobal": 0.314
+          },
+          "notes": [
+            "A partir des revenus percus en 2026, appliquer les taux en vigueur selon type de revenu"
+          ]
+        }
+      ],
+      "exclusions": [
+        "Option 2OP globale: impossible de choisir PFU pour les interets et bareme pour les dividendes"
+      ],
+      "warnings": [
+        "Toujours expliciter l'annee des revenus compares",
+        "Verifier l'acompte 2CK pour eviter une double imposition"
+      ],
+      "sourceRuleIds": ["pfu_rate_2025_2026"]
+    },
+    {
+      "arbitrageId": "real_expenses_vs_10pct",
+      "title": "Frais reels vs abattement 10%",
+      "eligibility": [
+        "Presence de salaires imposables",
+        "Montant de frais reels disponible"
+      ],
+      "optionA": {
+        "label": "Abattement 10%",
+        "formula": "max(plancher, min(plafond, salaires imposables x 10%))",
+        "caseCodes": []
+      },
+      "optionB": {
+        "label": "Frais reels",
+        "formula": "deduction du montant total de frais reels saisi par l'utilisateur",
+        "caseCodes": ["1AK", "1BK", "1CK", "1DK"]
+      },
+      "breakEvenRule": "Frais reels preferables si leur montant total est strictement superieur a l'abattement forfaitaire",
+      "exclusions": [],
+      "warnings": [
+        "Les frais reels doivent etre justifiables",
+        "Le detail de calcul IK/repas/double residence sera traite par le lot 1b"
+      ],
+      "sourceRuleIds": ["salary_deduction_10pct"]
+    },
+    {
+      "arbitrageId": "micro_vs_real_rental",
+      "title": "Micro-foncier vs regime reel",
+      "eligibility": [
+        "Presence de revenus fonciers nus",
+        "Micro-foncier reserve aux recettes brutes <= 15 000 EUR"
+      ],
+      "optionA": {
+        "label": "Micro-foncier",
+        "formula": "revenu imposable = recettes brutes x 70%",
+        "caseCodes": ["4BE"]
+      },
+      "optionB": {
+        "label": "Regime reel",
+        "formula": "revenu imposable = recettes brutes - charges deductibles",
+        "caseCodes": ["2044", "4BA", "4BB", "4BC"]
+      },
+      "breakEvenRule": "Le reel devient favorable si les charges deductibles depassent 30% des recettes brutes",
+      "exclusions": [
+        "Si recettes brutes > 15 000 EUR, micro-foncier non eligible"
+      ],
+      "warnings": [
+        "Le regime reel engage en principe pour 3 ans",
+        "Le lot 1 compare sur charges globales, sans simulation detaillee 2044"
+      ],
+      "sourceRuleIds": ["micro_foncier"]
+    },
+    {
+      "arbitrageId": "child_attachment_vs_detachment",
+      "title": "Rattachement enfant majeur vs detachement avec pension",
+      "eligibility": [
+        "Enfant majeur potentiellement rattachable",
+        "Montant de pension envisage ou verse disponible"
+      ],
+      "optionA": {
+        "label": "Rattachement",
+        "formula": "recalcul IR avec majoration de parts et plafonnement quotient familial",
+        "caseCodes": ["N", "F"]
+      },
+      "optionB": {
+        "label": "Detachement + pension",
+        "formula": "recalcul IR sans majoration de parts, avec deduction pension alimentaire dans la limite du plafond annuel",
+        "caseCodes": ["6EL", "6EM"]
+      },
+      "breakEvenRule": "Comparer gain de quotient familial vs economie d'impot liee a la pension deductible",
+      "exclusions": [
+        "Rattachement et deduction pension sont mutuellement exclusifs pour un meme enfant"
+      ],
+      "warnings": [
+        "Verifier l'age, les etudes et la situation de l'enfant",
+        "Plafond pension a parametrer par campagne"
+      ],
+      "sourceRuleIds": ["child_attachment_and_alimony"]
+    }
+  ]
+}

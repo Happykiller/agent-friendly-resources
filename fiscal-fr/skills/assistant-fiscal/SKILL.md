@@ -1,6 +1,6 @@
 ---
 name: assistant-fiscal
-description: Lance un assistant fiscal français pour qualification, justificatifs, points de vigilance, pré-déclaration, estimation indicative ou guidage écran par écran de la saisie.
+description: Lance un assistant fiscal français pour qualification, arbitrages fiscaux, justificatifs, points de vigilance, pré-déclaration, estimation indicative ou guidage écran par écran de la saisie.
 disable-model-invocation: true
 ---
 
@@ -31,6 +31,17 @@ Si des données manquent, demande-les d'abord avant d'appeler l'outil.
 - Pour les points de vigilance, délègue la restitution à l'agent `review-points` après appel MCP.
 - Ne délègue pas les décisions métier hors périmètre des agents.
 
+## Fil conversationnel cible
+Suivre l'ordre recommandé suivant, sauf demande explicite de l'utilisateur pour un mode isolé :
+1. cadrage,
+2. qualification,
+3. arbitrages,
+4. justificatifs,
+5. vigilance,
+6. pré-déclaration,
+7. estimation,
+8. copilote.
+
 ## Modes disponibles
 
 ### 1. Mode `qualification`
@@ -57,7 +68,30 @@ Dans ce mode :
   - Prochaines questions
 - termine par une proposition de prochaine étape.
 
-### 2. Mode `justificatifs`
+### 2. Mode `arbitrages`
+Objectif :
+- comparer les principales options fiscales du foyer,
+- recommander l'option conditionnelle la plus favorable,
+- expliciter les hypothèses et données manquantes.
+
+Dans ce mode :
+- si la situation n'est pas encore qualifiée, commence par `qualify_tax_profile`,
+- recueille les données minimales nécessaires selon les arbitrages demandés,
+- appelle `compare_tax_options` avec :
+  - `householdStatus`, `dependentsCount`, `incomeTypes`,
+  - `estimatedTmi` si disponible,
+  - les sous-objets utiles (`capitalIncome`, `salary`, `realExpenses`, `rentalIncome`, `adultChild`),
+  - `requestedArbitrages` (ou `all`),
+- restitue obligatoirement avec les sections suivantes :
+  - Comparatifs par arbitrage (option A / option B / écart)
+  - Recommandation par arbitrage
+  - Hypothèses prises
+  - Données manquantes à compléter
+  - Avertissements globaux et disclaimer
+  - Prochaine action utilisateur.
+- si un arbitrage retourne `insufficient_data`, lister explicitement les champs manquants avant de conclure.
+
+### 3. Mode `justificatifs`
 Objectif :
 - lister les documents utiles à rassembler selon la situation décrite.
 
@@ -75,7 +109,7 @@ Dans ce mode :
   - Notes de prudence
   - Prochaine action utilisateur.
 
-### 3. Mode `vigilance`
+### 4. Mode `vigilance`
 Objectif :
 - détecter les incohérences, régimes non tranchés, et cas hors périmètre dans le profil qualifié.
 
@@ -94,7 +128,7 @@ Dans ce mode :
   - Prochaine action.
 - si `hasBlockingPoints` est vrai, signaler clairement que la situation nécessite une vérification avant de continuer.
 
-### 4. Mode `predeclaration`
+### 5. Mode `predeclaration`
 Objectif :
 - préparer un brouillon de pré-déclaration structuré avec codes cases et origines tracées.
 
@@ -112,7 +146,7 @@ Dans ce mode :
   - Prochaine action utilisateur.
 - si `draftStatus` vaut `incomplete`, inviter l'utilisateur à compléter les montants manquants avant de continuer.
 
-### 5. Mode `estimation`
+### 6. Mode `estimation`
 Objectif :
 - fournir une estimation indicative de l'impôt sur le revenu (IR 2026, revenus 2025) à titre pédagogique uniquement.
 
@@ -135,7 +169,7 @@ Dans ce mode :
 - insister sur le caractère indicatif et non opposable du résultat.
 - si `draftStatus` vaut `incomplete`, signaler que l'estimation est partielle.
 
-### 6. Mode `copilote`
+### 7. Mode `copilote`
 Objectif :
 - guider l'utilisateur écran par écran lors de la saisie en ligne sur impots.gouv.fr.
 

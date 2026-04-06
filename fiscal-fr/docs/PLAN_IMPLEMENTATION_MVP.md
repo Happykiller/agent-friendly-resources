@@ -198,7 +198,7 @@ Regle de modelisation MCP obligatoire:
   - quotient familial avec plafonnement (1 807 €/demi-part, 4 262 € parent isole),
   - abattements : salaires 10% (plancher 509€, plafond 14 555€), pensions 10% (plancher 454€, plafond 4 439€), micro-foncier 30%, dividendes barème 40%, micro-entrepreneur (BIC vente 71%, services 50%, BNC 34%),
   - decote : celibataire (seuil 1 982€, base 897€) et couple (seuil 3 277€, base 1 483€),
-  - PFU 31,4% (12,8% IR + 18,6% PS) sur revenus du capital hors option bareme,
+  - PFU sur revenus du capital hors option bareme : 30% (12,8% IR + 17,2% PS) pour revenus percus en 2025 ; 31,4% (12,8% IR + 18,6% PS) a partir de 2026 selon type de revenu,
   - reductions dons 66%/75% Coluche (plafond 2 000€ depuis 14/10/2025),
   - credits garde enfant (50%, plaf. 3 500€/enfant) et emploi domicile (50%, plaf. 12 000€+),
   - CEHR/CDHR (3% et 4% selon seuils),

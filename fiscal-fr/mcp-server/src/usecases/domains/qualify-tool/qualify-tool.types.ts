@@ -493,3 +493,101 @@ export type EstimateImpactResult = {
   disclaimer: string;
   sourcesUsed: EstimateImpactSourceRef[];
 };
+
+// ── compare_tax_options types ───────────────────────────────────────────────
+
+export type CompareTaxOptionsRateSet = {
+  incomeYear: string;
+  appliesTo: string[];
+  pfu: {
+    tauxIR: number;
+    tauxPS: number;
+    tauxGlobal: number;
+  };
+  notes?: string[];
+};
+
+export type CompareTaxOptionDefinition = {
+  label: string;
+  formula: string;
+  caseCodes: string[];
+};
+
+export type CompareTaxArbitrageKnowledge = {
+  arbitrageId:
+    | "pfu_vs_bareme"
+    | "real_expenses_vs_10pct"
+    | "micro_vs_real_rental"
+    | "child_attachment_vs_detachment";
+  title: string;
+  eligibility: string[];
+  optionA: CompareTaxOptionDefinition;
+  optionB: CompareTaxOptionDefinition;
+  breakEvenRule?: string;
+  rateSets?: CompareTaxOptionsRateSet[];
+  exclusions: string[];
+  warnings: string[];
+  sourceRuleIds: string[];
+};
+
+export type CompareTaxOptionsKnowledge = {
+  campaign: string;
+  revenusAnneeDefaut: string;
+  sources: EstimateImpactSourceRef[];
+  arbitrages: CompareTaxArbitrageKnowledge[];
+};
+
+export type CompareTaxArbitrageId =
+  | "pfu_vs_bareme"
+  | "real_expenses_vs_10pct"
+  | "micro_vs_real_rental"
+  | "child_attachment_vs_detachment";
+
+export type CompareTaxOptionsInput = {
+  householdStatus: string;
+  dependentsCount: number;
+  incomeTypes: string[];
+  estimatedTmi?: number;
+  includeDeferredCsgBenefit?: boolean;
+  incomeYear?: string;
+  salary?: { grossAnnual: number; taxableAnnual: number };
+  realExpenses?: { totalAmount: number };
+  capitalIncome?: {
+    interests: number;
+    dividends: number;
+    eligibleDividendsAmount?: number;
+    deductibleFees?: number;
+  };
+  rentalIncome?: { grossRevenue: number; totalCharges?: number };
+  adultChild?: {
+    childAge: number;
+    pensionPaidAmount?: number;
+    estimatedAttachmentTaxSaving?: number;
+    attachmentExtraHalfParts?: number;
+  };
+  requestedArbitrages?: Array<CompareTaxArbitrageId | "all">;
+};
+
+export type CompareTaxOptionAmount = {
+  label: string;
+  amount: number;
+  details: string;
+};
+
+export type CompareTaxComparisonResult = {
+  arbitrageId: CompareTaxArbitrageId;
+  optionA: CompareTaxOptionAmount;
+  optionB: CompareTaxOptionAmount;
+  difference: number;
+  recommendation: "option_a" | "option_b" | "neutral" | "insufficient_data";
+  hypotheses: string[];
+  missingData: string[];
+  warnings: string[];
+  sourceUrls: string[];
+};
+
+export type CompareTaxOptionsResult = {
+  comparisons: CompareTaxComparisonResult[];
+  globalWarnings: string[];
+  disclaimer: string;
+};

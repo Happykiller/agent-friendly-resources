@@ -2,7 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { JsonDbAdapter } from "../../../adapters/db/db.json.js";
 import { JsonQualifyToolRepository } from "../../../adapters/db/qualify-tool.repository.json.js";
-import { GuideFilingStepUseCase } from "./guide-filing-step.usecase.ts";
+import { GuideFilingStepUseCase } from "./guide-filing-step.usecase.js";
 
 function createUseCase() {
   const db = new JsonDbAdapter();

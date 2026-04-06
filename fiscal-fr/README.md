@@ -21,11 +21,14 @@ L'assistant couvre l'integralite du parcours de preparation:
 | Mode | Commande | Ce que ca fait |
 |------|----------|----------------|
 | `qualification` | "Lance le mode qualification" | Qualifie la situation fiscale, classe en simple/a surveiller/hors perimetre |
+| `arbitrages` | "Compare mes options fiscales" | Compare PFU vs bareme, frais reels vs 10%, micro-foncier vs reel, rattachement vs pension |
 | `justificatifs` | "Passe en mode justificatifs" | Liste les documents obligatoires, recommandes, manquants |
 | `vigilance` | "Detecte les points de vigilance" | Repere les incoherences, regimes a trancher, cas hors perimetre |
 | `predeclaration` | "Prepare une pre-declaration" | Produit un brouillon structure avec codes cases et origines tracees |
 | `estimation` | "Estime mon impot" | Estimation indicative IR 2026 (bareme progressif, quotient familial, decote, reductions/credits) |
 | `copilote` | "Guide-moi ecran par ecran" | Copilote de saisie sur impots.gouv.fr, etape par etape |
+
+Sequence recommandee: `qualification -> arbitrages -> justificatifs -> vigilance -> predeclaration -> estimation -> copilote`.
 
 ## Perimetres couverts
 
@@ -50,7 +53,7 @@ Prises en charge: dons (`donations`), frais de garde (`childcare`), emploi a dom
 - Quotient familial avec plafonnement (1 807 €/demi-part, 4 262 € parent isole).
 - Abattements: salaires 10%, pensions 10%, micro-foncier 30%, dividendes 40%, micro-entrepreneur (BIC 71%/50%, BNC 34%).
 - Decote (celibataire et couple).
-- PFU 31,4% sur revenus du capital hors option bareme.
+- PFU sur revenus du capital hors option bareme : 30% (12,8% IR + 17,2% PS) pour revenus percus en 2025, puis 31,4% (12,8% IR + 18,6% PS) a partir de 2026 selon type de revenu.
 - Reductions dons 66%/75% Coluche (plafond 2 000 € depuis 14/10/2025).
 - Credits garde enfant (50%, plaf. 3 500 €/enfant) et emploi domicile (50%, plaf. 12 000 €+).
 - CEHR/CDHR (3% et 4% selon seuils).
