@@ -4,5 +4,13 @@
   "version": "0.1.0",
   "author": {
     "name": "Fabrice"
-  }
+  },
+  "keywords": [
+    "fiscal",
+    "france",
+    "declaration",
+    "impot",
+    "mcp",
+    "assistant"
+  ]
 }

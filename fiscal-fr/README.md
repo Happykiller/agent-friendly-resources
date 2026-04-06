@@ -85,13 +85,27 @@ cd fiscal-fr
 npm ci --prefix mcp-server
 ```
 
-3. Lancer Claude Code depuis le dossier du plugin
+3. Lancer Claude Code en chargeant explicitement le plugin
 
 ```bash
-claude
+claude --plugin-dir .
 ```
 
-Le fichier `.mcp.json` presente a la racine demarre le serveur MCP automatiquement.
+Le fichier `.mcp.json` present a la racine demarre le serveur MCP automatiquement.
+
+Si Claude est deja ouvert, rechargez ensuite les plugins :
+
+```text
+/reload-plugins
+```
+
+Verification rapide dans Claude Code :
+
+```text
+/help
+```
+
+Le skill doit apparaitre avec son namespace plugin (exemple : `/fiscal-fr:assistant-fiscal`).
 
 ### Demarrage manuel du serveur (si besoin)
 
@@ -127,9 +141,35 @@ L'assistant propose ensuite les etapes dans l'ordre:
 5. Estimation indicative de l'impot
 6. Copilote de saisie sur impots.gouv.fr
 
+### Commandes slash du plugin
+
+Une fois le plugin charge, vous pouvez aussi utiliser:
+
+```text
+/fiscal-fr:help
+/fiscal-fr:start [mode]
+/fiscal-fr:infos
+/fiscal-fr:assistant-fiscal [mode]
+```
+
+Modes: `qualification`, `justificatifs`, `vigilance`, `predeclaration`, `estimation`, `copilote`.
+
+Si les commandes n'apparaissent pas tout de suite:
+
+```text
+/reload-plugins
+/help
+```
+
 ## Commandes utiles
 
 ```bash
+# Lancer Claude en chargeant explicitement le plugin (depuis fiscal-fr)
+claude --plugin-dir .
+
+# Lancer depuis le dossier parent
+claude --plugin-dir ./fiscal-fr
+
 # Installer les dependances
 npm ci --prefix mcp-server
 
