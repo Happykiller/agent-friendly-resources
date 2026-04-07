@@ -25,6 +25,30 @@ npm run dev --prefix mcp-server
 
 Ce mode est celui attendu par Claude Code quand le plugin est charge.
 
+### Logs serveur (fichier)
+
+Le serveur peut ecrire ses logs dans un fichier via variables d'environnement:
+
+- `MCP_LOG_FILE` : chemin du fichier de logs (defaut `./logs/mcp-server.log`)
+- `MCP_LOG_LEVEL` : niveau minimum (`debug`, `info`, `warn`, `error`), defaut `info`
+- `MCP_LOG_STDERR` : `true|false` pour garder/couper la sortie sur stderr, defaut `true`
+- `MCP_LOG_ROTATE_DAILY` : `true|false` pour rotation quotidienne, defaut `true`
+- `MCP_ACCOUNT_HEADER` : header HTTP principal pour identifier le compte appelant, defaut `x-user-account`
+- `MCP_STDIO_ACCOUNT` : identifiant compte a afficher en mode stdio, defaut `stdio`
+
+Quand la rotation quotidienne est active, le logger ecrit dans un fichier date:
+
+- `./logs/mcp-server.log` devient `./logs/mcp-server-YYYY-MM-DD.log`
+- si `MCP_LOG_FILE` contient `{date}`, le placeholder est remplace (ex: `./logs/mcp-{date}.log`)
+
+Pour chaque sollicitation MCP, les logs incluent `requesterAccount`. En HTTP, le serveur tente de le resoudre depuis les headers (`MCP_ACCOUNT_HEADER`, puis fallbacks usuels) ou depuis un JWT Bearer si present.
+
+Exemple:
+
+```bash
+MCP_LOG_FILE=./logs/mcp-server.log MCP_LOG_LEVEL=info npm run dev --prefix mcp-server
+```
+
 ### Mode HTTP (test manuel)
 
 ```bash

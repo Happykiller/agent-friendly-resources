@@ -91,7 +91,7 @@ npm ci --prefix mcp-server
 3. Lancer Claude Code en chargeant explicitement le plugin
 
 ```bash
-claude --plugin-dir .
+claude --plugin-dir ./fiscal-fr
 ```
 
 Le fichier `.mcp.json` present a la racine demarre le serveur MCP automatiquement.

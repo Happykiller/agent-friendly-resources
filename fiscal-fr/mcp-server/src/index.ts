@@ -14,13 +14,49 @@ import { BuildPreDeclarationUseCase } from "./usecases/domains/qualify-tool/buil
 import { EstimateImpactUseCase } from "./usecases/domains/qualify-tool/estimate-impact.usecase.js";
 import { GuideFilingStepUseCase } from "./usecases/domains/qualify-tool/guide-filing-step.usecase.js";
 import { CompareTaxOptionsUseCase } from "./usecases/domains/qualify-tool/compare-tax-options.usecase.js";
+import { createLoggerFromEnv } from "./logger.js";
+import { extractRequesterAccount } from "./requester-account.js";
 
 const SERVER_INFO = {
   name: "fiscal-fr-mcp",
   version: "0.1.0",
 } as const;
 
-function createMcpServer() {
+const logger = createLoggerFromEnv();
+
+type RequestContext = {
+  requesterAccount: string;
+  transport: "http" | "stdio";
+};
+
+function extractDebugMetaFromRequest(request: unknown): Record<string, unknown> {
+  if (!request || typeof request !== "object") {
+    return {};
+  }
+
+  const requestRecord = request as Record<string, unknown>;
+  const params = requestRecord.params;
+  if (!params || typeof params !== "object") {
+    return {};
+  }
+
+  const paramsRecord = params as Record<string, unknown>;
+  const meta = paramsRecord._meta;
+
+  if (!meta || typeof meta !== "object") {
+    return {};
+  }
+
+  return { requestMeta: meta };
+}
+
+function createMcpServer(context: RequestContext) {
+  const withRequestMeta = (meta?: Record<string, unknown>) => ({
+    requesterAccount: context.requesterAccount,
+    transport: context.transport,
+    ...meta,
+  });
+
   const server = new Server(
     SERVER_INFO,
     {
@@ -52,7 +88,12 @@ function createMcpServer() {
     TYPES.CompareTaxOptionsUseCase
   );
 
-  server.setRequestHandler(ListToolsRequestSchema, async () => {
+  server.setRequestHandler(ListToolsRequestSchema, async (request) => {
+    logger.info("MCP list tools request received", withRequestMeta());
+    logger.debug(
+      "MCP list tools request meta",
+      withRequestMeta(extractDebugMetaFromRequest(request))
+    );
     return {
       tools: [
         {
@@ -102,10 +143,27 @@ function createMcpServer() {
   });
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
+    logger.info("MCP tool call request received", {
+      ...withRequestMeta(),
+      tool: request.params.name,
+    });
+    logger.debug(
+      "MCP tool call request meta",
+      withRequestMeta({
+        tool: request.params.name,
+        ...extractDebugMetaFromRequest(request),
+      })
+    );
+
     if (request.params.name === "qualify_tax_profile") {
+      logger.debug("Validating tool input", withRequestMeta({ tool: "qualify_tax_profile" }));
       const parsed = qualifyTaxProfileUseCase.validateInput(request.params.arguments);
 
       if (!parsed.success) {
+        logger.debug(
+          "Tool input validation failed",
+          withRequestMeta({ tool: "qualify_tax_profile" })
+        );
         return {
           content: [
             {
@@ -124,7 +182,14 @@ function createMcpServer() {
         };
       }
 
+      const startedAt = Date.now();
+      logger.debug("Executing tool", withRequestMeta({ tool: "qualify_tax_profile" }));
       const result = qualifyTaxProfileUseCase.execute(parsed.data);
+      logger.debug("Tool execution completed", {
+        ...withRequestMeta(),
+        tool: "qualify_tax_profile",
+        durationMs: Date.now() - startedAt,
+      });
 
       return {
         content: [
@@ -137,9 +202,17 @@ function createMcpServer() {
     }
 
     if (request.params.name === "list_supporting_documents") {
+      logger.debug(
+        "Validating tool input",
+        withRequestMeta({ tool: "list_supporting_documents" })
+      );
       const parsed = listSupportingDocumentsUseCase.validateInput(request.params.arguments);
 
       if (!parsed.success) {
+        logger.debug(
+          "Tool input validation failed",
+          withRequestMeta({ tool: "list_supporting_documents" })
+        );
         return {
           content: [
             {
@@ -158,7 +231,14 @@ function createMcpServer() {
         };
       }
 
+      const startedAt = Date.now();
+      logger.debug("Executing tool", withRequestMeta({ tool: "list_supporting_documents" }));
       const result = listSupportingDocumentsUseCase.execute(parsed.data);
+      logger.debug("Tool execution completed", {
+        ...withRequestMeta(),
+        tool: "list_supporting_documents",
+        durationMs: Date.now() - startedAt,
+      });
 
       return {
         content: [
@@ -171,9 +251,14 @@ function createMcpServer() {
     }
 
     if (request.params.name === "detect_review_points") {
+      logger.debug("Validating tool input", withRequestMeta({ tool: "detect_review_points" }));
       const parsed = detectReviewPointsUseCase.validateInput(request.params.arguments);
 
       if (!parsed.success) {
+        logger.debug(
+          "Tool input validation failed",
+          withRequestMeta({ tool: "detect_review_points" })
+        );
         return {
           content: [
             {
@@ -192,7 +277,14 @@ function createMcpServer() {
         };
       }
 
+      const startedAt = Date.now();
+      logger.debug("Executing tool", withRequestMeta({ tool: "detect_review_points" }));
       const result = detectReviewPointsUseCase.execute(parsed.data);
+      logger.debug("Tool execution completed", {
+        ...withRequestMeta(),
+        tool: "detect_review_points",
+        durationMs: Date.now() - startedAt,
+      });
 
       return {
         content: [
@@ -205,9 +297,14 @@ function createMcpServer() {
     }
 
     if (request.params.name === "build_pre_declaration") {
+      logger.debug("Validating tool input", withRequestMeta({ tool: "build_pre_declaration" }));
       const parsed = buildPreDeclarationUseCase.validateInput(request.params.arguments);
 
       if (!parsed.success) {
+        logger.debug(
+          "Tool input validation failed",
+          withRequestMeta({ tool: "build_pre_declaration" })
+        );
         return {
           content: [
             {
@@ -226,7 +323,14 @@ function createMcpServer() {
         };
       }
 
+      const startedAt = Date.now();
+      logger.debug("Executing tool", withRequestMeta({ tool: "build_pre_declaration" }));
       const result = buildPreDeclarationUseCase.execute(parsed.data);
+      logger.debug("Tool execution completed", {
+        ...withRequestMeta(),
+        tool: "build_pre_declaration",
+        durationMs: Date.now() - startedAt,
+      });
 
       return {
         content: [
@@ -239,9 +343,14 @@ function createMcpServer() {
     }
 
     if (request.params.name === "estimate_impact") {
+      logger.debug("Validating tool input", withRequestMeta({ tool: "estimate_impact" }));
       const parsed = estimateImpactUseCase.validateInput(request.params.arguments);
 
       if (!parsed.success) {
+        logger.debug(
+          "Tool input validation failed",
+          withRequestMeta({ tool: "estimate_impact" })
+        );
         return {
           content: [
             {
@@ -260,7 +369,14 @@ function createMcpServer() {
         };
       }
 
+      const startedAt = Date.now();
+      logger.debug("Executing tool", withRequestMeta({ tool: "estimate_impact" }));
       const result = estimateImpactUseCase.execute(parsed.data);
+      logger.debug("Tool execution completed", {
+        ...withRequestMeta(),
+        tool: "estimate_impact",
+        durationMs: Date.now() - startedAt,
+      });
 
       return {
         content: [
@@ -273,9 +389,14 @@ function createMcpServer() {
     }
 
     if (request.params.name === "guide_filing_step") {
+      logger.debug("Validating tool input", withRequestMeta({ tool: "guide_filing_step" }));
       const parsed = guideFilingStepUseCase.validateInput(request.params.arguments);
 
       if (!parsed.success) {
+        logger.debug(
+          "Tool input validation failed",
+          withRequestMeta({ tool: "guide_filing_step" })
+        );
         return {
           content: [
             {
@@ -295,7 +416,14 @@ function createMcpServer() {
       }
 
       try {
+        const startedAt = Date.now();
+        logger.debug("Executing tool", withRequestMeta({ tool: "guide_filing_step" }));
         const result = guideFilingStepUseCase.execute(parsed.data);
+        logger.debug("Tool execution completed", {
+          ...withRequestMeta(),
+          tool: "guide_filing_step",
+          durationMs: Date.now() - startedAt,
+        });
         return {
           content: [
             {
@@ -305,6 +433,11 @@ function createMcpServer() {
           ],
         };
       } catch (err) {
+        logger.warn("Tool execution failed", {
+          ...withRequestMeta(),
+          tool: "guide_filing_step",
+          error: err instanceof Error ? err.message : String(err),
+        });
         return {
           content: [
             {
@@ -325,9 +458,14 @@ function createMcpServer() {
     }
 
     if (request.params.name === "compare_tax_options") {
+      logger.debug("Validating tool input", withRequestMeta({ tool: "compare_tax_options" }));
       const parsed = compareTaxOptionsUseCase.validateInput(request.params.arguments);
 
       if (!parsed.success) {
+        logger.debug(
+          "Tool input validation failed",
+          withRequestMeta({ tool: "compare_tax_options" })
+        );
         return {
           content: [
             {
@@ -346,7 +484,14 @@ function createMcpServer() {
         };
       }
 
+      const startedAt = Date.now();
+      logger.debug("Executing tool", withRequestMeta({ tool: "compare_tax_options" }));
       const result = compareTaxOptionsUseCase.execute(parsed.data);
+      logger.debug("Tool execution completed", {
+        ...withRequestMeta(),
+        tool: "compare_tax_options",
+        durationMs: Date.now() - startedAt,
+      });
 
       return {
         content: [
@@ -358,6 +503,10 @@ function createMcpServer() {
       };
     }
 
+    logger.warn("Unknown MCP tool requested", {
+      ...withRequestMeta(),
+      tool: request.params.name,
+    });
     return {
       content: [
         {
@@ -373,9 +522,11 @@ function createMcpServer() {
 }
 
 async function startStdioServer() {
-  const server = createMcpServer();
+  const requesterAccount = process.env.MCP_STDIO_ACCOUNT?.trim() || "stdio";
+  const server = createMcpServer({ requesterAccount, transport: "stdio" });
   const transport = new StdioServerTransport();
   await server.connect(transport);
+  logger.info("STDIO MCP server ready", { requesterAccount, transport: "stdio" });
 }
 
 async function startHttpServer() {
@@ -383,7 +534,14 @@ async function startHttpServer() {
   const port = Number.parseInt(process.env.MCP_PORT ?? "3333", 10);
 
   app.post("/mcp", async (req: any, res: any) => {
-    const server = createMcpServer();
+    const requesterAccount = extractRequesterAccount(req);
+    logger.info("HTTP MCP request received", {
+      method: req.method,
+      path: req.path,
+      requesterAccount,
+      transport: "http",
+    });
+    const server = createMcpServer({ requesterAccount, transport: "http" });
 
     try {
       const transport = new StreamableHTTPServerTransport({
@@ -398,7 +556,11 @@ async function startHttpServer() {
         server.close();
       });
     } catch (error) {
-      console.error("Error handling MCP HTTP request:", error);
+      logger.error("Error handling MCP HTTP request", {
+        error: error instanceof Error ? error.message : String(error),
+        requesterAccount,
+        transport: "http",
+      });
 
       if (!res.headersSent) {
         res.status(500).json({
@@ -437,18 +599,24 @@ async function startHttpServer() {
 
   app.listen(port, (error?: Error) => {
     if (error) {
-      console.error("Failed to start MCP HTTP server:", error);
+      logger.error("Failed to start MCP HTTP server", {
+        error: error instanceof Error ? error.message : String(error),
+      });
       process.exit(1);
     }
 
-    console.log(`fiscal-fr-mcp listening on http://localhost:${port}/mcp`);
+    logger.info("HTTP MCP server started", {
+      endpoint: `http://localhost:${port}/mcp`,
+    });
   });
 }
 
 const transportMode = (process.env.MCP_TRANSPORT ?? "stdio").toLowerCase();
 
 if (transportMode === "http") {
+  logger.info("Starting MCP server", { transport: "http" });
   await startHttpServer();
 } else {
+  logger.info("Starting MCP server", { transport: "stdio" });
   await startStdioServer();
 }

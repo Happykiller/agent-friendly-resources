@@ -1,11 +1,16 @@
 {
   "mcpServers": {
     "fiscal-fr-local": {
-      "command": "bash",
+      "command": "node",
       "args": [
-        "-lc",
-        "if [ -f \"$PWD/mcp-server/package.json\" ]; then npm run dev --prefix \"$PWD/mcp-server\"; else npm run dev --prefix \"$PWD/fiscal-fr/mcp-server\"; fi"
-      ]
+        "-e",
+        "require(require('path').join(process.cwd(), 'fiscal-fr', 'start-mcp.js'))"
+      ],
+      "env": {
+        "MCP_PROFILE": "debug",
+        "MCP_LOG_FILE": "./logs/mcp-server-{date}.log",
+        "MCP_LOG_STDERR": "true"
+      }
     }
   }
 }
