@@ -1,16 +1,7 @@
 {
   "mcpServers": {
     "fiscal-fr-local": {
-      "command": "node",
-      "args": [
-        "-e",
-        "require(require('path').join(process.cwd(), 'fiscal-fr', 'start-mcp.js'))"
-      ],
-      "env": {
-        "MCP_PROFILE": "debug",
-        "MCP_LOG_FILE": "./logs/mcp-server-{date}.log",
-        "MCP_LOG_STDERR": "true"
-      }
+      "url": "http://localhost:3333/mcp"
     }
   }
 }
