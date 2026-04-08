@@ -2,6 +2,8 @@
 
 **Prerequis** : Node.js 20+, npm, Claude Code installe.
 
+Voir aussi : [Demarrage — Claude.ai web](./START_CLAUDE_WEB.md)
+
 ## 1. Recuperer le plugin et installer les dependances
 
 ```bash
@@ -15,7 +17,9 @@ npm ci --prefix fiscal-fr/mcp-server
 claude --plugin-dir ./fiscal-fr
 ```
 
-Le fichier `.mcp.json` present a la racine demarre le serveur MCP automatiquement en mode stdio.
+Commande a lancer depuis le dossier parent de `fiscal-fr`.
+
+Le fichier `.mcp.json` present a la racine configure automatiquement le connecteur MCP HTTP (`https://kalifa.happykiller.net/mcp`).
 
 ## 3. Verifier que le plugin est charge
 
@@ -24,6 +28,12 @@ Le fichier `.mcp.json` present a la racine demarre le serveur MCP automatiquemen
 ```
 
 Le skill doit apparaitre : `/fiscal-fr:assistant-fiscal`.
+
+Verification optionnelle du connecteur MCP :
+
+```text
+/mcp
+```
 
 Si les commandes n'apparaissent pas :
 
@@ -52,7 +62,9 @@ Je suis celibataire, salarie. Aide-moi a preparer ma declaration.
 /fiscal-fr:infos
 ```
 
-Modes : `qualification`, `arbitrages`, `justificatifs`, `vigilance`, `predeclaration`, `estimation`, `copilote`.
+Modes de `/fiscal-fr:assistant-fiscal` : `qualification`, `arbitrages`, `justificatifs`, `vigilance`, `predeclaration`, `estimation`, `copilote`.
+
+Modes de `/fiscal-fr:start` : `qualification`, `justificatifs`, `vigilance`, `predeclaration`, `estimation`, `copilote`.
 
 ## Commandes de developpement
 
