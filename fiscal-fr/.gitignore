@@ -6,3 +6,4 @@ dist/
 CODEX.md
 GEMINI.md
 CLAUDE.md
+mcp-server/.env
