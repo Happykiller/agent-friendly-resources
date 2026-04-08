@@ -2,39 +2,48 @@
 
 Ouvrir Claude : [https://claude.ai](https://claude.ai).
 
-## 1. Installer la competence (skill)
+## 1. Recuperer le fichier des competences
 
-Ouvrir les parametres Claude (**Parametres → Personnalisation → Importer une competence**) et deposer le fichier :
+Au prealable, recuperer le fichier zip des competences :
 
 [`delivery/fisk-assistant_1.0.0.zip`](../delivery/fisk-assistant_1.0.0.zip)
 
-La competence `fisk-assistant` apparait dans la liste des competences actives.
+## 2. Importer la competence
 
-## 2. Ajouter le connecteur MCP
+- Dans le menu de gauche, cliquer sur `Personaliser`.
+- Ouvrir le sous-menu `Competences`.
+- Cliquer sur `+`, puis `Creer une competence`, puis `Televerser une competence`.
+- Dans la fenetre qui s'ouvre, selectionner le fichier zip des competences telecharge au prealable.
 
-Ouvrir les parametres Claude (**Parametres → Integrations → Ajouter une integration**) et saisir :
+La competence `fisk-assistant` apparait alors dans la liste des competences.
+
+## 3. Ajouter le connecteur MCP
+
+- Retourner dans le menu de gauche sur `Connecteurs`.
+- Cliquer sur `+`, puis `Ajouter un connecteur personnalise`.
+- Indiquer un nom (par exemple `Assistant Fiscal`).
+- Indiquer l'URL MCP :
 
 ```
 https://kalifa.happykiller.net/mcp
 ```
 
-## 3. Autoriser l'acces
+- Dans la liste des connecteurs, choisir `Assistant Fiscal`.
+- Cliquer sur `Se connecter` : cela ouvre la page d'authentification de l'assistant fiscal.
 
-Claude.ai redirige vers la page de connexion. Entrer les identifiants du compte et autoriser l'acces.
+## 4. S'authentifier
 
-Si vous n'avez pas encore de compte, rapprochez-vous de l'admin pour obtenir un compte et les acces.
+- Utiliser l'identifiant et le mot de passe fournis par l'administrateur (Fabrice).
+- Valider avec `Autoriser`.
+- En cas de succes, retour automatique sur Claude.ai.
 
-## 4. Demarrer l'assistant
+Tout est pret. Vous pouvez demarrer l'assistant fiscal dans une nouvelle conversation.
 
-Dans n'importe quelle conversation, vous pouvez taper `/`, puis `fiscal-fr`, pour demarrer rapidement si le skill apparait dans les suggestions.
-
-Sinon, demander directement en langage naturel :
+Exemple :
 
 ```
 Je suis celibataire, salarie. Aide-moi a preparer ma declaration.
 ```
-
-L'assistant utilise automatiquement les outils MCP disponibles et propose les etapes dans l'ordre recommande.
 
 ## Exemples de demarrage
 

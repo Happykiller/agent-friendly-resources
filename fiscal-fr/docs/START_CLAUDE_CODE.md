@@ -1,10 +1,13 @@
 # Demarrage — Claude Code (CLI / desktop)
 
-**Prerequis** : Claude Code installe et plugin `fiscal-fr` disponible en local.
+## 1. Ouvrir le dossier du plugin
 
-## 1. Configurer le token MCP (obligatoire)
+- Ouvrir votre dossier local qui contient `fiscal-fr`.
+- Ouvrir le fichier `fiscal-fr/.mcp.json`.
 
-Ouvrir le fichier `fiscal-fr/.mcp.json` et remplacer uniquement `change-me` par votre token :
+## 2. Renseigner votre token (obligatoire)
+
+Dans `fiscal-fr/.mcp.json`, remplacer uniquement `change-me` par votre token :
 
 ```json
 "Authorization": "Bearer <votre-token>"
@@ -17,17 +20,17 @@ Comment obtenir le token :
 
 Ne modifiez pas l'URL MCP si elle est deja renseignee (`https://kalifa.happykiller.net/mcp`).
 
-## 2. Lancer Claude Code avec le plugin
+## 3. Lancer Claude Code
+
+- Ouvrir un terminal.
+- Se placer dans le dossier parent de `fiscal-fr`.
+- Executer :
 
 ```bash
 claude --plugin-dir ./fiscal-fr
 ```
 
-Commande a lancer depuis le dossier parent de `fiscal-fr`.
-
-Le fichier `.mcp.json` present a la racine configure le connecteur MCP HTTP.
-
-## 3. Verifier que le plugin est charge
+## 4. Verifier que le plugin est actif
 
 ```text
 /help
@@ -35,7 +38,7 @@ Le fichier `.mcp.json` present a la racine configure le connecteur MCP HTTP.
 
 Le skill doit apparaitre : `/fiscal-fr:assistant-fiscal`.
 
-Verification optionnelle du connecteur MCP :
+Verification du connecteur MCP :
 
 ```text
 /mcp
@@ -47,7 +50,7 @@ Si les commandes n'apparaissent pas :
 /reload-plugins
 ```
 
-## 4. Demarrer l'assistant
+## 5. Demarrer l'assistant fiscal
 
 ```text
 /fiscal-fr:assistant-fiscal
@@ -59,7 +62,7 @@ Ou directement en langage naturel :
 Je suis celibataire, salarie. Aide-moi a preparer ma declaration.
 ```
 
-## Commandes disponibles
+## Commandes utiles
 
 ```text
 /fiscal-fr:assistant-fiscal [mode]
@@ -67,10 +70,6 @@ Je suis celibataire, salarie. Aide-moi a preparer ma declaration.
 /fiscal-fr:help
 /fiscal-fr:infos
 ```
-
-Modes de `/fiscal-fr:assistant-fiscal` : `qualification`, `arbitrages`, `justificatifs`, `vigilance`, `predeclaration`, `estimation`, `copilote`.
-
-Modes de `/fiscal-fr:start` : `qualification`, `justificatifs`, `vigilance`, `predeclaration`, `estimation`, `copilote`.
 
 ## Note developpement
 
