@@ -1,0 +1,9 @@
+{
+  "users": [
+    {
+      "id": "fabrice",
+      "email": "fabrice@example.com",
+      "passwordHash": "07ccfc0f9253fa85f9b4ca6e0b13dbd5:73f82f927560992da37f212ce6cdab438a553c190afef16c31f9326a40f3cd85ed35d179c666838bc00f75bda05f148bbd90ae6dff72081e8be1fcbe9d1e92d0"
+    }
+  ]
+}

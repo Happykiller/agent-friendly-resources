@@ -1,0 +1,60 @@
+### fiscal-fr MCP server — OAuth 2.0 flow
+### Prerequisite: run `npm run dev:http` in `mcp-server/`
+
+@baseUrl = http://localhost:3333
+
+# PKCE pair pre-générée pour les tests (regenerer avec le script ci-dessous si besoin)
+# node -e "const {randomBytes,createHash}=require('crypto');const v=randomBytes(32).toString('base64url');console.log('verifier:',v,'challenge:',createHash('sha256').update(v).digest('base64url'))"
+@code_verifier = 0rgAu7LHc4BgQxcwSzJkoym3P_lMooj2-CfPuKc9QUo
+@code_challenge = oy0TKznOLzD8yttHHEAhasDHtUZJZLUoj9J5zmXp9mY
+
+### 1. Métadonnées du serveur OAuth (RFC 8414)
+GET {{baseUrl}}/.well-known/oauth-authorization-server
+Accept: application/json
+
+###
+
+### 2. Ouvrir dans le navigateur pour s'authentifier et récupérer le code
+### User dev : fabrice@example.com / demo123
+### URL : http://localhost:3333/oauth/authorize?client_id=test&redirect_uri=http://localhost/cb&code_challenge=oy0TKznOLzD8yttHHEAhasDHtUZJZLUoj9J5zmXp9mY&code_challenge_method=S256&scope=mcp:tools
+### Après login, le navigateur redirige vers : http://localhost/cb?code=<CODE>
+### Copier le <CODE> dans la variable @auth_code ci-dessous
+
+@auth_code = eb502cd7cd760fec0ce5226d9e36d30b217111bd6bc1f24fe624d5ba855f6ab2
+
+### 3. Échanger le code contre un access token (JWT)
+POST {{baseUrl}}/oauth/token
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&code={{auth_code}}&redirect_uri=http://localhost/cb&code_verifier={{code_verifier}}
+
+###
+
+### 4. (Optionnel) Tester le MCP avec le JWT obtenu à l'étape 3
+### Remplacer Bearer <JWT> par le access_token reçu
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJmYWJyaWNlQGV4YW1wbGUuY29tIiwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDozMzMzIiwiaWF0IjoxNzc1NjQxNzYyLCJleHAiOjE3NzU3MjgxNjJ9.Vv2vDMzfaoWH8VNX1QnqlEuCwIQLGGZOmFB-qhgliRY
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": {}
+}
+
+###
+
+### 5. (Raccourci dev) MCP avec API key statique
+POST {{baseUrl}}/mcp
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Authorization: Bearer sk-dev-local
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": {}
+}

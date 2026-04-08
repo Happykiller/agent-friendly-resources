@@ -14,8 +14,10 @@ import { BuildPreDeclarationUseCase } from "./usecases/domains/qualify-tool/buil
 import { EstimateImpactUseCase } from "./usecases/domains/qualify-tool/estimate-impact.usecase.js";
 import { GuideFilingStepUseCase } from "./usecases/domains/qualify-tool/guide-filing-step.usecase.js";
 import { CompareTaxOptionsUseCase } from "./usecases/domains/qualify-tool/compare-tax-options.usecase.js";
+import express from "express";
 import { createLoggerFromEnv } from "./logger.js";
-import { extractRequesterAccount } from "./requester-account.js";
+import { authMiddleware } from "./auth/auth.middleware.js";
+import { createOAuthRouter } from "./auth/oauth.router.js";
 
 const SERVER_INFO = {
   name: "fiscal-fr-mcp",
@@ -533,11 +535,22 @@ async function startHttpServer() {
   const app = createMcpExpressApp();
   const port = Number.parseInt(process.env.MCP_PORT ?? "3333", 10);
 
-  app.post("/mcp", async (req: any, res: any) => {
-    const requesterAccount = extractRequesterAccount(req);
+  // Body parsers (needed for OAuth form POST and token endpoint)
+  app.use(express.urlencoded({ extended: false }));
+
+  // OAuth endpoints (no auth required)
+  app.use(createOAuthRouter());
+
+  app.post("/mcp", authMiddleware, async (req: any, res: any) => {
+    const requesterAccount = (res.locals.requesterAccount as string) ?? "unknown";
     logger.info("HTTP MCP request received", {
       method: req.method,
       path: req.path,
+      requesterAccount,
+      transport: "http",
+    });
+    logger.debug("HTTP MCP request headers", {
+      headers: req.headers,
       requesterAccount,
       transport: "http",
     });

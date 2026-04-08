@@ -1,0 +1,16 @@
+services:
+  kalifa:
+    image: fiscal-fr-mcp:${VERSION:-1.0.0}
+    container_name: kalifa
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "3333:3333"
+    volumes:
+      - ./logs:/app/logs
+    networks:
+      - interservices
+
+networks:
+  interservices:
+    external: true
