@@ -1,15 +1,21 @@
 # Demarrage — Claude Code (CLI / desktop)
 
-**Prerequis** : Node.js 20+, npm, Claude Code installe.
+**Prerequis** : Claude Code installe et plugin `fiscal-fr` disponible en local.
 
-Voir aussi : [Demarrage — Claude.ai web](./START_CLAUDE_WEB.md)
+## 1. Configurer le token MCP (obligatoire)
 
-## 1. Recuperer le plugin et installer les dependances
+Ouvrir le fichier `fiscal-fr/.mcp.json` et remplacer uniquement `change-me` par votre token :
 
-```bash
-git clone <url-du-repo>
-npm ci --prefix fiscal-fr/mcp-server
+```json
+"Authorization": "Bearer <votre-token>"
 ```
+
+Comment obtenir le token :
+
+- Si vous n'avez pas de compte, rapprochez-vous de l'admin pour obtenir un compte et un token personnel.
+- Si vous avez deja un compte, demander a l'admin la generation (ou regeneration) de votre token d'acces MCP.
+
+Ne modifiez pas l'URL MCP si elle est deja renseignee (`https://kalifa.happykiller.net/mcp`).
 
 ## 2. Lancer Claude Code avec le plugin
 
@@ -19,7 +25,7 @@ claude --plugin-dir ./fiscal-fr
 
 Commande a lancer depuis le dossier parent de `fiscal-fr`.
 
-Le fichier `.mcp.json` present a la racine configure automatiquement le connecteur MCP HTTP (`https://kalifa.happykiller.net/mcp`).
+Le fichier `.mcp.json` present a la racine configure le connecteur MCP HTTP.
 
 ## 3. Verifier que le plugin est charge
 
@@ -66,21 +72,6 @@ Modes de `/fiscal-fr:assistant-fiscal` : `qualification`, `arbitrages`, `justifi
 
 Modes de `/fiscal-fr:start` : `qualification`, `justificatifs`, `vigilance`, `predeclaration`, `estimation`, `copilote`.
 
-## Commandes de developpement
+## Note developpement
 
-```bash
-# Installer les dependances
-npm ci --prefix mcp-server
-
-# Lancer en mode dev stdio
-npm run dev --prefix mcp-server
-
-# Lancer en mode dev HTTP
-npm run dev:http --prefix mcp-server
-
-# Compiler
-npm run build --prefix mcp-server
-
-# Tests
-npm test --prefix mcp-server
-```
+Les commandes de developpement (install, dev, build, tests) restent documentees dans le [README general](../README.md).

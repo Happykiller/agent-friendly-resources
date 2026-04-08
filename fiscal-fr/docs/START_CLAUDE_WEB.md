@@ -2,11 +2,9 @@
 
 **Prerequis** : un compte Claude.ai (Pro ou Team).
 
-Voir aussi : [Demarrage — Claude Code (CLI / desktop)](./START_CLAUDE_CODE.md)
-
 ## 1. Installer la competence (skill)
 
-Ouvrir les parametres Claude (**Settings → Personalization → Import skill**) et deposer le fichier :
+Ouvrir les parametres Claude (**Parametres → Personnalisation → Importer une competence**) et deposer le fichier :
 
 [`delivery/fisk-assistant_1.0.0.zip`](../delivery/fisk-assistant_1.0.0.zip)
 
@@ -14,7 +12,7 @@ La competence `fisk-assistant` apparait dans la liste des competences actives.
 
 ## 2. Ajouter le connecteur MCP
 
-Ouvrir les parametres Claude (**Settings → Integrations → Add integration**) et saisir :
+Ouvrir les parametres Claude (**Parametres → Integrations → Ajouter une integration**) et saisir :
 
 ```
 https://kalifa.happykiller.net/mcp
