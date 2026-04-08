@@ -1,6 +1,6 @@
 # Demarrage — Claude.ai web
 
-**Prerequis** : un compte Claude.ai (Pro ou Team).
+Ouvrir Claude sur `https://claude.ai`.
 
 ## 1. Installer la competence (skill)
 
