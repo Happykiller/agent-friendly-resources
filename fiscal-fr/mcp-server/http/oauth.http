@@ -15,7 +15,6 @@ Accept: application/json
 ###
 
 ### 2. Ouvrir dans le navigateur pour s'authentifier et récupérer le code
-### User dev : fabrice@example.com / demo123
 ### URL : http://localhost:3333/oauth/authorize?client_id=test&redirect_uri=http://localhost/cb&code_challenge=oy0TKznOLzD8yttHHEAhasDHtUZJZLUoj9J5zmXp9mY&code_challenge_method=S256&scope=mcp:tools
 ### Après login, le navigateur redirige vers : http://localhost/cb?code=<CODE>
 ### Copier le <CODE> dans la variable @auth_code ci-dessous

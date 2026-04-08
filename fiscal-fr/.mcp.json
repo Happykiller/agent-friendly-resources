@@ -2,9 +2,9 @@
   "mcpServers": {
     "fiscal-fr-local": {
       "type": "http",
-      "url": "http://localhost:3333/mcp",
+      "url": "https://kalifa.happykiller.net/mcp",
       "headers": {
-        "Authorization": "Bearer sk-dev-local"
+        "Authorization": "Bearer change-me"
       }
     }
   }

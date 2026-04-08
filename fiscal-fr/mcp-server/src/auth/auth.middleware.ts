@@ -17,7 +17,13 @@ export async function authMiddleware(
 
   const authHeader = req.headers.authorization;
 
+  const issuer = process.env.OAUTH_ISSUER?.replace(/\/$/, "") ?? `${req.protocol}://${req.get("host")}`;
+
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    res.setHeader(
+      "WWW-Authenticate",
+      `Bearer realm="${issuer}", resource_metadata="${issuer}/.well-known/oauth-protected-resource"`
+    );
     res.status(401).json({
       jsonrpc: "2.0",
       error: { code: -32001, message: "Unauthorized: missing Bearer token" },
@@ -46,6 +52,10 @@ export async function authMiddleware(
     return;
   }
 
+  res.setHeader(
+    "WWW-Authenticate",
+    `Bearer realm="${issuer}", error="invalid_token", resource_metadata="${issuer}/.well-known/oauth-protected-resource"`
+  );
   res.status(401).json({
     jsonrpc: "2.0",
     error: { code: -32001, message: "Unauthorized: invalid token" },

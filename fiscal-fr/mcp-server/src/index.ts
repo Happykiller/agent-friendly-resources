@@ -532,7 +532,10 @@ async function startStdioServer() {
 }
 
 async function startHttpServer() {
-  const app = createMcpExpressApp();
+  const allowedHosts = process.env.MCP_ALLOWED_HOSTS
+    ? process.env.MCP_ALLOWED_HOSTS.split(",").map((h) => h.trim()).filter(Boolean)
+    : undefined;
+  const app = createMcpExpressApp(allowedHosts ? { host: "0.0.0.0", allowedHosts } : {});
   const port = Number.parseInt(process.env.MCP_PORT ?? "3333", 10);
 
   // Body parsers (needed for OAuth form POST and token endpoint)
@@ -588,26 +591,31 @@ async function startHttpServer() {
     }
   });
 
-  app.get("/mcp", (_req: any, res: any) => {
-    res.status(405).json({
-      jsonrpc: "2.0",
-      error: {
-        code: -32000,
-        message: "Method not allowed.",
-      },
-      id: null,
-    });
+  app.get("/mcp", authMiddleware, async (req: any, res: any) => {
+    const requesterAccount = (res.locals.requesterAccount as string) ?? "unknown";
+    logger.info("HTTP MCP GET request received", { requesterAccount, transport: "http" });
+    const server = createMcpServer({ requesterAccount, transport: "http" });
+    try {
+      const transport = new StreamableHTTPServerTransport({ sessionIdGenerator: undefined });
+      await server.connect(transport);
+      await transport.handleRequest(req, res, req.body);
+      res.on("close", () => {
+        transport.close();
+        server.close();
+      });
+    } catch {
+      if (!res.headersSent) {
+        res.status(405).json({
+          jsonrpc: "2.0",
+          error: { code: -32000, message: "SSE not supported in stateless mode." },
+          id: null,
+        });
+      }
+    }
   });
 
-  app.delete("/mcp", (_req: any, res: any) => {
-    res.status(405).json({
-      jsonrpc: "2.0",
-      error: {
-        code: -32000,
-        message: "Method not allowed.",
-      },
-      id: null,
-    });
+  app.delete("/mcp", authMiddleware, (_req: any, res: any) => {
+    res.status(200).json({ message: "Session closed." });
   });
 
   app.listen(port, (error?: Error) => {

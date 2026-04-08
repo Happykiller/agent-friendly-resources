@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createHash } from "crypto";
+import { createHash, randomUUID } from "crypto";
 import {
   findUserByEmail,
   verifyPassword,
@@ -59,11 +59,48 @@ export function createOAuthRouter(): Router {
       issuer,
       authorization_endpoint: `${issuer}/oauth/authorize`,
       token_endpoint: `${issuer}/oauth/token`,
+      registration_endpoint: `${issuer}/oauth/register`,
       response_types_supported: ["code"],
       grant_types_supported: ["authorization_code"],
       code_challenge_methods_supported: ["S256"],
       scopes_supported: ["mcp:tools"],
       token_endpoint_auth_methods_supported: ["none"],
+    });
+  });
+
+  // RFC 7591 — Dynamic Client Registration
+  router.post("/oauth/register", (req, res) => {
+    const body = req.body as Record<string, unknown>;
+    const redirectUris = Array.isArray(body.redirect_uris) ? body.redirect_uris : [];
+    res.status(201).json({
+      client_id: randomUUID(),
+      client_id_issued_at: Math.floor(Date.now() / 1000),
+      redirect_uris: redirectUris,
+      grant_types: ["authorization_code"],
+      response_types: ["code"],
+      token_endpoint_auth_method: "none",
+      code_challenge_methods_supported: ["S256"],
+    });
+  });
+
+  // RFC 9728 — OAuth Protected Resource Metadata
+  router.get("/.well-known/oauth-protected-resource", (req, res) => {
+    const issuer = getIssuer(req as any);
+    res.json({
+      resource: `${issuer}/mcp`,
+      authorization_servers: [issuer],
+      bearer_methods_supported: ["header"],
+      scopes_supported: ["mcp:tools"],
+    });
+  });
+
+  router.get("/.well-known/oauth-protected-resource/mcp", (req, res) => {
+    const issuer = getIssuer(req as any);
+    res.json({
+      resource: `${issuer}/mcp`,
+      authorization_servers: [issuer],
+      bearer_methods_supported: ["header"],
+      scopes_supported: ["mcp:tools"],
     });
   });
 
