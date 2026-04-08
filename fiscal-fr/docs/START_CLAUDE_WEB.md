@@ -1,6 +1,6 @@
 # Demarrage — Claude.ai web
 
-Ouvrir Claude sur `https://claude.ai`.
+Ouvrir Claude : [https://claude.ai](https://claude.ai).
 
 ## 1. Installer la competence (skill)
 
