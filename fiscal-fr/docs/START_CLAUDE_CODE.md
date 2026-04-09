@@ -13,12 +13,40 @@ Dans `fiscal-fr/.mcp.json`, remplacer uniquement `change-me` par votre token :
 "Authorization": "Bearer <votre-token>"
 ```
 
-Comment obtenir le token :
+Comment obtenir le token — deux méthodes au choix :
+
+**Méthode A — Page web (recommandée)**
 
 1. Ouvrir dans un navigateur : `https://kalifa.happykiller.net/token-portal`
 2. Saisir votre email et mot de passe.
-3. Copier le token affiché (il est valable 365 jours — il ne sera plus affiché).
+3. Copier le token affiché (bouton "Copier le token").
 4. Coller ce token à la place de `change-me` dans `.mcp.json`.
+
+**Méthode B — Requête API (terminal / script)**
+
+```bash
+curl -s -X POST https://kalifa.happykiller.net/token-portal \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "email=vous@exemple.com&password=votre-mot-de-passe"
+```
+
+Réponse :
+
+```json
+{ "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." }
+```
+
+Extraire directement le token (nécessite `jq`) :
+
+```bash
+TOKEN=$(curl -s -X POST https://kalifa.happykiller.net/token-portal \
+  -H "Accept: application/json" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "email=vous@exemple.com&password=votre-mot-de-passe" | jq -r '.token')
+```
+
+Le token est valable 365 jours.
 
 > Si vous n'avez pas encore de compte, rapprochez-vous de l'admin.
 
