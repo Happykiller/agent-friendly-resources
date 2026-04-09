@@ -115,7 +115,7 @@ export function buildPortalHandlers() {
       return;
     }
 
-    const token = await signLongLivedToken(user.email);
+    const token = await signLongLivedToken(user.email, 365);
     const today = new Date().toISOString().slice(0, 10);
     writeApiKey({
       key: token,
