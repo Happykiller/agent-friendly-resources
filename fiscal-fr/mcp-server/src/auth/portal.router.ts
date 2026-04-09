@@ -2,6 +2,15 @@ import { Router } from "express";
 import { findUserByEmail, verifyPassword, writeApiKey } from "./auth.store.js";
 import { signLongLivedToken } from "./token.service.js";
 
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function getBaseUrl(req: { protocol: string; get: (h: string) => string | undefined }): string {
   return (
     process.env.OAUTH_ISSUER ?? `${req.protocol}://${req.get("host")}`
@@ -31,7 +40,7 @@ function renderForm(error?: string): string {
 <body>
   <h1>Fiscal FR</h1>
   <p>Connectez-vous pour générer votre token d'accès Claude Code.</p>
-  ${error ? `<div class="error">${error}</div>` : ""}
+  ${error ? `<div class="error">${escapeHtml(error)}</div>` : ""}
   <form method="POST" action="/token-portal">
     <label for="email">Email</label>
     <input type="email" id="email" name="email" required autofocus autocomplete="email">
