@@ -10,6 +10,7 @@ function makeRes() {
     _headers: {} as Record<string, string>,
     status(code: number) { this._status = code; return this; },
     send(body: string) { this._body = body; return this; },
+    json(body: unknown) { this._body = JSON.stringify(body); return this; },
     setHeader(k: string, v: string) { this._headers[k] = v; },
     redirect(url: string) { this._redirectUrl = url; },
   };

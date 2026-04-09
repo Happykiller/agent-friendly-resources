@@ -117,10 +117,17 @@ export function buildPortalHandlers() {
   async function handlePost(req: any, res: any): Promise<void> {
     const { email, password } = req.body as { email?: string; password?: string };
 
+    const wantsJson = (req.headers?.["accept"] as string | undefined)?.includes("application/json") ?? false;
+
     const user = findUserByEmail(email ?? "");
     if (!user || !verifyPassword(password ?? "", user.passwordHash)) {
-      res.setHeader("Content-Type", "text/html; charset=utf-8");
-      res.status(401).send(renderForm("Email ou mot de passe incorrect."));
+      if (wantsJson) {
+        res.setHeader("Content-Type", "application/json; charset=utf-8");
+        res.status(401).json({ error: "Email ou mot de passe incorrect." });
+      } else {
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        res.status(401).send(renderForm("Email ou mot de passe incorrect."));
+      }
       return;
     }
 
@@ -132,6 +139,12 @@ export function buildPortalHandlers() {
       label: `portal-${today}`,
       createdAt: today,
     });
+
+    if (wantsJson) {
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      res.status(200).json({ token });
+      return;
+    }
 
     const baseUrl = getBaseUrl(req);
     res.setHeader("Content-Type", "text/html; charset=utf-8");
