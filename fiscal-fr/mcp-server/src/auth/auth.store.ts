@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, writeFileSync } from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
 import { randomBytes, scryptSync, timingSafeEqual } from "crypto";
@@ -49,6 +49,12 @@ export function findUserByEmail(email: string): User | undefined {
 export function findApiKey(key: string): ApiKey | undefined {
   const db = readDb<{ keys: ApiKey[] }>("api-keys.db.json");
   return db.keys.find((k) => k.key === key);
+}
+
+export function writeApiKey(key: ApiKey): void {
+  const db = readDb<{ keys: ApiKey[] }>("api-keys.db.json");
+  db.keys.push(key);
+  writeFileSync(join(DATA_DIR, "api-keys.db.json"), JSON.stringify(db, null, 2) + "\n", "utf8");
 }
 
 // --- Auth codes (in-memory, ephemeral 10 min TTL) ---
