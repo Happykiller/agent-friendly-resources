@@ -24,6 +24,15 @@ export async function signAccessToken(userId: string): Promise<string> {
     .sign(getSecret());
 }
 
+export async function signLongLivedToken(userId: string, expiryDays = 365): Promise<string> {
+  return new SignJWT({ sub: userId })
+    .setProtectedHeader({ alg: "HS256" })
+    .setIssuer(getIssuer())
+    .setIssuedAt()
+    .setExpirationTime(`${expiryDays}d`)
+    .sign(getSecret());
+}
+
 export async function verifyAccessToken(token: string): Promise<string | null> {
   try {
     const { payload } = await jwtVerify(token, getSecret(), {
