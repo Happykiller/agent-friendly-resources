@@ -18,6 +18,7 @@ import express from "express";
 import { createLoggerFromEnv } from "./logger.js";
 import { authMiddleware } from "./auth/auth.middleware.js";
 import { createOAuthRouter } from "./auth/oauth.router.js";
+import { createPortalRouter } from "./auth/portal.router.js";
 
 const SERVER_INFO = {
   name: "fiscal-fr-mcp",
@@ -543,6 +544,7 @@ async function startHttpServer() {
 
   // OAuth endpoints (no auth required)
   app.use(createOAuthRouter());
+  app.use(createPortalRouter());
 
   app.post("/mcp", authMiddleware, async (req: any, res: any) => {
     const requesterAccount = (res.locals.requesterAccount as string) ?? "unknown";
