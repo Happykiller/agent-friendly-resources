@@ -15,8 +15,12 @@ Dans `fiscal-fr/.mcp.json`, remplacer uniquement `change-me` par votre token :
 
 Comment obtenir le token :
 
-- Si vous n'avez pas de compte, rapprochez-vous de l'admin pour obtenir un compte et un token personnel.
-- Si vous avez deja un compte, demander a l'admin la generation (ou regeneration) de votre token d'acces MCP.
+1. Ouvrir dans un navigateur : `https://kalifa.happykiller.net/token-portal`
+2. Saisir votre email et mot de passe.
+3. Copier le token affiché (il est valable 365 jours — il ne sera plus affiché).
+4. Coller ce token à la place de `change-me` dans `.mcp.json`.
+
+> Si vous n'avez pas encore de compte, rapprochez-vous de l'admin.
 
 Ne modifiez pas l'URL MCP si elle est deja renseignee (`https://kalifa.happykiller.net/mcp`).
 
