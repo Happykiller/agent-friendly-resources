@@ -2,6 +2,7 @@
 ### Prerequisite: run `npm run dev:http` in `mcp-server/`
 
 @baseUrl = http://localhost:3333
+// https://kalifa.happykiller.net
 @mcpPath = /mcp
 
 ### Health check (method not allowed expected)

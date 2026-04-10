@@ -22,12 +22,16 @@ package: build
 
 ## install — charge l'image et démarre le container (à lancer sur le serveur)
 install:
-	@test -f "$(TAR)" || { echo "Erreur : $(TAR) introuvable — lancez make package d'abord"; exit 1; }
-	@test -f ".env"   || { echo "Erreur : .env manquant — copiez .env.example et configurez-le"; exit 1; }
-	docker load -i $(TAR)
-	docker network inspect interservices >/dev/null 2>&1 || docker network create interservices
-	VERSION=$(VERSION) docker compose up -d
-	@echo "Serveur démarré → http://localhost:3333/mcp (container: $(CONTAINER))"
+	@TAR_FILE="$$(ls -1 $(IMAGE)-*.tar 2>/dev/null | sort -V | tail -n 1)"; \
+	test -n "$$TAR_FILE" || { echo "Erreur : aucun livrable $(IMAGE)-*.tar introuvable — lancez make package d'abord"; exit 1; }; \
+	test -f ".env" || { echo "Erreur : .env manquant — copiez .env.example et configurez-le"; exit 1; }; \
+	VERSION_DETECTED="$${TAR_FILE#$(IMAGE)-}"; \
+	VERSION_DETECTED="$${VERSION_DETECTED%.tar}"; \
+	echo "Installation depuis $$TAR_FILE (version $$VERSION_DETECTED)"; \
+	docker load -i "$$TAR_FILE"; \
+	docker network inspect interservices >/dev/null 2>&1 || docker network create interservices; \
+	VERSION="$$VERSION_DETECTED" docker compose up -d; \
+	echo "Serveur démarré → http://localhost:3333/mcp (container: $(CONTAINER), version: $$VERSION_DETECTED)"
 
 ## stop — arrête le container
 stop:

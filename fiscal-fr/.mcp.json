@@ -1,6 +1,6 @@
 {
   "mcpServers": {
-    "fiscal-fr-local": {
+    "fiscal-fr": {
       "type": "http",
       "url": "https://kalifa.happykiller.net/mcp",
       "headers": {

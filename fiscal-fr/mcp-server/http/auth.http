@@ -1,0 +1,39 @@
+### fiscal-fr MCP server — Auth API token flow
+### Prerequisite: run `npm run dev:http` in `mcp-server/`
+
+//@baseUrl = http://localhost:3333
+@baseUrl = https://kalifa.happykiller.net
+@mcpPath = /mcp
+
+# Remplacer par un compte valide present dans src/data/users.db.json
+@email = fabrice@example.com
+@password = changeme
+
+### 1. Récupérer un token via l'API du portal (réponse JSON)
+# @name login
+POST {{baseUrl}}/token-portal
+Content-Type: application/json
+Accept: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+### Store Token
+@token = {{login.response.body.token}}
+
+###
+
+### 2. Tester le token sur le endpoint MCP
+POST {{baseUrl}}{{mcpPath}}
+Content-Type: application/json
+Accept: application/json, text/event-stream
+Authorization: Bearer {{token}}
+
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "tools/list",
+  "params": {}
+}

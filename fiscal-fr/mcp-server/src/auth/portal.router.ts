@@ -96,7 +96,7 @@ function renderSuccess(token: string, baseUrl: string): string {
   <button onclick="navigator.clipboard.writeText(document.getElementById('token-value').value).then(() => this.textContent='Copié !').catch(() => { document.getElementById('token-value').select(); document.execCommand('copy'); this.textContent='Copié !'; })">Copier le token</button>
 
   <h2>Configuration Claude Code</h2>
-  <p>Collez ce bloc dans votre fichier de configuration Claude Code (<code>claude_desktop_config.json</code> ou équivalent) :</p>
+  <p>Collez ce bloc dans votre fichier de configuration Claude Code (<code>.mcp.json</code> ou équivalent) :</p>
   <pre id="mcp-config">${mcpConfig.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre>
   <button onclick="navigator.clipboard.writeText(document.getElementById('mcp-config').textContent).then(() => this.textContent='Copié !').catch(() => { const r = document.createRange(); r.selectNode(document.getElementById('mcp-config')); window.getSelection()?.removeAllRanges(); window.getSelection()?.addRange(r); document.execCommand('copy'); this.textContent='Copié !'; })">Copier la configuration</button>
 
